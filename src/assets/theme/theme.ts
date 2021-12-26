@@ -97,17 +97,6 @@ export const Theme = createTheme({
       },
       styleOverrides: {
         root: {
-          fontFamily: [
-            'walDIN',
-            'system - ui',
-            '-apple - system',
-            'BlinkMacSystemFont',
-            'Segoe UI',
-            'Roboto',
-            'Helvetica Neue',
-            'sans - serif',
-          ],
-          // boxShadow: '0px 1px 4px rgb(76 87 237 / 24%);',
           fontWeight: 'bold',
           textTransform: 'none',
           borderRadius: 8,
