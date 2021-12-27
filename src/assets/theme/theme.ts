@@ -46,6 +46,9 @@ export const Theme = createTheme({
     primary: {
       main: '#009688',
     },
+    secondary: {
+      main: '#212121',
+    },
   },
   typography: {
     fontFamily: [
