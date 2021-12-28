@@ -10,5 +10,11 @@ yarn:
 yarn_add: package_name
 	$(DC_FRONT) yarn add $(PACKAGE_NAME)
 
+yarn_remove: package_name
+	$(DC_FRONT) yarn remove $(PACKAGE_NAME)
+
 yarn_add_dev: package_name
 	@make yarn_add -D $(PACKAGE_NAME)
+
+lint:
+	$(DC_FRONT) yarn fix
