@@ -35,7 +35,21 @@ export const Header: VFC = memo(() => {
               display: { xs: 'flex', md: 'flex' },
               cursor: 'pointer',
             }}
-            color="primary"
+            fontFamily={[
+              'Nunito',
+              'Roboto',
+              'sans-serif',
+              'IBM Plex Sans',
+              '-apple-system',
+              'BlinkMacSystemFont',
+              'Segoe UI',
+              'Helvetica Neue',
+              'Arial',
+              'Apple Color Emoji',
+              'Segoe UI Emoji',
+              'Segoe UI Symbol',
+            ].join(',')}
+            color="black"
             variant="h5"
             fontWeight="bold"
             component="div"
