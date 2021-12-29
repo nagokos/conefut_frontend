@@ -87,7 +87,7 @@ export const Header: VFC = memo(() => {
         <Box component="div" maxWidth={1200} mx={'auto'}>
           <TabCompetition />
         </Box>
-        <Divider />
+        <Divider sx={{ borderColor: '#ebf2f2' }} />
       </Box>
     </>
   );
