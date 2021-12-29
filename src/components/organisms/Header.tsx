@@ -26,6 +26,7 @@ export const Header: VFC = memo(() => {
     <>
       <AppBar sx={{ maxWidth: 1200, mx: 'auto' }} style={{ background: 'white' }} elevation={0} position="static">
         <Toolbar sx={{ mx: isMobile ? '' : 2 }}>
+          <img src="/src/assets/img/main-logo.png" width="28" height="28" alt="app logo" />
           <Typography
             sx={{
               flexGrow: isMobile ? 1 : 1,
@@ -34,7 +35,21 @@ export const Header: VFC = memo(() => {
               display: { xs: 'flex', md: 'flex' },
               cursor: 'pointer',
             }}
-            color="primary"
+            fontFamily={[
+              'Nunito',
+              'Roboto',
+              'sans-serif',
+              'IBM Plex Sans',
+              '-apple-system',
+              'BlinkMacSystemFont',
+              'Segoe UI',
+              'Helvetica Neue',
+              'Arial',
+              'Apple Color Emoji',
+              'Segoe UI Emoji',
+              'Segoe UI Symbol',
+            ].join(',')}
+            color="black"
             variant="h5"
             fontWeight="bold"
             component="div"
@@ -49,19 +64,30 @@ export const Header: VFC = memo(() => {
           >
             <SearchIcon />
           </IconButton>
-          <Button disableRipple sx={{ mr: 2, fontSize: 12 }} variant="text">
+          <Button
+            size={isMobile ? 'small' : 'medium'}
+            disableRipple
+            sx={{ mr: isMobile ? 0.5 : 2, fontSize: 12 }}
+            variant="text"
+          >
             ログイン
           </Button>
-          <Button disableRipple sx={{ fontSize: 12 }} disableElevation variant="contained">
-            新規登録
+          <Button
+            size={isMobile ? 'small' : 'medium'}
+            disableRipple
+            sx={{ fontSize: 12 }}
+            disableElevation
+            variant="contained"
+          >
+            {isMobile ? '登録' : '新規登録'}
           </Button>
         </Toolbar>
       </AppBar>
-      <Box component="nav" sx={{ position: 'sticky', top: 0, background: '#fff' }}>
+      <Box zIndex={100} component="nav" sx={{ position: 'sticky', top: 0, background: '#fff' }}>
         <Box component="div" maxWidth={1200} mx={'auto'}>
           <TabCompetition />
         </Box>
-        <Divider />
+        <Divider sx={{ borderColor: '#ebf2f2' }} />
       </Box>
     </>
   );
