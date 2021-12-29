@@ -26,6 +26,7 @@ export const Header: VFC = memo(() => {
     <>
       <AppBar sx={{ maxWidth: 1200, mx: 'auto' }} style={{ background: 'white' }} elevation={0} position="static">
         <Toolbar sx={{ mx: isMobile ? '' : 2 }}>
+          <img src="/src/assets/img/main-logo.png" width="28" height="28" alt="app logo" />
           <Typography
             sx={{
               flexGrow: isMobile ? 1 : 1,
