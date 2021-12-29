@@ -63,7 +63,7 @@ export const TabCompetition: VFC = memo(() => {
   };
 
   return (
-    <Box ml={isMobile ? 1 : 4}>
+    <Box ml={isMobile ? 0.3 : 3}>
       <StyledTabs value={value} onChange={handleChange}>
         {competitions.map((competition: Competition) => (
           <Tab
