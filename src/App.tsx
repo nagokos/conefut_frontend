@@ -1,7 +1,7 @@
 import { ThemeProvider } from '@emotion/react';
 import { memo, VFC } from 'react';
 import { Router } from './router/Router';
-import { Theme as theme } from './assets/theme/theme';
+import { theme } from './assets/theme/theme';
 import { BrowserRouter } from 'react-router-dom';
 import { Header } from './components/index';
 
