@@ -64,11 +64,22 @@ export const Header: VFC = memo(() => {
           >
             <SearchIcon />
           </IconButton>
-          <Button disableRipple sx={{ mr: 2, fontSize: 12 }} variant="text">
+          <Button
+            size={isMobile ? 'small' : 'medium'}
+            disableRipple
+            sx={{ mr: isMobile ? 0.5 : 2, fontSize: 12 }}
+            variant="text"
+          >
             ログイン
           </Button>
-          <Button disableRipple sx={{ fontSize: 12 }} disableElevation variant="contained">
-            新規登録
+          <Button
+            size={isMobile ? 'small' : 'medium'}
+            disableRipple
+            sx={{ fontSize: 12 }}
+            disableElevation
+            variant="contained"
+          >
+            {isMobile ? '登録' : '新規登録'}
           </Button>
         </Toolbar>
       </AppBar>
