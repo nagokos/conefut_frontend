@@ -4,11 +4,13 @@ import type {} from '@mui/lab/themeAugmentation';
 declare module '@mui/material/styles' {
   interface Palette {
     dark: Palette['primary'];
+    light: Palette['primary'];
   }
 
   // allow configuration using `createTheme`
   interface PaletteOptions {
     dark?: PaletteOptions['primary'];
+    light?: PaletteOptions['primary'];
   }
 }
 
@@ -16,32 +18,40 @@ declare module '@mui/material/styles' {
 declare module '@mui/material/Button' {
   interface ButtonPropsColorOverrides {
     dark: true;
+    light: true;
   }
 }
 
 declare module '@mui/material/Input' {
   interface InputBasePropsColorOverrides {
     dark: true;
+    light: true;
   }
 }
 
 declare module '@mui/material/TextField' {
   interface TextFieldPropsColorOverrides {
     dark: true;
+    light: true;
   }
 }
 
 declare module '@mui/material/FormControl' {
   interface FormControlPropsColorOverrides {
     dark: true;
+    light: true;
   }
 }
 
-export const Theme = createTheme({
+export const theme = createTheme({
   palette: {
     dark: {
       main: '#212121',
       contrastText: '#fff',
+    },
+    light: {
+      main: '#ced4da',
+      contrastText: 'black',
     },
     primary: {
       main: '#009688',
@@ -79,14 +89,6 @@ export const Theme = createTheme({
         autoHideDuration: 5000,
       },
     },
-    MuiOutlinedInput: {
-      styleOverrides: {
-        root: {
-          borderRadius: 10,
-          marginTop: 5,
-        },
-      },
-    },
     MuiLoadingButton: {
       defaultProps: {
         variant: 'contained',
@@ -106,7 +108,6 @@ export const Theme = createTheme({
         },
       },
     },
-
     MuiButtonBase: {
       defaultProps: {
         disableRipple: true,
