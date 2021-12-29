@@ -83,7 +83,7 @@ export const Header: VFC = memo(() => {
           </Button>
         </Toolbar>
       </AppBar>
-      <Box component="nav" sx={{ position: 'sticky', top: 0, background: '#fff' }}>
+      <Box zIndex={100} component="nav" sx={{ position: 'sticky', top: 0, background: '#fff' }}>
         <Box component="div" maxWidth={1200} mx={'auto'}>
           <TabCompetition />
         </Box>
