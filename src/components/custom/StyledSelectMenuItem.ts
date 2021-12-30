@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import MenuItem from '@mui/material/MenuItem';
 
 export const StyledSelectMenuItem = styled(MenuItem)(() => ({
