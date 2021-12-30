@@ -7,11 +7,11 @@ import { Header } from './components/index';
 
 export const App: VFC = memo(() => {
   return (
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
         <Header />
         <Router />
-      </BrowserRouter>
-    </ThemeProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 });

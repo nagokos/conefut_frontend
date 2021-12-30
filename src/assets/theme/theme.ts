@@ -55,6 +55,7 @@ export const theme = createTheme({
     },
     primary: {
       main: '#009688',
+      light: '#f0f5f4',
     },
     secondary: {
       main: '#212121',
@@ -104,7 +105,7 @@ export const theme = createTheme({
         root: {
           fontWeight: 'bold',
           textTransform: 'none',
-          borderRadius: 8,
+          borderRadius: 20,
         },
       },
     },
