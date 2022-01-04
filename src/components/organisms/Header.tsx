@@ -61,17 +61,18 @@ export const Header: VFC = memo(() => {
                 color="black"
                 variant="h5"
                 fontWeight="bold"
-                component="div"
               >
-                <Box onClick={pushHome} sx={{ cursor: 'pointer' }} display="flex" alignItems="center">
-                  <img
-                    style={{ marginRight: 4 }}
-                    src="/src/assets/img/main-logo.png"
-                    width="28"
-                    height="28"
-                    alt="app logo"
-                  />
-                  connefut
+                <Box display="flex">
+                  <Box onClick={pushHome} display="flex" alignItems="center" sx={{ cursor: 'pointer' }}>
+                    <img
+                      style={{ marginRight: 4 }}
+                      src="/src/assets/img/main-logo.png"
+                      width="28"
+                      height="28"
+                      alt="app logo"
+                    />
+                    connefut
+                  </Box>
                 </Box>
               </Typography>
               <IconButton
