@@ -18,3 +18,9 @@ yarn_add_dev: package_name
 
 lint:
 	$(DC_FRONT) yarn fix
+
+build:
+	${DC_FRONT} yarn build
+
+preview:
+	${DC_FRONT} yarn preview --debug

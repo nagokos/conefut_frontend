@@ -1,5 +1,4 @@
 import { createTheme } from '@mui/material/styles';
-import type {} from '@mui/lab/themeAugmentation';
 
 declare module '@mui/material/styles' {
   interface Palette {
@@ -17,13 +16,6 @@ declare module '@mui/material/styles' {
 // Update the Button's color prop options
 declare module '@mui/material/Button' {
   interface ButtonPropsColorOverrides {
-    dark: true;
-    light: true;
-  }
-}
-
-declare module '@mui/material/Input' {
-  interface InputBasePropsColorOverrides {
     dark: true;
     light: true;
   }
@@ -88,11 +80,6 @@ export const theme = createTheme({
     MuiSnackbar: {
       defaultProps: {
         autoHideDuration: 5000,
-      },
-    },
-    MuiLoadingButton: {
-      defaultProps: {
-        variant: 'contained',
       },
     },
     MuiButton: {

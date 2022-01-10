@@ -20,7 +20,7 @@ export const SearchInputGrey: VFC = memo(() => {
       <IconButton disabled type="submit" sx={{ p: '10px' }} aria-label="search">
         <SearchIcon />
       </IconButton>
-      <InputBase sx={{ flex: 1, fontSize: 14 }} placeholder="キーワードを入力" />
+      <InputBase sx={{ flex: 1, fontSize: 14, caretColor: '#009688' }} placeholder="キーワードを入力" />
     </StyledPaper>
   );
 });
