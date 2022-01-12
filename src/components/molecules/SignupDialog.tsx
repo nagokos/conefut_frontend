@@ -16,7 +16,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useSize } from '../../hooks';
 import { StyledDialogInput } from '../index';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { User } from '../../types';
+import { NewUser, useCreateUserMutation } from '../../generated/graphql';
+import { GraphQLErrorExtensions } from 'graphql';
 
 type Props = {
   open: boolean;
@@ -27,8 +28,9 @@ export const SignupDialog: VFC<Props> = memo((props) => {
   const { open, handleClose } = props;
   const [isShow, setIsShow] = useState<boolean>(false);
   const { isMobile } = useSize();
+  const [input, { error }] = useCreateUserMutation();
 
-  const { control, handleSubmit, reset } = useForm<User>({
+  const { control, handleSubmit, reset, setError } = useForm<NewUser>({
     defaultValues: {
       name: '',
       email: '',
@@ -50,9 +52,24 @@ export const SignupDialog: VFC<Props> = memo((props) => {
     setIsShow(!isShow);
   };
 
-  const onSubmit: SubmitHandler<User> = async (data: User) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<NewUser> = async (userData: NewUser) => {
+    input({
+      variables: {
+        name: userData.name,
+        email: userData.email,
+        password: userData.password,
+      },
+    });
   };
+
+  useEffect(() => {
+    const errors: GraphQLErrorExtensions | undefined = error?.graphQLErrors[0].extensions;
+    for (const key in errors) {
+      setError(key as 'name' | 'email' | 'password', {
+        message: String(errors[key]),
+      });
+    }
+  }, [error]);
 
   return (
     <Dialog

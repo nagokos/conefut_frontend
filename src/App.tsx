@@ -4,8 +4,8 @@ import { Router } from './router/Router';
 import { theme } from './assets/theme/theme';
 import { BrowserRouter } from 'react-router-dom';
 import { Header } from './components/index';
+import { client } from './apollo/apollo';
 import { ApolloProvider } from '@apollo/client';
-import { client } from './apollo/client';
 
 export const App: VFC = memo(() => {
   return (
