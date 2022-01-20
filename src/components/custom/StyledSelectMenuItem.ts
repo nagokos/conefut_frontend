@@ -11,9 +11,9 @@ export const StyledSelectMenuItem = styled(MenuItem)(() => ({
     },
   },
   '&.Mui-selected': {
-    backgroundColor: '#fafafa',
+    backgroundColor: '#fff',
     '&:hover, &.Mui-focusVisible': {
-      backgroundColor: '#fafafa',
+      backgroundColor: '#fff',
     },
   },
   '&.Mui-disabled': {
