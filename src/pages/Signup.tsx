@@ -23,10 +23,10 @@ export const Signup: VFC = memo(() => {
   };
 
   return (
-    <>
+    <Box sx={{ pt: 2, px: 2 }}>
       {!isMobile && (
-        <IconButton disableTouchRipple component={Link} to="/" sx={{ ml: 1, mt: 1 }} size="large">
-          <ArrowBackIcon sx={{ fontSize: 26 }} />
+        <IconButton disableTouchRipple component={Link} to="/" size="medium">
+          <ArrowBackIcon sx={{ fontSize: 24 }} />
         </IconButton>
       )}
       <Container sx={{ mt: isMobile ? 22 : 24 }}>
@@ -109,6 +109,6 @@ export const Signup: VFC = memo(() => {
         </Grid>
       </Container>
       <SignupDialog open={open} handleClose={handleClose} />
-    </>
+    </Box>
   );
 });
