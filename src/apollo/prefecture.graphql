@@ -1,5 +1,5 @@
 query PrefectureAll {
-  GetPrefectures {
+  getPrefectures {
     id
     name
   }
