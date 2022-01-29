@@ -1,21 +1,34 @@
 import { ThemeProvider } from '@emotion/react';
 import { memo, VFC } from 'react';
-import { Router } from './router/Router';
+import { routes } from './router/Router';
 import { theme } from './assets/theme/theme';
-import { BrowserRouter } from 'react-router-dom';
-import { Header } from './components/index';
-import { client } from './apollo/apollo';
-import { ApolloProvider } from '@apollo/client';
+import { Header, SnackbarNotification } from './components/index';
+import { useGetCurrentUserQuery } from './generated/graphql';
+import { currentUser } from './reactive/user';
+import { useRoutes } from 'react-router-dom';
+import { useLocationChange } from './hooks';
 
 export const App: VFC = memo(() => {
+  const { loading, data } = useGetCurrentUserQuery();
+  currentUser(data?.getCurrentUser);
+
+  useLocationChange(async () => {
+    if (!currentUser()) {
+      currentUser(data?.getCurrentUser);
+    }
+  });
+
+  const routing = useRoutes(routes(!!currentUser()));
+
   return (
-    <BrowserRouter>
-      <ApolloProvider client={client}>
-        <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
+      {!loading && (
+        <>
           <Header />
-          <Router />
-        </ThemeProvider>
-      </ApolloProvider>
-    </BrowserRouter>
+          <SnackbarNotification />
+          {routing}
+        </>
+      )}
+    </ThemeProvider>
   );
 });
