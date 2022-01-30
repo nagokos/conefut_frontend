@@ -6,7 +6,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Email from '@mui/icons-material/Email';
 import { Link } from 'react-router-dom';
 
-import { StyledRoundedButton, SignupDialog } from '../components';
+import { StyledRoundedButton, LoginDialog } from '../components';
 import { useSize } from '../hooks';
 
 export const Login: VFC = memo(() => {
@@ -23,10 +23,10 @@ export const Login: VFC = memo(() => {
   };
 
   return (
-    <>
+    <Box sx={{ pt: 2, px: 2 }}>
       {!isMobile && (
-        <IconButton disableTouchRipple component={Link} to="/" sx={{ ml: 1, mt: 1 }} size="large">
-          <ArrowBackIcon sx={{ fontSize: 26 }} />
+        <IconButton disableTouchRipple component={Link} to="/" size="medium">
+          <ArrowBackIcon sx={{ fontSize: 24 }} />
         </IconButton>
       )}
       <Container sx={{ mt: isMobile ? 22 : 24 }}>
@@ -108,7 +108,7 @@ export const Login: VFC = memo(() => {
           </Grid>
         </Grid>
       </Container>
-      <SignupDialog open={open} handleClose={handleClose} />
-    </>
+      <LoginDialog open={open} handleClose={handleClose} />
+    </Box>
   );
 });

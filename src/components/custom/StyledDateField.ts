@@ -1,24 +1,17 @@
 import { styled } from '@mui/material/styles';
-import { TextField } from '@mui/material';
+import { InputBase } from '@mui/material';
 
-export const StyledDateField = styled(TextField)(({ theme }) => ({
-  '& .MuiOutlinedInput-root': {
+export const StyledDateField = styled(InputBase)(({ theme }) => ({
+  'label + &': {
+    marginTop: theme.spacing(3),
+  },
+  '& .MuiInputBase-input': {
     borderRadius: 4,
     position: 'relative',
+    maxHeight: 11,
+    border: '1px solid #ced4da',
     fontSize: 12,
-    maxHeight: 38,
     fontWeight: 'bold',
-    '&.Mui-focused fieldset': {
-      border: `1px solid ${theme.palette.light.main}`,
-    },
-    fieldset: {
-      borderColor: theme.palette.light.main,
-    },
-    '&:hover fieldset': {
-      borderColor: theme.palette.light.main,
-    },
-    '& .MuiSvgIcon-root': {
-      fontSize: 20,
-    },
+    padding: '12.7px 26px 12.7px 12px',
   },
 }));

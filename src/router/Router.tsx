@@ -1,21 +1,21 @@
-import { memo, VFC } from 'react';
-import { useRoutes } from 'react-router-dom';
-import { Home, Signup, Login } from '../pages';
+import { Navigate } from 'react-router-dom';
+import { Home, Signup, Login, RecruitmentCreate } from '../pages';
 
-export const Router: VFC = memo(() => {
-  const routes = useRoutes([
-    {
-      path: '/',
-      element: <Home />,
-    },
-    {
-      path: '/signup',
-      element: <Signup />,
-    },
-    {
-      path: '/login',
-      element: <Login />,
-    },
-  ]);
-  return routes;
-});
+export const routes = (isLoggedIn: boolean) => [
+  {
+    path: '/',
+    element: <Home />,
+  },
+  {
+    path: '/signup',
+    element: <Signup />,
+  },
+  {
+    path: '/login',
+    element: <Login />,
+  },
+  {
+    path: '/recruitments/new',
+    element: isLoggedIn ? <RecruitmentCreate /> : <Navigate to="/login" />,
+  },
+];

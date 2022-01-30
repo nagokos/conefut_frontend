@@ -4,21 +4,13 @@ import { routes } from './router/Router';
 import { theme } from './assets/theme/theme';
 import { Header, SnackbarNotification } from './components/index';
 import { useGetCurrentUserQuery } from './generated/graphql';
-import { currentUser } from './reactive/user';
+import { isLoggedIn } from './reactive/user';
 import { useRoutes } from 'react-router-dom';
-import { useLocationChange } from './hooks';
 
 export const App: VFC = memo(() => {
-  const { loading, data } = useGetCurrentUserQuery();
-  currentUser(data?.getCurrentUser);
+  const { data, loading } = useGetCurrentUserQuery();
 
-  useLocationChange(async () => {
-    if (!currentUser()) {
-      currentUser(data?.getCurrentUser);
-    }
-  });
-
-  const routing = useRoutes(routes(!!currentUser()));
+  const routing = useRoutes(routes(isLoggedIn(!!data?.getCurrentUser)));
 
   return (
     <ThemeProvider theme={theme}>

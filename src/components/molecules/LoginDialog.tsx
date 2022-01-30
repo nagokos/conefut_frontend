@@ -1,4 +1,4 @@
-import { ChangeEvent, memo, useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { VFC } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -16,7 +16,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useSize } from '../../hooks';
 import { StyledDialogInput } from '../index';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { CreateUserInput, useCreateUserMutation, useGetCurrentUserQuery } from '../../generated/graphql';
+import { LoginUserInput, useGetCurrentUserQuery, useLoginUserMutation } from '../../generated/graphql';
 import { GraphQLError } from 'graphql';
 import { useSetRecoilState } from 'recoil';
 import { flashMessage, flashState, flashType } from '../../store/flash';
@@ -28,12 +28,13 @@ type Props = {
   handleClose: () => void;
 };
 
-export const SignupDialog: VFC<Props> = memo((props) => {
+export const LoginDialog: VFC<Props> = memo((props) => {
   const { open, handleClose } = props;
   const [isShow, setIsShow] = useState<boolean>(false);
   const { isMobile } = useSize();
-  const [signupUser, { loading, error }] = useCreateUserMutation();
+
   const { refetch } = useGetCurrentUserQuery();
+  const [loginUser, { loading, error }] = useLoginUserMutation();
 
   const navigate = useNavigate();
 
@@ -41,9 +42,8 @@ export const SignupDialog: VFC<Props> = memo((props) => {
   const setMessage = useSetRecoilState(flashMessage);
   const setType = useSetRecoilState(flashType);
 
-  const { control, handleSubmit, reset, setError } = useForm<CreateUserInput>({
+  const { control, handleSubmit, reset, setError } = useForm<LoginUserInput>({
     defaultValues: {
-      name: '',
       email: '',
       password: '',
     },
@@ -54,19 +54,13 @@ export const SignupDialog: VFC<Props> = memo((props) => {
     reset();
   }, [handleClose]);
 
-  const changeName = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): string => {
-    const str: string = e.target.value;
-    return str.trim();
-  };
-
   const handleClickShowPassword = () => {
     setIsShow(!isShow);
   };
 
-  const onSubmit: SubmitHandler<CreateUserInput> = async (userData: CreateUserInput) => {
-    await signupUser({
+  const onSubmit: SubmitHandler<LoginUserInput> = async (userData: LoginUserInput) => {
+    await loginUser({
       variables: {
-        name: userData.name,
         email: userData.email,
         password: userData.password,
       },
@@ -76,7 +70,7 @@ export const SignupDialog: VFC<Props> = memo((props) => {
     });
     if (!loading) {
       setState(true);
-      setMessage('新規登録しました');
+      setMessage('ログインしました');
       setType('success');
       isLoggedIn(true);
       handleClose();
@@ -87,7 +81,8 @@ export const SignupDialog: VFC<Props> = memo((props) => {
   useEffect(() => {
     error?.graphQLErrors?.forEach((error: GraphQLError) => {
       if (error.extensions) {
-        setError(error.extensions['attribute'] as 'name' | 'email' | 'password', {
+        console.log(error.extensions);
+        setError(error.extensions['attribute'] as 'email' | 'password', {
           message: error.message,
         });
         setState(true);
@@ -118,35 +113,11 @@ export const SignupDialog: VFC<Props> = memo((props) => {
         >
           <CloseIcon />
         </IconButton>
-        メールアドレスで登録
+        メールアドレスでログイン
       </DialogTitle>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <DialogContent sx={{ px: 3.3, pt: 0 }}>
+        <DialogContent sx={{ px: 3.3, pt: 2 }}>
           <Grid spacing={{ xs: 1.8, sm: 1.8, md: 1.8 }} container>
-            <Grid sx={{ marginRight: 'auto', marginLeft: 'auto' }} item xs={12} md={12}>
-              <Controller
-                name="name"
-                control={control}
-                rules={{
-                  required: '名前を入力してください',
-                }}
-                render={({ field: { onChange }, formState: { errors } }) => (
-                  <FormControl fullWidth variant="standard">
-                    <InputLabel sx={{ fontWeight: 'bold' }} shrink htmlFor="input-name">
-                      お名前
-                    </InputLabel>
-                    <StyledDialogInput
-                      error={!!errors.name}
-                      onChange={(e) => onChange(changeName(e))}
-                      type="text"
-                      placeholder="ユーザー名"
-                      id="input-name"
-                    />
-                    <FormHelperText error={!!errors.name}>{errors.name ? errors.name.message : ' '}</FormHelperText>
-                  </FormControl>
-                )}
-              />
-            </Grid>
             <Grid item xs={12} md={12}>
               <Controller
                 name="email"
@@ -210,7 +181,7 @@ export const SignupDialog: VFC<Props> = memo((props) => {
                 )}
               />
             </Grid>
-            <Grid item xs={12} md={12} mb={1.2}>
+            <Grid item xs={12} md={12} mb={1.2} sx={{ mt: 1 }}>
               <Button
                 disableRipple
                 size="large"
@@ -220,7 +191,7 @@ export const SignupDialog: VFC<Props> = memo((props) => {
                 variant="contained"
                 type="submit"
               >
-                登録する
+                ログイン
               </Button>
             </Grid>
           </Grid>

@@ -21,6 +21,13 @@ declare module '@mui/material/Button' {
   }
 }
 
+declare module '@mui/material/FormLabel' {
+  interface FormLabelPropsColorOverrides {
+    dark: true;
+    light: true;
+  }
+}
+
 declare module '@mui/material/TextField' {
   interface TextFieldPropsColorOverrides {
     dark: true;
@@ -35,6 +42,13 @@ declare module '@mui/material/FormControl' {
   }
 }
 
+declare module '@mui/material/Fab' {
+  interface FabPropsColorOverrides {
+    dark: true;
+    light: true;
+  }
+}
+
 export const theme = createTheme({
   palette: {
     dark: {
@@ -42,7 +56,7 @@ export const theme = createTheme({
       contrastText: '#fff',
     },
     light: {
-      main: '#ced4da',
+      main: '#fff',
       contrastText: 'black',
     },
     primary: {
@@ -70,6 +84,11 @@ export const theme = createTheme({
     ].join(','),
   },
   components: {
+    MuiMenuItem: {
+      defaultProps: {
+        disableRipple: true,
+      },
+    },
     MuiDivider: {
       styleOverrides: {
         root: {
