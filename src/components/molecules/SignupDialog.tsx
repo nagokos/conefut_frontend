@@ -16,8 +16,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useSize } from '../../hooks';
 import { StyledDialogInput } from '../index';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { NewUser, useCreateUserMutation } from '../../generated/graphql';
-import { GraphQLErrorExtensions } from 'graphql';
+import { CreateUserInput, useCreateUserMutation, useGetCurrentUserQuery } from '../../generated/graphql';
+import { GraphQLError } from 'graphql';
+import { useSetRecoilState } from 'recoil';
+import { flashMessage, flashState, flashType } from '../../store/flash';
+import { useNavigate } from 'react-router-dom';
+import { isLoggedIn } from '../../reactive/user';
 
 type Props = {
   open: boolean;
@@ -28,9 +32,16 @@ export const SignupDialog: VFC<Props> = memo((props) => {
   const { open, handleClose } = props;
   const [isShow, setIsShow] = useState<boolean>(false);
   const { isMobile } = useSize();
-  const [input, { error }] = useCreateUserMutation();
+  const [signupUser, { loading, error }] = useCreateUserMutation();
+  const { refetch } = useGetCurrentUserQuery();
 
-  const { control, handleSubmit, reset, setError } = useForm<NewUser>({
+  const navigate = useNavigate();
+
+  const setState = useSetRecoilState(flashState);
+  const setMessage = useSetRecoilState(flashMessage);
+  const setType = useSetRecoilState(flashType);
+
+  const { control, handleSubmit, reset, setError } = useForm<CreateUserInput>({
     defaultValues: {
       name: '',
       email: '',
@@ -52,23 +63,38 @@ export const SignupDialog: VFC<Props> = memo((props) => {
     setIsShow(!isShow);
   };
 
-  const onSubmit: SubmitHandler<NewUser> = async (userData: NewUser) => {
-    input({
+  const onSubmit: SubmitHandler<CreateUserInput> = async (userData: CreateUserInput) => {
+    await signupUser({
       variables: {
         name: userData.name,
         email: userData.email,
         password: userData.password,
       },
+      onCompleted() {
+        refetch();
+      },
     });
+    if (!loading) {
+      setState(true);
+      setMessage('新規登録しました');
+      setType('success');
+      isLoggedIn(true);
+      handleClose();
+      navigate('/');
+    }
   };
 
   useEffect(() => {
-    const errors: GraphQLErrorExtensions | undefined = error?.graphQLErrors[0].extensions;
-    for (const key in errors) {
-      setError(key as 'name' | 'email' | 'password', {
-        message: String(errors[key]),
-      });
-    }
+    error?.graphQLErrors?.forEach((error: GraphQLError) => {
+      if (error.extensions) {
+        setError(error.extensions['attribute'] as 'name' | 'email' | 'password', {
+          message: error.message,
+        });
+        setState(true);
+        setMessage('フォームに不備があります');
+        setType('error');
+      }
+    });
   }, [error]);
 
   return (
