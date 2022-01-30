@@ -1,6 +1,5 @@
 import { makeVar } from '@apollo/client';
-import { User } from '../generated/graphql';
 
-const currentUser = makeVar<User | null>(null);
+const isLoggedIn = makeVar<boolean>(false);
 
-export { currentUser };
+export { isLoggedIn };
