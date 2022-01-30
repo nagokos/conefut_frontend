@@ -7,15 +7,28 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Select from '@mui/material/Select';
 import { SelectChangeEvent } from '@mui/material';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 import { StyledMenuItem, SearchInputGrey, StyledInput, StyledDateField } from '../index';
+import { Prefecture } from '../../generated/graphql';
 
-export const SearchInput: VFC = memo(() => {
+type Props = {
+  prefectures: Array<Prefecture> | undefined;
+};
+
+export const SearchInput: VFC<Props> = memo((props) => {
+  const { prefectures } = props;
   const [select, setSelect] = useState('0');
+  const [selectPrefecture, setSelectPrefecture] = useState<string>('0');
   const [value, setValue] = useState<Date | null>(null);
+  const [picker, setPicker] = useState<boolean>(false);
 
   const handleChange = (event: SelectChangeEvent) => {
     setSelect(String(event.target.value));
+  };
+
+  const changeSelectPrefecture = (event: SelectChangeEvent) => {
+    setSelectPrefecture(String(event.target.value));
   };
 
   return (
@@ -47,17 +60,37 @@ export const SearchInput: VFC = memo(() => {
       <Select
         input={<StyledInput />}
         size="small"
-        sx={{ mt: 2, borderRadius: 1, color: select === '0' ? '#9e9e9e' : 'black' }}
+        sx={{ mt: 2, borderRadius: 1, maxHeight: 200, color: selectPrefecture === '0' ? '#9e9e9e' : 'black' }}
         fullWidth
-        value={select}
-        onChange={handleChange}
+        value={selectPrefecture}
+        onChange={changeSelectPrefecture}
+        renderValue={(selected) => {
+          const target = prefectures?.find((prefecture) => prefecture.id === selected);
+          if (target) {
+            return target.name;
+          } else {
+            return '地域';
+          }
+        }}
+        MenuProps={{
+          PaperProps: {
+            sx: {
+              maxHeight: 300,
+            },
+          },
+        }}
       >
         <StyledMenuItem value="0" disabled>
           地域
         </StyledMenuItem>
-        <StyledMenuItem value={10}>東京</StyledMenuItem>
-        <StyledMenuItem value={20}>神奈川</StyledMenuItem>
-        <StyledMenuItem value={30}>愛知</StyledMenuItem>
+        {prefectures?.map((prefecture: Prefecture) => (
+          <StyledMenuItem disableRipple key={prefecture.id} value={prefecture.id}>
+            {prefecture.name}
+            {prefecture.id === selectPrefecture && (
+              <CheckCircleIcon sx={{ fontSize: 16, color: '#009688', ml: 'auto' }} />
+            )}
+          </StyledMenuItem>
+        ))}
       </Select>
       <Select
         input={<StyledInput />}
