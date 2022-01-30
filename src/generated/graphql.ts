@@ -15,6 +15,12 @@ export type Scalars = {
   Float: number;
 };
 
+export type Competition = {
+  __typename?: 'Competition';
+  id: Scalars['String'];
+  name: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createUser: User;
@@ -40,6 +46,7 @@ export type Prefecture = {
 
 export type Query = {
   __typename?: 'Query';
+  getCompetitions: Array<Competition>;
   getCurrentUser?: Maybe<User>;
   getPrefectures: Array<Prefecture>;
 };
@@ -71,10 +78,15 @@ export type LoginUserInput = {
   password: Scalars['String'];
 };
 
-export type PrefectureAllQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetCompetitionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PrefectureAllQuery = { __typename?: 'Query', getPrefectures: Array<{ __typename?: 'Prefecture', id: string, name: string }> };
+export type GetCompetitionsQuery = { __typename?: 'Query', getCompetitions: Array<{ __typename?: 'Competition', id: string, name: string }> };
+
+export type GetPrefecturesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetPrefecturesQuery = { __typename?: 'Query', getPrefectures: Array<{ __typename?: 'Prefecture', id: string, name: string }> };
 
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -104,8 +116,43 @@ export type LogoutUserMutationVariables = Exact<{ [key: string]: never; }>;
 export type LogoutUserMutation = { __typename?: 'Mutation', logoutUser?: boolean | null | undefined };
 
 
-export const PrefectureAllDocument = gql`
-    query PrefectureAll {
+export const GetCompetitionsDocument = gql`
+    query GetCompetitions {
+  getCompetitions {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useGetCompetitionsQuery__
+ *
+ * To run a query within a React component, call `useGetCompetitionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCompetitionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCompetitionsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCompetitionsQuery(baseOptions?: Apollo.QueryHookOptions<GetCompetitionsQuery, GetCompetitionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCompetitionsQuery, GetCompetitionsQueryVariables>(GetCompetitionsDocument, options);
+      }
+export function useGetCompetitionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCompetitionsQuery, GetCompetitionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCompetitionsQuery, GetCompetitionsQueryVariables>(GetCompetitionsDocument, options);
+        }
+export type GetCompetitionsQueryHookResult = ReturnType<typeof useGetCompetitionsQuery>;
+export type GetCompetitionsLazyQueryHookResult = ReturnType<typeof useGetCompetitionsLazyQuery>;
+export type GetCompetitionsQueryResult = Apollo.QueryResult<GetCompetitionsQuery, GetCompetitionsQueryVariables>;
+export const GetPrefecturesDocument = gql`
+    query GetPrefectures {
   getPrefectures {
     id
     name
@@ -114,31 +161,31 @@ export const PrefectureAllDocument = gql`
     `;
 
 /**
- * __usePrefectureAllQuery__
+ * __useGetPrefecturesQuery__
  *
- * To run a query within a React component, call `usePrefectureAllQuery` and pass it any options that fit your needs.
- * When your component renders, `usePrefectureAllQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetPrefecturesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPrefecturesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = usePrefectureAllQuery({
+ * const { data, loading, error } = useGetPrefecturesQuery({
  *   variables: {
  *   },
  * });
  */
-export function usePrefectureAllQuery(baseOptions?: Apollo.QueryHookOptions<PrefectureAllQuery, PrefectureAllQueryVariables>) {
+export function useGetPrefecturesQuery(baseOptions?: Apollo.QueryHookOptions<GetPrefecturesQuery, GetPrefecturesQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<PrefectureAllQuery, PrefectureAllQueryVariables>(PrefectureAllDocument, options);
+        return Apollo.useQuery<GetPrefecturesQuery, GetPrefecturesQueryVariables>(GetPrefecturesDocument, options);
       }
-export function usePrefectureAllLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PrefectureAllQuery, PrefectureAllQueryVariables>) {
+export function useGetPrefecturesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPrefecturesQuery, GetPrefecturesQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<PrefectureAllQuery, PrefectureAllQueryVariables>(PrefectureAllDocument, options);
+          return Apollo.useLazyQuery<GetPrefecturesQuery, GetPrefecturesQueryVariables>(GetPrefecturesDocument, options);
         }
-export type PrefectureAllQueryHookResult = ReturnType<typeof usePrefectureAllQuery>;
-export type PrefectureAllLazyQueryHookResult = ReturnType<typeof usePrefectureAllLazyQuery>;
-export type PrefectureAllQueryResult = Apollo.QueryResult<PrefectureAllQuery, PrefectureAllQueryVariables>;
+export type GetPrefecturesQueryHookResult = ReturnType<typeof useGetPrefecturesQuery>;
+export type GetPrefecturesLazyQueryHookResult = ReturnType<typeof useGetPrefecturesLazyQuery>;
+export type GetPrefecturesQueryResult = Apollo.QueryResult<GetPrefecturesQuery, GetPrefecturesQueryVariables>;
 export const GetCurrentUserDocument = gql`
     query GetCurrentUser {
   getCurrentUser {
