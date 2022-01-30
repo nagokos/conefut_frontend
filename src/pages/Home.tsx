@@ -6,12 +6,12 @@ import Grid from '@mui/material/Grid';
 
 import { useSize } from '../hooks/index';
 import { SelectOrder, SearchInput } from '../components';
-import { usePrefectureAllQuery } from '../generated/graphql';
+import { useGetPrefecturesQuery } from '../generated/graphql';
 
 export const Home: VFC = memo(() => {
   const { isMobile } = useSize();
 
-  const { loading, error, data } = usePrefectureAllQuery();
+  const { loading, error, data } = useGetPrefecturesQuery();
 
   return (
     <>
