@@ -1,4 +1,4 @@
-query PrefectureAll {
+query GetPrefectures {
   getPrefectures {
     id
     name
