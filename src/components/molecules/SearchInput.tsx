@@ -112,13 +112,24 @@ export const SearchInput: VFC<Props> = memo((props) => {
       <LocalizationProvider dateAdapter={AdapterDateFns} locale={jaLocale}>
         <DatePicker
           value={value}
+          onClose={() => setPicker(false)}
           onChange={(newValue) => {
             setValue(newValue);
           }}
+          open={picker}
           minDate={new Date()}
           disableMaskedInput={true}
           inputFormat={value ? 'yyyy/M/d' : '開催日'}
-          renderInput={(params) => <StyledDateField fullWidth sx={{ mt: 2 }} {...params} />}
+          renderInput={(props) => (
+            <StyledDateField
+              fullWidth
+              sx={{ mt: 2 }}
+              inputRef={props.inputRef}
+              inputProps={props.inputProps}
+              value={props.value}
+              onClick={() => setPicker(true)}
+            />
+          )}
         />
       </LocalizationProvider>
     </Box>
