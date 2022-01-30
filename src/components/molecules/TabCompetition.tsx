@@ -33,7 +33,7 @@ const StyledTabs = styled((props: StyledTabsProps) => (
     backgroundColor: 'transparent',
   },
   '& .MuiTabs-indicatorSpanShort': {
-    maxWidth: 40,
+    maxWidth: 50,
     width: '100%',
     backgroundColor: 'black',
   },
