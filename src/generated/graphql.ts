@@ -13,6 +13,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  DateTime: any;
 };
 
 export type Competition = {
@@ -21,11 +22,32 @@ export type Competition = {
   name: Scalars['String'];
 };
 
+export enum EmailVerificationStatus {
+  Pending = 'PENDING',
+  Unnecessary = 'UNNECESSARY',
+  Verified = 'VERIFIED'
+}
+
+export enum Level {
+  Beginner = 'BEGINNER',
+  Enjoy = 'ENJOY',
+  Expert = 'EXPERT',
+  Middle = 'MIDDLE',
+  Open = 'OPEN',
+  Unnecessary = 'UNNECESSARY'
+}
+
 export type Mutation = {
   __typename?: 'Mutation';
+  createRecruitment: Recruitment;
   createUser: User;
   loginUser: User;
   logoutUser?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type MutationCreateRecruitmentArgs = {
+  input: CreateRecruitmentInput;
 };
 
 
@@ -51,20 +73,60 @@ export type Query = {
   getPrefectures: Array<Prefecture>;
 };
 
+export type Recruitment = {
+  __typename?: 'Recruitment';
+  capacity?: Maybe<Scalars['Int']>;
+  closingAt: Scalars['DateTime'];
+  competition: Competition;
+  content: Scalars['String'];
+  id: Scalars['String'];
+  level: Level;
+  locationUrl?: Maybe<Scalars['String']>;
+  place?: Maybe<Scalars['String']>;
+  prefecture: Prefecture;
+  startAt?: Maybe<Scalars['DateTime']>;
+  title: Scalars['String'];
+  type: Type;
+  user: User;
+};
+
 export enum Role {
   Admin = 'ADMIN',
   General = 'GENERAL'
+}
+
+export enum Type {
+  Coaching = 'COACHING',
+  Individual = 'INDIVIDUAL',
+  Joining = 'JOINING',
+  Opponent = 'OPPONENT',
+  Others = 'OTHERS',
+  Teammate = 'TEAMMATE'
 }
 
 export type User = {
   __typename?: 'User';
   avatar: Scalars['String'];
   email: Scalars['String'];
-  emailVerificationStatus: Scalars['Boolean'];
+  emailVerificationStatus: EmailVerificationStatus;
   id: Scalars['String'];
   introduction?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   role: Role;
+};
+
+export type CreateRecruitmentInput = {
+  capacity?: InputMaybe<Scalars['Int']>;
+  closingAt: Scalars['DateTime'];
+  competitionId: Scalars['String'];
+  content: Scalars['String'];
+  level: Level;
+  locationUrl?: InputMaybe<Scalars['String']>;
+  place?: InputMaybe<Scalars['String']>;
+  prefectureId?: InputMaybe<Scalars['String']>;
+  startAt?: InputMaybe<Scalars['DateTime']>;
+  title: Scalars['String'];
+  type: Type;
 };
 
 export type CreateUserInput = {
@@ -88,10 +150,27 @@ export type GetPrefecturesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetPrefecturesQuery = { __typename?: 'Query', getPrefectures: Array<{ __typename?: 'Prefecture', id: string, name: string }> };
 
+export type CreateRecruitmentMutationVariables = Exact<{
+  title: Scalars['String'];
+  competitionId: Scalars['String'];
+  closingAt: Scalars['DateTime'];
+  content: Scalars['String'];
+  level: Level;
+  type: Type;
+  locationUrl?: InputMaybe<Scalars['String']>;
+  startAt?: InputMaybe<Scalars['DateTime']>;
+  prefectureId?: InputMaybe<Scalars['String']>;
+  capacity?: InputMaybe<Scalars['Int']>;
+  place?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type CreateRecruitmentMutation = { __typename?: 'Mutation', createRecruitment: { __typename?: 'Recruitment', title: string, content: string, closingAt: any } };
+
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCurrentUserQuery = { __typename?: 'Query', getCurrentUser?: { __typename?: 'User', id: string, name: string, email: string, role: Role, avatar: string, introduction?: string | null | undefined, emailVerificationStatus: boolean } | null | undefined };
+export type GetCurrentUserQuery = { __typename?: 'Query', getCurrentUser?: { __typename?: 'User', id: string, name: string, email: string, role: Role, avatar: string, introduction?: string | null, emailVerificationStatus: EmailVerificationStatus } | null };
 
 export type CreateUserMutationVariables = Exact<{
   name: Scalars['String'];
@@ -100,7 +179,7 @@ export type CreateUserMutationVariables = Exact<{
 }>;
 
 
-export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, name: string, email: string, role: Role, avatar: string, introduction?: string | null | undefined, emailVerificationStatus: boolean } };
+export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, name: string, email: string, role: Role, avatar: string, introduction?: string | null, emailVerificationStatus: EmailVerificationStatus } };
 
 export type LoginUserMutationVariables = Exact<{
   email: Scalars['String'];
@@ -108,12 +187,12 @@ export type LoginUserMutationVariables = Exact<{
 }>;
 
 
-export type LoginUserMutation = { __typename?: 'Mutation', loginUser: { __typename?: 'User', id: string, name: string, email: string, role: Role, avatar: string, introduction?: string | null | undefined, emailVerificationStatus: boolean } };
+export type LoginUserMutation = { __typename?: 'Mutation', loginUser: { __typename?: 'User', id: string, name: string, email: string, role: Role, avatar: string, introduction?: string | null, emailVerificationStatus: EmailVerificationStatus } };
 
 export type LogoutUserMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LogoutUserMutation = { __typename?: 'Mutation', logoutUser?: boolean | null | undefined };
+export type LogoutUserMutation = { __typename?: 'Mutation', logoutUser?: boolean | null };
 
 
 export const GetCompetitionsDocument = gql`
@@ -186,6 +265,53 @@ export function useGetPrefecturesLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type GetPrefecturesQueryHookResult = ReturnType<typeof useGetPrefecturesQuery>;
 export type GetPrefecturesLazyQueryHookResult = ReturnType<typeof useGetPrefecturesLazyQuery>;
 export type GetPrefecturesQueryResult = Apollo.QueryResult<GetPrefecturesQuery, GetPrefecturesQueryVariables>;
+export const CreateRecruitmentDocument = gql`
+    mutation CreateRecruitment($title: String!, $competitionId: String!, $closingAt: DateTime!, $content: String!, $level: Level!, $type: Type!, $locationUrl: String, $startAt: DateTime, $prefectureId: String, $capacity: Int, $place: String) {
+  createRecruitment(
+    input: {title: $title, competitionId: $competitionId, closingAt: $closingAt, content: $content, level: $level, type: $type, locationUrl: $locationUrl, startAt: $startAt, capacity: $capacity, place: $place, prefectureId: $prefectureId}
+  ) {
+    title
+    content
+    closingAt
+  }
+}
+    `;
+export type CreateRecruitmentMutationFn = Apollo.MutationFunction<CreateRecruitmentMutation, CreateRecruitmentMutationVariables>;
+
+/**
+ * __useCreateRecruitmentMutation__
+ *
+ * To run a mutation, you first call `useCreateRecruitmentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateRecruitmentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createRecruitmentMutation, { data, loading, error }] = useCreateRecruitmentMutation({
+ *   variables: {
+ *      title: // value for 'title'
+ *      competitionId: // value for 'competitionId'
+ *      closingAt: // value for 'closingAt'
+ *      content: // value for 'content'
+ *      level: // value for 'level'
+ *      type: // value for 'type'
+ *      locationUrl: // value for 'locationUrl'
+ *      startAt: // value for 'startAt'
+ *      prefectureId: // value for 'prefectureId'
+ *      capacity: // value for 'capacity'
+ *      place: // value for 'place'
+ *   },
+ * });
+ */
+export function useCreateRecruitmentMutation(baseOptions?: Apollo.MutationHookOptions<CreateRecruitmentMutation, CreateRecruitmentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateRecruitmentMutation, CreateRecruitmentMutationVariables>(CreateRecruitmentDocument, options);
+      }
+export type CreateRecruitmentMutationHookResult = ReturnType<typeof useCreateRecruitmentMutation>;
+export type CreateRecruitmentMutationResult = Apollo.MutationResult<CreateRecruitmentMutation>;
+export type CreateRecruitmentMutationOptions = Apollo.BaseMutationOptions<CreateRecruitmentMutation, CreateRecruitmentMutationVariables>;
 export const GetCurrentUserDocument = gql`
     query GetCurrentUser {
   getCurrentUser {
