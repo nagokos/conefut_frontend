@@ -1,0 +1,63 @@
+import { memo, VFC, useState } from 'react';
+import { InputLabel } from '@mui/material';
+import { Control, Controller } from 'react-hook-form';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DateTimePicker from '@mui/lab/DateTimePicker';
+import ja from 'date-fns/locale/ja';
+
+import { CreateRecruitmentInput } from '../../generated/graphql';
+import { StyledRecruitmentInput } from '../index';
+import { format } from 'date-fns';
+
+type Props = {
+  control: Control<CreateRecruitmentInput, object>;
+};
+
+export const RecruitmentFormDeadline: VFC<Props> = memo((props) => {
+  const { control } = props;
+
+  const [valueDeadline, setValueDeadline] = useState<Date | null>(null);
+  const [pickerDeadline, setPickerDeadline] = useState<boolean>(false);
+
+  return (
+    <Controller
+      name="closingAt"
+      control={control}
+      rules={{
+        required: '募集期限を設定してください',
+      }}
+      render={({ field }) => (
+        <>
+          <InputLabel color="dark" sx={{ fontWeight: 'bold' }} shrink htmlFor="input-prefecture">
+            募集期限
+          </InputLabel>
+          <LocalizationProvider dateAdapter={AdapterDateFns} locale={ja}>
+            <DateTimePicker
+              open={pickerDeadline}
+              onClose={() => setPickerDeadline(false)}
+              minDate={new Date()}
+              disableMaskedInput={true}
+              renderInput={(props) => (
+                <StyledRecruitmentInput
+                  fullWidth
+                  {...field}
+                  type="text"
+                  inputRef={props.inputRef}
+                  inputProps={props.inputProps}
+                  value={props.value}
+                  onClick={() => setPickerDeadline(true)}
+                />
+              )}
+              value={valueDeadline}
+              onChange={(newValue) => {
+                setValueDeadline(newValue);
+                field.onChange(format(new Date(String(newValue)), 'yyyy/MM/dd HH:mm'));
+              }}
+            />
+          </LocalizationProvider>
+        </>
+      )}
+    />
+  );
+});
