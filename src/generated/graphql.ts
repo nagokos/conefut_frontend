@@ -123,7 +123,7 @@ export type CreateRecruitmentInput = {
   level: Level;
   locationUrl?: InputMaybe<Scalars['String']>;
   place?: InputMaybe<Scalars['String']>;
-  prefectureId?: InputMaybe<Scalars['String']>;
+  prefectureId: Scalars['String'];
   startAt?: InputMaybe<Scalars['DateTime']>;
   title: Scalars['String'];
   type: Type;
@@ -159,7 +159,7 @@ export type CreateRecruitmentMutationVariables = Exact<{
   type: Type;
   locationUrl?: InputMaybe<Scalars['String']>;
   startAt?: InputMaybe<Scalars['DateTime']>;
-  prefectureId?: InputMaybe<Scalars['String']>;
+  prefectureId: Scalars['String'];
   capacity?: InputMaybe<Scalars['Int']>;
   place?: InputMaybe<Scalars['String']>;
 }>;
@@ -266,7 +266,7 @@ export type GetPrefecturesQueryHookResult = ReturnType<typeof useGetPrefecturesQ
 export type GetPrefecturesLazyQueryHookResult = ReturnType<typeof useGetPrefecturesLazyQuery>;
 export type GetPrefecturesQueryResult = Apollo.QueryResult<GetPrefecturesQuery, GetPrefecturesQueryVariables>;
 export const CreateRecruitmentDocument = gql`
-    mutation CreateRecruitment($title: String!, $competitionId: String!, $closingAt: DateTime!, $content: String!, $level: Level!, $type: Type!, $locationUrl: String, $startAt: DateTime, $prefectureId: String, $capacity: Int, $place: String) {
+    mutation CreateRecruitment($title: String!, $competitionId: String!, $closingAt: DateTime!, $content: String!, $level: Level!, $type: Type!, $locationUrl: String, $startAt: DateTime, $prefectureId: String!, $capacity: Int, $place: String) {
   createRecruitment(
     input: {title: $title, competitionId: $competitionId, closingAt: $closingAt, content: $content, level: $level, type: $type, locationUrl: $locationUrl, startAt: $startAt, capacity: $capacity, place: $place, prefectureId: $prefectureId}
   ) {
