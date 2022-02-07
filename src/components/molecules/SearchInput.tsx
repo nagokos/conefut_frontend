@@ -9,7 +9,7 @@ import Select from '@mui/material/Select';
 import { SelectChangeEvent } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
-import { StyledMenuItem, SearchInputGrey, StyledInput, StyledDateField } from '../index';
+import { StyledSelectMenuItem, SearchInputGrey, StyledInput, StyledDateField } from '../index';
 import { Prefecture } from '../../generated/graphql';
 
 type Props = {
@@ -47,15 +47,15 @@ export const SearchInput: VFC<Props> = memo((props) => {
         value={select}
         onChange={handleChange}
       >
-        <StyledMenuItem value="0" disabled>
+        <StyledSelectMenuItem value="0" disabled>
           募集タイプ
-        </StyledMenuItem>
-        <StyledMenuItem value={10}>試合相手の募集</StyledMenuItem>
-        <StyledMenuItem value={20}>個人での参加の募集</StyledMenuItem>
-        <StyledMenuItem value={30}>チームメイトの募集</StyledMenuItem>
-        <StyledMenuItem value={40}>チームに入りたい募集</StyledMenuItem>
-        <StyledMenuItem value={50}>コーチの募集</StyledMenuItem>
-        <StyledMenuItem value={60}>その他</StyledMenuItem>
+        </StyledSelectMenuItem>
+        <StyledSelectMenuItem value={10}>試合相手の募集</StyledSelectMenuItem>
+        <StyledSelectMenuItem value={20}>個人での参加の募集</StyledSelectMenuItem>
+        <StyledSelectMenuItem value={30}>チームメイトの募集</StyledSelectMenuItem>
+        <StyledSelectMenuItem value={40}>チームに入りたい募集</StyledSelectMenuItem>
+        <StyledSelectMenuItem value={50}>コーチの募集</StyledSelectMenuItem>
+        <StyledSelectMenuItem value={60}>その他</StyledSelectMenuItem>
       </Select>
       <Select
         input={<StyledInput />}
@@ -80,16 +80,16 @@ export const SearchInput: VFC<Props> = memo((props) => {
           },
         }}
       >
-        <StyledMenuItem value="0" disabled>
+        <StyledSelectMenuItem value="0" disabled>
           地域
-        </StyledMenuItem>
+        </StyledSelectMenuItem>
         {prefectures?.map((prefecture: Prefecture) => (
-          <StyledMenuItem disableRipple key={prefecture.id} value={prefecture.id}>
+          <StyledSelectMenuItem disableRipple key={prefecture.id} value={prefecture.id}>
             {prefecture.name}
             {prefecture.id === selectPrefecture && (
               <CheckCircleIcon sx={{ fontSize: 16, color: '#009688', ml: 'auto' }} />
             )}
-          </StyledMenuItem>
+          </StyledSelectMenuItem>
         ))}
       </Select>
       <Select
@@ -100,13 +100,13 @@ export const SearchInput: VFC<Props> = memo((props) => {
         value={select}
         onChange={handleChange}
       >
-        <StyledMenuItem value="0" disabled>
+        <StyledSelectMenuItem value="0" disabled>
           レベル
-        </StyledMenuItem>
-        <StyledMenuItem value={10}>エンジョイ</StyledMenuItem>
-        <StyledMenuItem value={20}>ビギナー</StyledMenuItem>
-        <StyledMenuItem value={30}>ミドル</StyledMenuItem>
-        <StyledMenuItem value={40}>エキスパート</StyledMenuItem>
+        </StyledSelectMenuItem>
+        <StyledSelectMenuItem value={10}>エンジョイ</StyledSelectMenuItem>
+        <StyledSelectMenuItem value={20}>ビギナー</StyledSelectMenuItem>
+        <StyledSelectMenuItem value={30}>ミドル</StyledSelectMenuItem>
+        <StyledSelectMenuItem value={40}>エキスパート</StyledSelectMenuItem>
       </Select>
 
       <LocalizationProvider dateAdapter={AdapterDateFns} locale={jaLocale}>
