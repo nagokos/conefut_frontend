@@ -6,7 +6,7 @@ const flashState = atom<boolean>({
   default: false,
 });
 
-const flashMessage = atom<string>({
+const flashMessage = atom<string | undefined>({
   key: 'flashMessage',
   default: '',
 });
