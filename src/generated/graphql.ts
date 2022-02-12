@@ -81,7 +81,8 @@ export type Recruitment = {
   content: Scalars['String'];
   id: Scalars['String'];
   level: Level;
-  locationUrl?: Maybe<Scalars['String']>;
+  locationLat?: Maybe<Scalars['Float']>;
+  locationLng?: Maybe<Scalars['Float']>;
   place?: Maybe<Scalars['String']>;
   prefecture: Prefecture;
   startAt?: Maybe<Scalars['DateTime']>;
@@ -121,7 +122,8 @@ export type CreateRecruitmentInput = {
   competitionId: Scalars['String'];
   content: Scalars['String'];
   level: Level;
-  locationUrl?: InputMaybe<Scalars['String']>;
+  locationLat?: InputMaybe<Scalars['Float']>;
+  locationLng?: InputMaybe<Scalars['Float']>;
   place?: InputMaybe<Scalars['String']>;
   prefectureId: Scalars['String'];
   startAt?: InputMaybe<Scalars['DateTime']>;
@@ -157,7 +159,8 @@ export type CreateRecruitmentMutationVariables = Exact<{
   content: Scalars['String'];
   level: Level;
   type: Type;
-  locationUrl?: InputMaybe<Scalars['String']>;
+  locationLat?: InputMaybe<Scalars['Float']>;
+  locationLng?: InputMaybe<Scalars['Float']>;
   startAt?: InputMaybe<Scalars['DateTime']>;
   prefectureId: Scalars['String'];
   capacity?: InputMaybe<Scalars['Int']>;
@@ -266,9 +269,9 @@ export type GetPrefecturesQueryHookResult = ReturnType<typeof useGetPrefecturesQ
 export type GetPrefecturesLazyQueryHookResult = ReturnType<typeof useGetPrefecturesLazyQuery>;
 export type GetPrefecturesQueryResult = Apollo.QueryResult<GetPrefecturesQuery, GetPrefecturesQueryVariables>;
 export const CreateRecruitmentDocument = gql`
-    mutation CreateRecruitment($title: String!, $competitionId: String!, $closingAt: DateTime!, $content: String!, $level: Level!, $type: Type!, $locationUrl: String, $startAt: DateTime, $prefectureId: String!, $capacity: Int, $place: String) {
+    mutation CreateRecruitment($title: String!, $competitionId: String!, $closingAt: DateTime!, $content: String!, $level: Level!, $type: Type!, $locationLat: Float, $locationLng: Float, $startAt: DateTime, $prefectureId: String!, $capacity: Int, $place: String) {
   createRecruitment(
-    input: {title: $title, competitionId: $competitionId, closingAt: $closingAt, content: $content, level: $level, type: $type, locationUrl: $locationUrl, startAt: $startAt, capacity: $capacity, place: $place, prefectureId: $prefectureId}
+    input: {title: $title, competitionId: $competitionId, closingAt: $closingAt, content: $content, level: $level, type: $type, locationLat: $locationLat, locationLng: $locationLng, startAt: $startAt, capacity: $capacity, place: $place, prefectureId: $prefectureId}
   ) {
     title
     content
@@ -297,7 +300,8 @@ export type CreateRecruitmentMutationFn = Apollo.MutationFunction<CreateRecruitm
  *      content: // value for 'content'
  *      level: // value for 'level'
  *      type: // value for 'type'
- *      locationUrl: // value for 'locationUrl'
+ *      locationLat: // value for 'locationLat'
+ *      locationLng: // value for 'locationLng'
  *      startAt: // value for 'startAt'
  *      prefectureId: // value for 'prefectureId'
  *      capacity: // value for 'capacity'

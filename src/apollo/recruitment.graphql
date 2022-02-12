@@ -1,0 +1,35 @@
+mutation CreateRecruitment(
+  $title: String!
+  $competitionId: String!
+  $closingAt: DateTime!
+  $content: String!
+  $level: Level!
+  $type: Type!
+  $locationLat: Float
+  $locationLng: Float
+  $startAt: DateTime
+  $prefectureId: String!
+  $capacity: Int
+  $place: String
+) {
+  createRecruitment(
+    input: {
+      title: $title
+      competitionId: $competitionId
+      closingAt: $closingAt
+      content: $content
+      level: $level
+      type: $type
+      locationLat: $locationLat
+      locationLng: $locationLng
+      startAt: $startAt
+      capacity: $capacity
+      place: $place
+      prefectureId: $prefectureId
+    }
+  ) {
+    title
+    content
+    closingAt
+  }
+}
