@@ -30,6 +30,8 @@ export const RecruitmentLocationDialog: VFC<Props> = memo((props) => {
   const { open, setValue, handleClose } = props;
   const [searchBox, setSearchBox] = useState<google.maps.places.SearchBox | null>(null);
 
+  const googleMapApiKey: string = import.meta.env.VITE_GOOGLE_MAP_API_KEY;
+
   const [location, setLocation] = useState<LocationObject>({
     lat: 35.69575,
     lng: 139.77521,
@@ -37,7 +39,7 @@ export const RecruitmentLocationDialog: VFC<Props> = memo((props) => {
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: 'AIzaSyDYTaJuiDoNaznWIv4bxUwB2JrYE_gg3rI',
+    googleMapsApiKey: googleMapApiKey,
     libraries: ['places'],
   });
 
