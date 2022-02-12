@@ -26,6 +26,9 @@ interface LocationObject {
   lng: number;
 }
 
+type Libraries = ['places'];
+const libraries: Libraries = ['places'];
+
 export const RecruitmentLocationDialog: VFC<Props> = memo((props) => {
   const { open, setValue, handleClose } = props;
   const [searchBox, setSearchBox] = useState<google.maps.places.SearchBox | null>(null);
@@ -40,7 +43,7 @@ export const RecruitmentLocationDialog: VFC<Props> = memo((props) => {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: googleMapApiKey,
-    libraries: ['places'],
+    libraries,
   });
 
   const onPlacesChanged = () => {
