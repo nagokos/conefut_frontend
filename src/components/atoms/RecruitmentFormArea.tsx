@@ -16,6 +16,9 @@ export const RecruitmentFormArea: VFC<Props> = memo((props) => {
       name="prefectureId"
       defaultValue=""
       control={control}
+      rules={{
+        required: '募集エリアを選択してください',
+      }}
       render={({ field }) => (
         <>
           <InputLabel color="dark" sx={{ fontWeight: 'bold' }} shrink>

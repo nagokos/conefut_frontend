@@ -1,5 +1,5 @@
 interface ImportMetaEnv {
-  readonly VITE_ENDPOINT: string;
+  readonly VITE_GOOGLE_MAP_API_KEY: string;
   // その他の環境変数...
 }
 
