@@ -16,7 +16,7 @@
     "@date-io/date-fns": "^2.13.1",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
-    "@mui/icons-material": "^5.3.1",
+    "@mui/icons-material": "^5.4.1",
     "@mui/lab": "^5.0.0-alpha.67",
     "@react-google-maps/api": "^2.7.0",
     "@mui/material": "^5.4.1",
@@ -24,12 +24,12 @@
     "graphql": "^16.3.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-hook-form": "^7.26.1",
+    "react-hook-form": "^7.27.0",
     "react-router-dom": "6",
     "recoil": "^0.6.1"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "2.5.0",
+    "@graphql-codegen/cli": "2.6.1",
     "@graphql-codegen/introspection": "2.1.1",
     "@graphql-codegen/typescript": "2.4.3",
     "@graphql-codegen/typescript-operations": "2.2.4",
