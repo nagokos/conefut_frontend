@@ -16,10 +16,7 @@ export const RecruitmentFormCapacity: VFC<Props> = memo((props) => {
     <Controller
       name="capacity"
       control={control}
-      defaultValue={0}
-      rules={{
-        required: '募集の詳細を入力してください',
-      }}
+      defaultValue={1}
       render={({ field }) => (
         <>
           <InputLabel color="dark" sx={{ fontWeight: 'bold' }} shrink htmlFor="input-prefecture">
