@@ -2,21 +2,22 @@ import { memo, VFC } from 'react';
 import { InputLabel } from '@mui/material';
 import { StyledRecruitmentInput } from '../index';
 
-import { CreateRecruitmentInput } from '../../generated/graphql';
+import { CreateRecruitmentInput, Type } from '../../generated/graphql';
 import { Control, Controller } from 'react-hook-form';
 
 type Props = {
   control: Control<CreateRecruitmentInput, object>;
+  watchIsPublished: boolean;
+  watchType: Type;
 };
 
 export const RecruitmentFormCapacity: VFC<Props> = memo((props) => {
-  const { control } = props;
+  const { control, watchIsPublished, watchType } = props;
 
   return (
     <Controller
       name="capacity"
       control={control}
-      defaultValue={1}
       render={({ field }) => (
         <>
           <InputLabel color="dark" sx={{ fontWeight: 'bold' }} shrink htmlFor="input-prefecture">

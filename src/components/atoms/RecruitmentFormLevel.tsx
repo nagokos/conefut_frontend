@@ -1,11 +1,13 @@
 import { memo, VFC } from 'react';
 import { Select, InputLabel } from '@mui/material';
 import { StyledSelectMenuItem, StyledRecruitmentSelectInput } from '../index';
-import { CreateRecruitmentInput, Level } from '../../generated/graphql';
+import { CreateRecruitmentInput, Level, Type } from '../../generated/graphql';
 import { Control, Controller } from 'react-hook-form';
 
 type Props = {
   control: Control<CreateRecruitmentInput, object>;
+  watchIsPublished: boolean;
+  watchType: Type;
 };
 
 interface MenuItem {
@@ -14,9 +16,10 @@ interface MenuItem {
 }
 
 export const RecruitmentFormLevel: VFC<Props> = memo((props) => {
-  const { control } = props;
+  const { control, watchIsPublished, watchType } = props;
 
   const levels: Array<MenuItem> = [
+    { id: Level.Unnecessary, value: '' },
     { id: Level.Enjoy, value: 'エンジョイ' },
     { id: Level.Beginner, value: 'ビギナー' },
     { id: Level.Middle, value: 'ミドル' },
@@ -42,12 +45,16 @@ export const RecruitmentFormLevel: VFC<Props> = memo((props) => {
               },
             }}
             {...field}
-            id="input-prefecture"
             fullWidth
             input={<StyledRecruitmentSelectInput />}
           >
             {levels.map((level: MenuItem) => (
-              <StyledSelectMenuItem disableRipple key={level.id} value={level.id}>
+              <StyledSelectMenuItem
+                sx={{ display: level.id === Type.Unnecessary ? 'none' : '' }}
+                disableRipple
+                key={level.id}
+                value={level.id}
+              >
                 {level.value}
               </StyledSelectMenuItem>
             ))}

@@ -32,7 +32,7 @@ export { RecruitmentFormLevel } from './atoms/RecruitmentFormLevel';
 export { RecruitmentFormCapacity } from './atoms/RecruitmentFormCapacity';
 export { RecruitmentFormStart } from './atoms/RecruitmentFormStart';
 export { RecruitmentFormDeadline } from './atoms/RecruitmentFormDeadline';
-export { RecruitmentFormCreate } from './atoms/RecruitmentFormCreate';
+export { RecruitmentFormPublish } from './atoms/RecruitmentFormPublish';
 export { RecruitmentFormPreview } from './atoms/RecruitmentFormPreview';
 export { RecruitmentFormLocation } from './atoms/RecruitmentFormLocation';
 export { RecruitmentFormDraft } from './atoms/RecruitmentFormDraft';

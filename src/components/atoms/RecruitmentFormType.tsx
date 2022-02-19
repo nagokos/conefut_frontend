@@ -7,6 +7,8 @@ import Menu from '@mui/material/Menu';
 
 type Props = {
   control: Control<CreateRecruitmentInput, object>;
+  watchIsPublished: boolean;
+  watchType: Type;
 };
 
 interface MenuItem {
@@ -15,7 +17,7 @@ interface MenuItem {
 }
 
 export const RecruitmentFormType: VFC<Props> = memo((props) => {
-  const { control } = props;
+  const { control, watchIsPublished, watchType } = props;
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -27,6 +29,7 @@ export const RecruitmentFormType: VFC<Props> = memo((props) => {
   };
 
   const types: Array<MenuItem> = [
+    { id: Type.Unnecessary, value: '' },
     { id: Type.Opponent, value: '試合相手の募集' },
     { id: Type.Individual, value: '個人での参加の募集' },
     { id: Type.Teammate, value: 'チームメイトの募集' },
@@ -39,21 +42,12 @@ export const RecruitmentFormType: VFC<Props> = memo((props) => {
     <Controller
       name="type"
       control={control}
-      rules={{
-        required: '募集タイプを選択してください',
-      }}
       render={({ field }) => (
         <>
-          <Button
-            aria-controls={open ? 'demo-customized-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-            size="small"
-            sx={{ fontSize: 12, px: 1 }}
-            disableRipple
-            onClick={handleClick}
-          >
-            {field.value ? types?.find((type) => type?.id === field?.value)?.value : '募集タイプを選択'}
+          <Button size="small" sx={{ fontSize: 12, px: 1 }} disableRipple onClick={handleClick}>
+            {field.value === Type.Unnecessary || field.value === undefined
+              ? '募集タイプを選択'
+              : types.find((type: MenuItem) => type.id === field.value)?.value}
           </Button>
           <Menu
             elevation={0}
@@ -86,6 +80,7 @@ export const RecruitmentFormType: VFC<Props> = memo((props) => {
                   handleClose();
                   field.onChange(type.id);
                 }}
+                sx={{ display: type.id === Type.Unnecessary ? 'none' : '' }}
                 disableRipple
               >
                 {type.value}

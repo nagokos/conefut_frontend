@@ -6,16 +6,18 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import ja from 'date-fns/locale/ja';
 
-import { CreateRecruitmentInput } from '../../generated/graphql';
+import { CreateRecruitmentInput, Type } from '../../generated/graphql';
 import { StyledRecruitmentInput } from '../index';
 import { format } from 'date-fns';
 
 type Props = {
   control: Control<CreateRecruitmentInput, object>;
+  watchIsPublished: boolean;
+  watchType: Type;
 };
 
 export const RecruitmentFormDeadline: VFC<Props> = memo((props) => {
-  const { control } = props;
+  const { control, watchIsPublished, watchType } = props;
 
   const [valueDeadline, setValueDeadline] = useState<Date | null>(null);
   const [pickerDeadline, setPickerDeadline] = useState<boolean>(false);
@@ -24,9 +26,6 @@ export const RecruitmentFormDeadline: VFC<Props> = memo((props) => {
     <Controller
       name="closingAt"
       control={control}
-      rules={{
-        required: '募集期限を設定してください',
-      }}
       render={({ field }) => (
         <>
           <InputLabel color="dark" sx={{ fontWeight: 'bold' }} shrink htmlFor="input-prefecture">

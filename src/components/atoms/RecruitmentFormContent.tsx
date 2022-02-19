@@ -1,31 +1,29 @@
 import { memo, VFC } from 'react';
 import { InputBase, Paper } from '@mui/material';
 
-import { CreateRecruitmentInput } from '../../generated/graphql';
+import { CreateRecruitmentInput, Type } from '../../generated/graphql';
 import { Control, Controller } from 'react-hook-form';
 
 type Props = {
   control: Control<CreateRecruitmentInput, object>;
+  watchIsPublished: boolean;
+  watchType: Type;
 };
 
 export const RecruitmentFormContent: VFC<Props> = memo((props) => {
-  const { control } = props;
+  const { control, watchIsPublished, watchType } = props;
 
   return (
     <Controller
       name="content"
       control={control}
-      defaultValue=""
-      rules={{
-        required: '募集の詳細を入力してください',
-      }}
       render={({ field }) => (
         <Paper
           elevation={0}
           sx={{
             borderRadius: 2,
             bgcolor: '#fff',
-            height: 310,
+            height: 330,
             mt: 3,
           }}
         >

@@ -1,14 +1,15 @@
 mutation CreateRecruitment(
   $title: String!
-  $competitionId: String!
-  $closingAt: DateTime!
-  $content: String!
+  $competitionId: String
+  $closingAt: DateTime
+  $content: String
   $level: Level!
   $type: Type!
   $locationLat: Float
   $locationLng: Float
   $startAt: DateTime
-  $prefectureId: String!
+  $prefectureId: String
+  $isPublished: Boolean!
   $capacity: Int
   $place: String
 ) {
@@ -22,6 +23,7 @@ mutation CreateRecruitment(
       type: $type
       locationLat: $locationLat
       locationLng: $locationLng
+      isPublished: $isPublished
       startAt: $startAt
       capacity: $capacity
       place: $place

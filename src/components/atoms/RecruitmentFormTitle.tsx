@@ -14,9 +14,6 @@ export const RecruitmentFormTitle: VFC<Props> = memo((props) => {
       name="title"
       control={control}
       defaultValue=""
-      rules={{
-        required: 'タイトルを入力してください',
-      }}
       render={({ field }) => (
         <InputBase
           {...field}

@@ -1,31 +1,30 @@
 import { memo, VFC } from 'react';
 import { Select, InputLabel } from '@mui/material';
 import { StyledSelectMenuItem, StyledRecruitmentSelectInput } from '../index';
-import { CreateRecruitmentInput, useGetPrefecturesQuery } from '../../generated/graphql';
-import { Control, Controller } from 'react-hook-form';
+import { CreateRecruitmentInput, Type, useGetPrefecturesQuery } from '../../generated/graphql';
+import { Control, Controller, UseFormGetValues } from 'react-hook-form';
 
 type Props = {
   control: Control<CreateRecruitmentInput, object>;
+  getValues: UseFormGetValues<CreateRecruitmentInput>;
+  watchIsPublished: boolean;
+  watchType: Type;
 };
 export const RecruitmentFormArea: VFC<Props> = memo((props) => {
-  const { control } = props;
+  const { control, getValues, watchIsPublished, watchType } = props;
   const { loading, data } = useGetPrefecturesQuery();
 
   return (
     <Controller
       name="prefectureId"
-      defaultValue=""
       control={control}
-      rules={{
-        required: '募集エリアを選択してください',
-      }}
+      defaultValue=""
       render={({ field }) => (
         <>
           <InputLabel color="dark" sx={{ fontWeight: 'bold' }} shrink>
             募集エリア
           </InputLabel>
           <Select
-            defaultValue=""
             MenuProps={{
               PaperProps: {
                 sx: {
@@ -35,6 +34,7 @@ export const RecruitmentFormArea: VFC<Props> = memo((props) => {
             }}
             {...field}
             fullWidth
+            defaultValue=""
             input={<StyledRecruitmentSelectInput />}
           >
             {data?.getPrefectures.map((prefecture) => (
