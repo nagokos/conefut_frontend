@@ -1,17 +1,19 @@
 import { memo, VFC, useState, MouseEvent } from 'react';
 import { Button } from '@mui/material';
 import { StyledSelectMenuItem } from '../index';
-import { Competition, useGetCompetitionsQuery } from '../../generated/graphql';
+import { Competition, Type, useGetCompetitionsQuery } from '../../generated/graphql';
 import { Control, Controller } from 'react-hook-form';
 import { CreateRecruitmentInput } from '../../generated/graphql';
 import Menu from '@mui/material/Menu';
 
 type Props = {
   control: Control<CreateRecruitmentInput, object>;
+  watchIsPublished: boolean;
+  watchType: Type;
 };
 
 export const RecruitmentFormCompetition: VFC<Props> = memo((props) => {
-  const { control } = props;
+  const { control, watchIsPublished, watchType } = props;
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -32,9 +34,6 @@ export const RecruitmentFormCompetition: VFC<Props> = memo((props) => {
     <Controller
       name="competitionId"
       control={control}
-      rules={{
-        required: '競技を選択してください',
-      }}
       render={({ field }) => (
         <>
           <Button
