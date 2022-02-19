@@ -76,15 +76,16 @@ export type Query = {
 export type Recruitment = {
   __typename?: 'Recruitment';
   capacity?: Maybe<Scalars['Int']>;
-  closingAt: Scalars['DateTime'];
-  competition: Competition;
-  content: Scalars['String'];
+  closingAt?: Maybe<Scalars['DateTime']>;
+  competition?: Maybe<Competition>;
+  content?: Maybe<Scalars['String']>;
   id: Scalars['String'];
+  isPublished: Scalars['Boolean'];
   level: Level;
   locationLat?: Maybe<Scalars['Float']>;
   locationLng?: Maybe<Scalars['Float']>;
   place?: Maybe<Scalars['String']>;
-  prefecture: Prefecture;
+  prefecture?: Maybe<Prefecture>;
   startAt?: Maybe<Scalars['DateTime']>;
   title: Scalars['String'];
   type: Type;
@@ -102,7 +103,8 @@ export enum Type {
   Joining = 'JOINING',
   Opponent = 'OPPONENT',
   Others = 'OTHERS',
-  Teammate = 'TEAMMATE'
+  Teammate = 'TEAMMATE',
+  Unnecessary = 'UNNECESSARY'
 }
 
 export type User = {
@@ -118,14 +120,15 @@ export type User = {
 
 export type CreateRecruitmentInput = {
   capacity?: InputMaybe<Scalars['Int']>;
-  closingAt: Scalars['DateTime'];
-  competitionId: Scalars['String'];
-  content: Scalars['String'];
+  closingAt?: InputMaybe<Scalars['DateTime']>;
+  competitionId?: InputMaybe<Scalars['String']>;
+  content?: InputMaybe<Scalars['String']>;
+  isPublished: Scalars['Boolean'];
   level: Level;
   locationLat?: InputMaybe<Scalars['Float']>;
   locationLng?: InputMaybe<Scalars['Float']>;
   place?: InputMaybe<Scalars['String']>;
-  prefectureId: Scalars['String'];
+  prefectureId?: InputMaybe<Scalars['String']>;
   startAt?: InputMaybe<Scalars['DateTime']>;
   title: Scalars['String'];
   type: Type;
@@ -154,21 +157,22 @@ export type GetPrefecturesQuery = { __typename?: 'Query', getPrefectures: Array<
 
 export type CreateRecruitmentMutationVariables = Exact<{
   title: Scalars['String'];
-  competitionId: Scalars['String'];
-  closingAt: Scalars['DateTime'];
-  content: Scalars['String'];
+  competitionId?: InputMaybe<Scalars['String']>;
+  closingAt?: InputMaybe<Scalars['DateTime']>;
+  content?: InputMaybe<Scalars['String']>;
   level: Level;
   type: Type;
   locationLat?: InputMaybe<Scalars['Float']>;
   locationLng?: InputMaybe<Scalars['Float']>;
   startAt?: InputMaybe<Scalars['DateTime']>;
-  prefectureId: Scalars['String'];
+  prefectureId?: InputMaybe<Scalars['String']>;
+  isPublished: Scalars['Boolean'];
   capacity?: InputMaybe<Scalars['Int']>;
   place?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type CreateRecruitmentMutation = { __typename?: 'Mutation', createRecruitment: { __typename?: 'Recruitment', title: string, content: string, closingAt: any } };
+export type CreateRecruitmentMutation = { __typename?: 'Mutation', createRecruitment: { __typename?: 'Recruitment', title: string, content?: string | null, closingAt?: any | null } };
 
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -269,9 +273,9 @@ export type GetPrefecturesQueryHookResult = ReturnType<typeof useGetPrefecturesQ
 export type GetPrefecturesLazyQueryHookResult = ReturnType<typeof useGetPrefecturesLazyQuery>;
 export type GetPrefecturesQueryResult = Apollo.QueryResult<GetPrefecturesQuery, GetPrefecturesQueryVariables>;
 export const CreateRecruitmentDocument = gql`
-    mutation CreateRecruitment($title: String!, $competitionId: String!, $closingAt: DateTime!, $content: String!, $level: Level!, $type: Type!, $locationLat: Float, $locationLng: Float, $startAt: DateTime, $prefectureId: String!, $capacity: Int, $place: String) {
+    mutation CreateRecruitment($title: String!, $competitionId: String, $closingAt: DateTime, $content: String, $level: Level!, $type: Type!, $locationLat: Float, $locationLng: Float, $startAt: DateTime, $prefectureId: String, $isPublished: Boolean!, $capacity: Int, $place: String) {
   createRecruitment(
-    input: {title: $title, competitionId: $competitionId, closingAt: $closingAt, content: $content, level: $level, type: $type, locationLat: $locationLat, locationLng: $locationLng, startAt: $startAt, capacity: $capacity, place: $place, prefectureId: $prefectureId}
+    input: {title: $title, competitionId: $competitionId, closingAt: $closingAt, content: $content, level: $level, type: $type, locationLat: $locationLat, locationLng: $locationLng, isPublished: $isPublished, startAt: $startAt, capacity: $capacity, place: $place, prefectureId: $prefectureId}
   ) {
     title
     content
@@ -304,6 +308,7 @@ export type CreateRecruitmentMutationFn = Apollo.MutationFunction<CreateRecruitm
  *      locationLng: // value for 'locationLng'
  *      startAt: // value for 'startAt'
  *      prefectureId: // value for 'prefectureId'
+ *      isPublished: // value for 'isPublished'
  *      capacity: // value for 'capacity'
  *      place: // value for 'place'
  *   },
