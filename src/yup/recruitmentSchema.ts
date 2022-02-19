@@ -3,7 +3,7 @@ import { Level, Type } from '../generated/graphql';
 import { differenceInMinutes } from 'date-fns';
 
 export const recruitmentSchema = yup.object().shape({
-  title: yup.string().required('タイトルを入力してください'),
+  title: yup.string().max(60, 'タイトルは60文字以内で入力してください').required('タイトルを入力してください'),
   competitionId: yup.string().when('isPublished', {
     is: true,
     then: yup.string().required('募集競技を選択してください'),
@@ -23,11 +23,14 @@ export const recruitmentSchema = yup.object().shape({
       }),
     otherwise: yup.string().notRequired(),
   }),
-  content: yup.string().when('isPublished', {
-    is: true,
-    then: yup.string().required('募集の詳細を入力してください'),
-    otherwise: yup.string().notRequired(),
-  }),
+  content: yup
+    .string()
+    .max(10000, '募集の詳細は10000文字以内で入力してください')
+    .when('isPublished', {
+      is: true,
+      then: yup.string().required('募集の詳細を入力してください'),
+      otherwise: yup.string().notRequired(),
+    }),
   prefectureId: yup.string().when('isPublished', {
     is: true,
     then: yup.string().required('募集エリアを選択してください'),
