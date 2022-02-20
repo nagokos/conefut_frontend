@@ -17,7 +17,7 @@ import { LoginUserInput, useGetCurrentUserQuery, useLoginUserMutation } from '..
 import { flashMessage, flashState, flashType } from '../../store/flash';
 import { isLoggedIn } from '../../reactive/user';
 import { LoginFormEmail, LoginFormPassword } from '../index';
-import { userSchema } from '../../yup/userSchema';
+import { loginSchema } from '../../yup/userSchema';
 
 type Props = {
   open: boolean;
@@ -42,7 +42,7 @@ export const LoginDialog: VFC<Props> = memo((props) => {
       email: '',
       password: '',
     },
-    resolver: yupResolver(userSchema),
+    resolver: yupResolver(loginSchema),
     mode: 'onChange',
   });
 

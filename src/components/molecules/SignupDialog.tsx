@@ -17,7 +17,7 @@ import { useSize } from '../../hooks';
 import { SignupFormName, SignupFormPassword, SignupFormEmail } from '../index';
 import { flashMessage, flashState, flashType } from '../../store/flash';
 import { isLoggedIn } from '../../reactive/user';
-import { userSchema } from '../../yup/userSchema';
+import { signupSchema } from '../../yup/userSchema';
 
 type Props = {
   open: boolean;
@@ -43,7 +43,7 @@ export const SignupDialog: VFC<Props> = memo((props) => {
       email: '',
       password: '',
     },
-    resolver: yupResolver(userSchema),
+    resolver: yupResolver(signupSchema),
     mode: 'onChange',
   });
 
