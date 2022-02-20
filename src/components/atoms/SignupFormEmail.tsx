@@ -18,13 +18,6 @@ export const SignupFormEmail: VFC<Props> = memo((props) => {
   return (
     <Controller
       name="email"
-      rules={{
-        required: 'メールアドレスを入力してください',
-        pattern: {
-          value: /^[a-zA-Z0-9_+-]+(.[a-zA-Z0-9_+-]+)*@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/i,
-          message: 'メールアドレスを正しく入力してください',
-        },
-      }}
       control={control}
       render={({ field, formState: { errors } }) => (
         <FormControl fullWidth variant="standard">

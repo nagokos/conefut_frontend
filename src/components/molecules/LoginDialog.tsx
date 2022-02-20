@@ -10,12 +10,14 @@ import { useNavigate } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { GraphQLError } from 'graphql';
 import { useSetRecoilState } from 'recoil';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useSize } from '../../hooks';
 import { LoginUserInput, useGetCurrentUserQuery, useLoginUserMutation } from '../../generated/graphql';
 import { flashMessage, flashState, flashType } from '../../store/flash';
 import { isLoggedIn } from '../../reactive/user';
 import { LoginFormEmail, LoginFormPassword } from '../index';
+import { userSchema } from '../../yup/userSchema';
 
 type Props = {
   open: boolean;
@@ -40,6 +42,7 @@ export const LoginDialog: VFC<Props> = memo((props) => {
       email: '',
       password: '',
     },
+    resolver: yupResolver(userSchema),
     mode: 'onChange',
   });
 
