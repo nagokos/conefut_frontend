@@ -1,4 +1,4 @@
-import { memo, useState, VFC } from 'react';
+import { memo, useEffect, useState, VFC } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -11,7 +11,7 @@ import { GoogleMap, StandaloneSearchBox, useJsApiLoader, Marker } from '@react-g
 import Autocomplete from '@mui/material/Autocomplete';
 import Popper from '@mui/material/Popper';
 
-import { CreateRecruitmentInput } from '../../generated/graphql';
+import { CreateRecruitmentInput, Type } from '../../generated/graphql';
 import { Typography } from '@mui/material';
 import { StyledLocationSearchInput } from '../index';
 
@@ -19,6 +19,7 @@ type Props = {
   setValue: UseFormSetValue<CreateRecruitmentInput>;
   open: boolean;
   handleClose: () => void;
+  watchType: Type;
 };
 
 interface LocationObject {
@@ -30,7 +31,7 @@ type Libraries = ['places'];
 const libraries: Libraries = ['places'];
 
 export const RecruitmentLocationDialog: VFC<Props> = memo((props) => {
-  const { open, setValue, handleClose } = props;
+  const { open, setValue, handleClose, watchType } = props;
   const [searchBox, setSearchBox] = useState<google.maps.places.SearchBox | null>(null);
 
   const googleMapApiKey: string = import.meta.env.VITE_GOOGLE_MAP_API_KEY;
@@ -78,6 +79,20 @@ export const RecruitmentLocationDialog: VFC<Props> = memo((props) => {
     handleClose();
   };
 
+  useEffect(() => {
+    if (
+      watchType === Type.Teammate ||
+      watchType === Type.Joining ||
+      watchType === Type.Coaching ||
+      watchType === Type.Others
+    ) {
+      setLocation({
+        lat: 35.69575,
+        lng: 139.77521,
+      });
+    }
+  }, [watchType]);
+
   return (
     <Dialog
       PaperProps={{
@@ -106,9 +121,9 @@ export const RecruitmentLocationDialog: VFC<Props> = memo((props) => {
             <Typography sx={{ color: '#757575' }} mb={2} fontSize={13}>
               会場を埋め込むためにマーカーを設置してください。
               <br />
-              マーカーを設置するにはマップをクリック又は検索することで設置できます。
+              マーカーを設置するにはマップをクリック、検索することで設置できます。
               <br />
-              ※マーカーが設置されていないと保存することはできません。
+              ※マーカーを指定の位置に設置後、必ず保存するをクリックしてください。
             </Typography>
 
             <GoogleMap
@@ -133,20 +148,7 @@ export const RecruitmentLocationDialog: VFC<Props> = memo((props) => {
                     renderInput={(params) => {
                       const { InputLabelProps, InputProps, ...rest } = params;
                       return (
-                        <StyledLocationSearchInput
-                          ref={InputProps.ref}
-                          // endAdornment={
-                          //   <IconButton
-                          //     onClick={onPlacesChanged}
-                          //     disableRipple
-                          //     sx={{ position: 'relative', right: 45 }}
-                          //   >
-                          //     <SearchIcon sx={{ fontSize: 20 }} />
-                          //   </IconButton>
-                          // }
-                          placeholder="検索ワードを入力"
-                          {...rest}
-                        />
+                        <StyledLocationSearchInput ref={InputProps.ref} placeholder="検索ワードを入力" {...rest} />
                       );
                     }}
                   />
