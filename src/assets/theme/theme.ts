@@ -111,7 +111,7 @@ export const theme = createTheme({
         root: {
           fontWeight: 'bold',
           textTransform: 'none',
-          borderRadius: 20,
+          borderRadius: 100,
         },
       },
     },
