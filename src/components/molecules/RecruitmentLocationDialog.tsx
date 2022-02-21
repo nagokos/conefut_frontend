@@ -59,8 +59,6 @@ export const RecruitmentLocationDialog: VFC<Props> = memo((props) => {
   };
 
   const onSBLoad = (ref: google.maps.places.SearchBox) => {
-    console.log(ref);
-
     setSearchBox(ref);
   };
 
