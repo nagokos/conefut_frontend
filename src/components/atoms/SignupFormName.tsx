@@ -23,9 +23,6 @@ export const SignupFormName: VFC<Props> = memo((props) => {
     <Controller
       name="name"
       control={control}
-      rules={{
-        required: '名前を入力してください',
-      }}
       render={({ field: { onChange }, formState: { errors } }) => (
         <FormControl fullWidth variant="standard">
           <InputLabel sx={{ fontWeight: 'bold' }} shrink htmlFor="input-name">

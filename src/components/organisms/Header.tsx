@@ -11,13 +11,12 @@ import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import Settings from '@mui/icons-material/Settings';
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import Logout from '@mui/icons-material/Logout';
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
-import MessageIcon from '@mui/icons-material/Message';
-import EventNoteIcon from '@mui/icons-material/EventNote';
-import HelpIcon from '@mui/icons-material/Help';
-import ArticleIcon from '@mui/icons-material/Article';
+import MessageOutlinedIcon from '@mui/icons-material/MessageOutlined';
+import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
+import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
+import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 
 import { useSize } from '../../hooks/index';
 import { TabCompetition } from '../index';
@@ -25,6 +24,13 @@ import { Divider, IconButton } from '@mui/material';
 import { useLocation, Link as RouterLink, useNavigate } from 'react-router-dom';
 import { isLoggedIn } from '../../reactive/user';
 import { useGetCurrentUserQuery, useLogoutUserMutation } from '../../generated/graphql';
+import { styled } from '@mui/material/styles';
+
+const StyledMenuItem = styled(MenuItem)(() => ({
+  '&:hover': {
+    background: '#f0f5f4',
+  },
+}));
 
 export const Header: VFC = memo(() => {
   const { data, loading } = useGetCurrentUserQuery();
@@ -58,6 +64,10 @@ export const Header: VFC = memo(() => {
     return (
       location.pathname === '/signup' || location.pathname === '/login' || location.pathname === '/recruitments/new'
     );
+  };
+
+  const isNeedTabCompetition = (): boolean => {
+    return location.pathname === '/';
   };
 
   const pushHome = () => {
@@ -164,55 +174,49 @@ export const Header: VFC = memo(() => {
                     transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                     anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                   >
-                    <MenuItem disableRipple sx={{ py: 2 }}>
+                    <StyledMenuItem disableRipple sx={{ py: 2 }}>
                       <Avatar sx={{ mr: 1.4, width: 35, height: 35 }} src={user?.avatar} />
                       {user?.name}
-                    </MenuItem>
+                    </StyledMenuItem>
                     <Divider sx={{ borderColor: '#ebf2f2' }} />
-                    <MenuItem onClick={() => transitionPage('/recruitments/new')} disableRipple sx={{ py: 1.2 }}>
+                    <StyledMenuItem onClick={() => transitionPage('/recruitments/new')} disableRipple sx={{ py: 1.2 }}>
                       <ListItemIcon>
-                        <ArticleIcon sx={{ fontSize: 21 }} />
+                        <CreateOutlinedIcon sx={{ fontSize: 21 }} />
                       </ListItemIcon>
                       <Box sx={{ color: '#616161', position: 'relative', fontSize: 12.7 }}>募集の作成</Box>
-                    </MenuItem>
-                    <MenuItem disableRipple sx={{ py: 1.2 }}>
+                    </StyledMenuItem>
+                    <StyledMenuItem onClick={() => transitionPage('/dashboard')} disableRipple sx={{ py: 1.2 }}>
                       <ListItemIcon>
-                        <EventNoteIcon sx={{ fontSize: 21 }} />
+                        <ArticleOutlinedIcon sx={{ fontSize: 21 }} />
                       </ListItemIcon>
-                      <Box sx={{ color: '#616161', position: 'relative', fontSize: 12.7 }}>応募済みの募集</Box>
-                    </MenuItem>
-                    <MenuItem disableRipple sx={{ py: 1.2 }}>
+                      <Box sx={{ color: '#616161', position: 'relative', fontSize: 12.7 }}>募集の管理</Box>
+                    </StyledMenuItem>
+                    <StyledMenuItem disableRipple sx={{ py: 1.2 }}>
                       <ListItemIcon>
-                        <MessageIcon sx={{ fontSize: 21 }} />
+                        <MessageOutlinedIcon sx={{ fontSize: 21 }} />
                       </ListItemIcon>
                       <Box sx={{ color: '#616161', position: 'relative', fontSize: 12.7 }}>メッセージの管理</Box>
-                    </MenuItem>
-                    <MenuItem disableRipple sx={{ py: 1.2 }}>
-                      <ListItemIcon>
-                        <BookmarkBorderIcon sx={{ fontSize: 21 }} />
-                      </ListItemIcon>
-                      <Box sx={{ color: '#616161', position: 'relative', fontSize: 12.7 }}>ストックした募集</Box>
-                    </MenuItem>
+                    </StyledMenuItem>
                     <Divider sx={{ borderColor: '#ebf2f2' }} />
-                    <MenuItem disableRipple sx={{ py: 1.2, fontSize: 13 }}>
+                    <StyledMenuItem disableRipple sx={{ py: 1.2, fontSize: 13 }}>
                       <ListItemIcon>
-                        <Settings sx={{ fontSize: 21 }} />
+                        <SettingsOutlinedIcon sx={{ fontSize: 21 }} />
                       </ListItemIcon>
                       <Box sx={{ color: '#616161', position: 'relative', fontSize: 12.7 }}>アカウント設定</Box>
-                    </MenuItem>
-                    <MenuItem disableRipple sx={{ py: 1.2, fontSize: 13 }}>
+                    </StyledMenuItem>
+                    <StyledMenuItem disableRipple sx={{ py: 1.2, fontSize: 13 }}>
                       <ListItemIcon>
-                        <HelpIcon sx={{ fontSize: 21 }} />
+                        <HelpOutlineOutlinedIcon sx={{ fontSize: 21 }} />
                       </ListItemIcon>
                       <Box sx={{ color: '#616161', position: 'relative', fontSize: 12.7 }}>お問い合わせ</Box>
-                    </MenuItem>
+                    </StyledMenuItem>
                     <Divider sx={{ borderColor: '#ebf2f2' }} />
-                    <MenuItem onClick={logoutUser} disableRipple sx={{ py: 1.2 }}>
+                    <StyledMenuItem onClick={logoutUser} disableRipple sx={{ py: 1.2 }}>
                       <ListItemIcon>
                         <Logout sx={{ fontSize: 21 }} />
                       </ListItemIcon>
                       <Box sx={{ color: '#616161', position: 'relative', fontSize: 12.7 }}>ログアウト</Box>
-                    </MenuItem>
+                    </StyledMenuItem>
                   </Menu>
                 </>
               )}
@@ -243,10 +247,13 @@ export const Header: VFC = memo(() => {
               )}
             </Toolbar>
           </AppBar>
+
           <Box zIndex={100} component="nav" sx={{ position: 'sticky', top: 0, background: '#fff' }}>
-            <Box component="div" maxWidth={1200} mx={'auto'}>
-              <TabCompetition />
-            </Box>
+            {isNeedTabCompetition() && (
+              <Box component="div" maxWidth={1200} mx={'auto'}>
+                <TabCompetition />
+              </Box>
+            )}
             <Divider sx={{ borderColor: '#ebf2f2' }} />
           </Box>
         </>

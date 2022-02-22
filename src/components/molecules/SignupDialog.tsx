@@ -11,11 +11,13 @@ import { CreateUserInput, useCreateUserMutation, useGetCurrentUserQuery } from '
 import { GraphQLError } from 'graphql';
 import { useSetRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useSize } from '../../hooks';
 import { SignupFormName, SignupFormPassword, SignupFormEmail } from '../index';
 import { flashMessage, flashState, flashType } from '../../store/flash';
 import { isLoggedIn } from '../../reactive/user';
+import { signupSchema } from '../../yup/userSchema';
 
 type Props = {
   open: boolean;
@@ -41,6 +43,7 @@ export const SignupDialog: VFC<Props> = memo((props) => {
       email: '',
       password: '',
     },
+    resolver: yupResolver(signupSchema),
     mode: 'onChange',
   });
 

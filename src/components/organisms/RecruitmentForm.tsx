@@ -108,8 +108,6 @@ export const RecruitmentForm: VFC = memo(() => {
   };
 
   useEffect(() => {
-    console.log(errors);
-
     let message: string | undefined = '';
     if (Object.keys(errors).length !== 0) {
       if (errors.title) {

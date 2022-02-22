@@ -26,14 +26,6 @@ export const LoginFormPassword: VFC<Props> = memo((props) => {
     <Controller
       name="password"
       control={control}
-      rules={{
-        required: 'パスワードを入力してください',
-        min: 8,
-        pattern: {
-          value: /^(?=.*?[a-z])(?=.*?\d)[a-z\d]{8,}$/i,
-          message: 'パスワードを正しく入力してください',
-        },
-      }}
       render={({ field, formState: { errors } }) => (
         <FormControl fullWidth variant="standard">
           <InputLabel sx={{ fontWeight: 'bold' }} shrink htmlFor="input-password">
