@@ -38,3 +38,5 @@ export { RecruitmentFormLocation } from './atoms/RecruitmentFormLocation';
 export { RecruitmentFormDraft } from './atoms/RecruitmentFormDraft';
 export { RecruitmentFormHelp } from './atoms/RecruitmentFormHelp';
 export { RecruitmentLocationDialog } from './molecules/RecruitmentLocationDialog';
+export { RecruitmentDeleteDialog } from './molecules/RecruitmentDeleteDiaglog';
+export { RecruitmentList } from './molecules/RecruitmentList';
