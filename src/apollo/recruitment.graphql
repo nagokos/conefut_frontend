@@ -43,3 +43,7 @@ mutation CreateRecruitment(
     closingAt
   }
 }
+
+mutation DeleteRecruitment($id: String!) {
+  deleteRecruitment(id: $id)
+}
