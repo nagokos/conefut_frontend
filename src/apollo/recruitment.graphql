@@ -1,3 +1,11 @@
+query GetCurrentUserRecruitments {
+  getCurrentUserRecruitments {
+    id
+    title
+    isPublished
+  }
+}
+
 mutation CreateRecruitment(
   $title: String!
   $competitionId: String
