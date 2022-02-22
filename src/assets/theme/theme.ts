@@ -66,6 +66,9 @@ export const theme = createTheme({
     secondary: {
       main: '#212121',
     },
+    error: {
+      main: 'rgb(244, 33, 46)',
+    },
   },
   typography: {
     fontFamily: [
