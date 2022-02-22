@@ -41,8 +41,9 @@ export type Mutation = {
   __typename?: 'Mutation';
   createRecruitment: Recruitment;
   createUser: User;
+  deleteRecruitment: Scalars['Boolean'];
   loginUser: User;
-  logoutUser?: Maybe<Scalars['Boolean']>;
+  logoutUser: Scalars['Boolean'];
 };
 
 
@@ -53,6 +54,11 @@ export type MutationCreateRecruitmentArgs = {
 
 export type MutationCreateUserArgs = {
   input: CreateUserInput;
+};
+
+
+export type MutationDeleteRecruitmentArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -70,6 +76,7 @@ export type Query = {
   __typename?: 'Query';
   getCompetitions: Array<Competition>;
   getCurrentUser?: Maybe<User>;
+  getCurrentUserRecruitments: Array<Recruitment>;
   getPrefectures: Array<Prefecture>;
 };
 
@@ -155,6 +162,11 @@ export type GetPrefecturesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetPrefecturesQuery = { __typename?: 'Query', getPrefectures: Array<{ __typename?: 'Prefecture', id: string, name: string }> };
 
+export type GetCurrentUserRecruitmentsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCurrentUserRecruitmentsQuery = { __typename?: 'Query', getCurrentUserRecruitments: Array<{ __typename?: 'Recruitment', id: string, title: string, isPublished: boolean }> };
+
 export type CreateRecruitmentMutationVariables = Exact<{
   title: Scalars['String'];
   competitionId?: InputMaybe<Scalars['String']>;
@@ -173,6 +185,13 @@ export type CreateRecruitmentMutationVariables = Exact<{
 
 
 export type CreateRecruitmentMutation = { __typename?: 'Mutation', createRecruitment: { __typename?: 'Recruitment', title: string, content?: string | null, closingAt?: any | null } };
+
+export type DeleteRecruitmentMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type DeleteRecruitmentMutation = { __typename?: 'Mutation', deleteRecruitment: boolean };
 
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -199,7 +218,7 @@ export type LoginUserMutation = { __typename?: 'Mutation', loginUser: { __typena
 export type LogoutUserMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LogoutUserMutation = { __typename?: 'Mutation', logoutUser?: boolean | null };
+export type LogoutUserMutation = { __typename?: 'Mutation', logoutUser: boolean };
 
 
 export const GetCompetitionsDocument = gql`
@@ -272,6 +291,42 @@ export function useGetPrefecturesLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type GetPrefecturesQueryHookResult = ReturnType<typeof useGetPrefecturesQuery>;
 export type GetPrefecturesLazyQueryHookResult = ReturnType<typeof useGetPrefecturesLazyQuery>;
 export type GetPrefecturesQueryResult = Apollo.QueryResult<GetPrefecturesQuery, GetPrefecturesQueryVariables>;
+export const GetCurrentUserRecruitmentsDocument = gql`
+    query GetCurrentUserRecruitments {
+  getCurrentUserRecruitments {
+    id
+    title
+    isPublished
+  }
+}
+    `;
+
+/**
+ * __useGetCurrentUserRecruitmentsQuery__
+ *
+ * To run a query within a React component, call `useGetCurrentUserRecruitmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCurrentUserRecruitmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCurrentUserRecruitmentsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCurrentUserRecruitmentsQuery(baseOptions?: Apollo.QueryHookOptions<GetCurrentUserRecruitmentsQuery, GetCurrentUserRecruitmentsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCurrentUserRecruitmentsQuery, GetCurrentUserRecruitmentsQueryVariables>(GetCurrentUserRecruitmentsDocument, options);
+      }
+export function useGetCurrentUserRecruitmentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCurrentUserRecruitmentsQuery, GetCurrentUserRecruitmentsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCurrentUserRecruitmentsQuery, GetCurrentUserRecruitmentsQueryVariables>(GetCurrentUserRecruitmentsDocument, options);
+        }
+export type GetCurrentUserRecruitmentsQueryHookResult = ReturnType<typeof useGetCurrentUserRecruitmentsQuery>;
+export type GetCurrentUserRecruitmentsLazyQueryHookResult = ReturnType<typeof useGetCurrentUserRecruitmentsLazyQuery>;
+export type GetCurrentUserRecruitmentsQueryResult = Apollo.QueryResult<GetCurrentUserRecruitmentsQuery, GetCurrentUserRecruitmentsQueryVariables>;
 export const CreateRecruitmentDocument = gql`
     mutation CreateRecruitment($title: String!, $competitionId: String, $closingAt: DateTime, $content: String, $level: Level!, $type: Type!, $locationLat: Float, $locationLng: Float, $startAt: DateTime, $prefectureId: String, $isPublished: Boolean!, $capacity: Int, $place: String) {
   createRecruitment(
@@ -321,6 +376,37 @@ export function useCreateRecruitmentMutation(baseOptions?: Apollo.MutationHookOp
 export type CreateRecruitmentMutationHookResult = ReturnType<typeof useCreateRecruitmentMutation>;
 export type CreateRecruitmentMutationResult = Apollo.MutationResult<CreateRecruitmentMutation>;
 export type CreateRecruitmentMutationOptions = Apollo.BaseMutationOptions<CreateRecruitmentMutation, CreateRecruitmentMutationVariables>;
+export const DeleteRecruitmentDocument = gql`
+    mutation DeleteRecruitment($id: String!) {
+  deleteRecruitment(id: $id)
+}
+    `;
+export type DeleteRecruitmentMutationFn = Apollo.MutationFunction<DeleteRecruitmentMutation, DeleteRecruitmentMutationVariables>;
+
+/**
+ * __useDeleteRecruitmentMutation__
+ *
+ * To run a mutation, you first call `useDeleteRecruitmentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteRecruitmentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteRecruitmentMutation, { data, loading, error }] = useDeleteRecruitmentMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteRecruitmentMutation(baseOptions?: Apollo.MutationHookOptions<DeleteRecruitmentMutation, DeleteRecruitmentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteRecruitmentMutation, DeleteRecruitmentMutationVariables>(DeleteRecruitmentDocument, options);
+      }
+export type DeleteRecruitmentMutationHookResult = ReturnType<typeof useDeleteRecruitmentMutation>;
+export type DeleteRecruitmentMutationResult = Apollo.MutationResult<DeleteRecruitmentMutation>;
+export type DeleteRecruitmentMutationOptions = Apollo.BaseMutationOptions<DeleteRecruitmentMutation, DeleteRecruitmentMutationVariables>;
 export const GetCurrentUserDocument = gql`
     query GetCurrentUser {
   getCurrentUser {
