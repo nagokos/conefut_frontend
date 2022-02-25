@@ -1,20 +1,20 @@
 import { memo, useState, VFC, MouseEvent } from 'react';
 import { Button } from '@mui/material';
 import { StyledSelectMenuItem } from '../index';
-import { CreateRecruitmentInput, Type } from '../../generated/graphql';
+import { RecruitmentInput, Type } from '../../generated/graphql';
 import { Control, Controller } from 'react-hook-form';
 import Menu from '@mui/material/Menu';
 
 type Props = {
-  control: Control<CreateRecruitmentInput, object>;
+  control: Control<RecruitmentInput, object>;
   watchIsPublished: boolean;
   watchType: Type;
 };
 
-interface MenuItem {
+type MenuItem = {
   id: string;
   value: string;
-}
+};
 
 export const RecruitmentFormType: VFC<Props> = memo((props) => {
   const { control, watchIsPublished, watchType } = props;
