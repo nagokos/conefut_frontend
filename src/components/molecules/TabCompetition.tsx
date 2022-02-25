@@ -10,11 +10,11 @@ type Competition = {
   value: number;
 };
 
-interface StyledTabsProps {
+type StyledTabsProps = {
   children?: React.ReactNode;
   value: number;
   onChange: (event: React.SyntheticEvent, newValue: number) => void;
-}
+};
 
 const StyledTabs = styled((props: StyledTabsProps) => (
   <Tabs
