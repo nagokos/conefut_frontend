@@ -62,7 +62,10 @@ export const Header: VFC = memo(() => {
 
   const isNeedHeader = (): boolean => {
     return (
-      location.pathname === '/signup' || location.pathname === '/login' || location.pathname === '/recruitments/new'
+      location.pathname === '/signup' ||
+      location.pathname === '/login' ||
+      location.pathname === '/recruitments/new' ||
+      (location.pathname.includes('recruitments') && location.pathname.includes('edit'))
     );
   };
 
@@ -247,7 +250,6 @@ export const Header: VFC = memo(() => {
               )}
             </Toolbar>
           </AppBar>
-
           <Box zIndex={100} component="nav" sx={{ position: 'sticky', top: 0, background: '#fff' }}>
             {isNeedTabCompetition() && (
               <Box component="div" maxWidth={1200} mx={'auto'}>
