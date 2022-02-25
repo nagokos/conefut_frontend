@@ -62,7 +62,7 @@ export const SearchInput: VFC = memo(() => {
         value={selectPrefecture}
         onChange={changeSelectPrefecture}
         renderValue={(selected) => {
-          const target = prefectures?.find((prefecture) => prefecture.id === selected);
+          const target = data?.getPrefectures?.find((prefecture) => prefecture.id === selected);
           if (target) {
             return target.name;
           } else {
@@ -80,7 +80,7 @@ export const SearchInput: VFC = memo(() => {
         <StyledSelectMenuItem value="0" disabled>
           地域
         </StyledSelectMenuItem>
-        {prefectures?.map((prefecture: Prefecture) => (
+        {data?.getPrefectures?.map((prefecture: Prefecture) => (
           <StyledSelectMenuItem disableRipple key={prefecture.id} value={prefecture.id}>
             {prefecture.name}
             {prefecture.id === selectPrefecture && (
@@ -105,7 +105,6 @@ export const SearchInput: VFC = memo(() => {
         <StyledSelectMenuItem value={30}>ミドル</StyledSelectMenuItem>
         <StyledSelectMenuItem value={40}>エキスパート</StyledSelectMenuItem>
       </Select>
-
       <LocalizationProvider dateAdapter={AdapterDateFns} locale={jaLocale}>
         <DatePicker
           value={value}
