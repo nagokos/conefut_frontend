@@ -5,12 +5,14 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { IconButton, ListItem, ListItemText, Paper, styled, Typography } from '@mui/material';
 import { RecruitmentDeleteDialog, StyledTooltip } from '../index';
+import { useNavigate } from 'react-router-dom';
+import { useGetEditRecruitmentLazyQuery } from '../../generated/graphql';
 
-interface Recruitment {
+type Recruitment = {
   id: string;
   title: string;
   isPublished: boolean;
-}
+};
 
 type Props = {
   color: string;
@@ -32,6 +34,14 @@ const StyledListButton = styled(IconButton)(() => ({
 export const RecruitmentList: VFC<Props> = memo((props) => {
   const { recruitment, color, deleteCurrentUserRecruitment } = props;
 
+  const navigate = useNavigate();
+
+  const [getEditRecruitment] = useGetEditRecruitmentLazyQuery({
+    variables: {
+      id: recruitment.id,
+    },
+  });
+
   const [open, setOpen] = useState<boolean>(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -39,6 +49,11 @@ export const RecruitmentList: VFC<Props> = memo((props) => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const pushEditRecruitment = async () => {
+    await getEditRecruitment();
+    navigate(`/recruitments/${recruitment.id}/edit`);
   };
 
   return (
@@ -85,7 +100,7 @@ export const RecruitmentList: VFC<Props> = memo((props) => {
           }
         />
         <StyledTooltip title="編集する" placement="bottom">
-          <StyledListButton sx={{ mr: 1 }} disableRipple size="medium">
+          <StyledListButton onClick={() => pushEditRecruitment()} sx={{ mr: 1 }} disableRipple size="medium">
             <EditOutlinedIcon fontSize="small" />
           </StyledListButton>
         </StyledTooltip>
