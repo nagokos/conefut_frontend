@@ -1,3 +1,24 @@
+query GetRecruitments {
+  getRecruitments {
+    id
+    title
+    content
+    type
+    level
+    place
+    startAt
+    closingAt
+    updatedAt
+    capacity
+    prefecture {
+      name
+    }
+    user {
+      name
+      avatar
+    }
+  }
+}
 query GetCurrentUserRecruitments {
   getCurrentUserRecruitments {
     id
