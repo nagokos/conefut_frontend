@@ -10,18 +10,15 @@ import { SelectChangeEvent } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 import { StyledSelectMenuItem, SearchInputGrey, StyledInput, StyledDateField } from '../index';
-import { Prefecture } from '../../generated/graphql';
+import { Prefecture, useGetPrefecturesQuery } from '../../generated/graphql';
 
-type Props = {
-  prefectures: Array<Prefecture> | undefined;
-};
-
-export const SearchInput: VFC<Props> = memo((props) => {
-  const { prefectures } = props;
+export const SearchInput: VFC = memo(() => {
   const [select, setSelect] = useState('0');
   const [selectPrefecture, setSelectPrefecture] = useState<string>('0');
   const [value, setValue] = useState<Date | null>(null);
   const [picker, setPicker] = useState<boolean>(false);
+
+  const { loading, error, data } = useGetPrefecturesQuery();
 
   const handleChange = (event: SelectChangeEvent) => {
     setSelect(String(event.target.value));
