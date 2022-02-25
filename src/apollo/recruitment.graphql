@@ -27,6 +27,29 @@ query GetCurrentUserRecruitments {
   }
 }
 
+query GetEditRecruitment($id: String!) {
+  getEditRecruitment(id: $id) {
+    id
+    title
+    type
+    level
+    place
+    startAt
+    content
+    capacity
+    closingAt
+    competition {
+      id
+    }
+    prefecture {
+      id
+    }
+    locationLat
+    locationLng
+    isPublished
+  }
+}
+
 mutation CreateRecruitment(
   $title: String!
   $competitionId: String
