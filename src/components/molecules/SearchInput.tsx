@@ -10,18 +10,15 @@ import { SelectChangeEvent } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 import { StyledSelectMenuItem, SearchInputGrey, StyledInput, StyledDateField } from '../index';
-import { Prefecture } from '../../generated/graphql';
+import { Prefecture, useGetPrefecturesQuery } from '../../generated/graphql';
 
-type Props = {
-  prefectures: Array<Prefecture> | undefined;
-};
-
-export const SearchInput: VFC<Props> = memo((props) => {
-  const { prefectures } = props;
+export const SearchInput: VFC = memo(() => {
   const [select, setSelect] = useState('0');
   const [selectPrefecture, setSelectPrefecture] = useState<string>('0');
   const [value, setValue] = useState<Date | null>(null);
   const [picker, setPicker] = useState<boolean>(false);
+
+  const { loading, error, data } = useGetPrefecturesQuery();
 
   const handleChange = (event: SelectChangeEvent) => {
     setSelect(String(event.target.value));
@@ -32,7 +29,7 @@ export const SearchInput: VFC<Props> = memo((props) => {
   };
 
   return (
-    <Box>
+    <Box maxWidth={228}>
       <Typography fontWeight="bold" color="#9e9e9e" fontSize={13}>
         検索条件
       </Typography>
@@ -65,7 +62,7 @@ export const SearchInput: VFC<Props> = memo((props) => {
         value={selectPrefecture}
         onChange={changeSelectPrefecture}
         renderValue={(selected) => {
-          const target = prefectures?.find((prefecture) => prefecture.id === selected);
+          const target = data?.getPrefectures?.find((prefecture) => prefecture.id === selected);
           if (target) {
             return target.name;
           } else {
@@ -83,7 +80,7 @@ export const SearchInput: VFC<Props> = memo((props) => {
         <StyledSelectMenuItem value="0" disabled>
           地域
         </StyledSelectMenuItem>
-        {prefectures?.map((prefecture: Prefecture) => (
+        {data?.getPrefectures?.map((prefecture: Prefecture) => (
           <StyledSelectMenuItem disableRipple key={prefecture.id} value={prefecture.id}>
             {prefecture.name}
             {prefecture.id === selectPrefecture && (
@@ -108,7 +105,6 @@ export const SearchInput: VFC<Props> = memo((props) => {
         <StyledSelectMenuItem value={30}>ミドル</StyledSelectMenuItem>
         <StyledSelectMenuItem value={40}>エキスパート</StyledSelectMenuItem>
       </Select>
-
       <LocalizationProvider dateAdapter={AdapterDateFns} locale={jaLocale}>
         <DatePicker
           value={value}

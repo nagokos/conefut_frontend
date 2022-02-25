@@ -1,12 +1,12 @@
 import { memo, VFC } from 'react';
 import { Select, InputLabel } from '@mui/material';
 import { StyledSelectMenuItem, StyledRecruitmentSelectInput } from '../index';
-import { CreateRecruitmentInput, Type, useGetPrefecturesQuery } from '../../generated/graphql';
+import { RecruitmentInput, Type, useGetPrefecturesQuery } from '../../generated/graphql';
 import { Control, Controller, UseFormGetValues } from 'react-hook-form';
 
 type Props = {
-  control: Control<CreateRecruitmentInput, object>;
-  getValues: UseFormGetValues<CreateRecruitmentInput>;
+  control: Control<RecruitmentInput, object>;
+  getValues: UseFormGetValues<RecruitmentInput>;
   watchIsPublished: boolean;
   watchType: Type;
 };

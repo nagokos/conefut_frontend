@@ -1,7 +1,51 @@
+query GetRecruitments {
+  getRecruitments {
+    id
+    title
+    content
+    type
+    level
+    place
+    startAt
+    closingAt
+    updatedAt
+    capacity
+    prefecture {
+      name
+    }
+    user {
+      name
+      avatar
+    }
+  }
+}
 query GetCurrentUserRecruitments {
   getCurrentUserRecruitments {
     id
     title
+    isPublished
+  }
+}
+
+query GetEditRecruitment($id: String!) {
+  getEditRecruitment(id: $id) {
+    id
+    title
+    type
+    level
+    place
+    startAt
+    content
+    capacity
+    closingAt
+    competition {
+      id
+    }
+    prefecture {
+      id
+    }
+    locationLat
+    locationLng
     isPublished
   }
 }
@@ -41,6 +85,46 @@ mutation CreateRecruitment(
     title
     content
     closingAt
+  }
+}
+
+mutation UpdateRecruitment(
+  $id: String!
+  $title: String!
+  $competitionId: String
+  $closingAt: DateTime
+  $content: String
+  $level: Level!
+  $type: Type!
+  $locationLat: Float
+  $locationLng: Float
+  $startAt: DateTime
+  $prefectureId: String
+  $isPublished: Boolean!
+  $capacity: Int
+  $place: String
+) {
+  updateRecruitment(
+    id: $id
+    input: {
+      title: $title
+      competitionId: $competitionId
+      closingAt: $closingAt
+      content: $content
+      level: $level
+      type: $type
+      locationLat: $locationLat
+      locationLng: $locationLng
+      isPublished: $isPublished
+      startAt: $startAt
+      capacity: $capacity
+      place: $place
+      prefectureId: $prefectureId
+    }
+  ) {
+    id
+    title
+    isPublished
   }
 }
 

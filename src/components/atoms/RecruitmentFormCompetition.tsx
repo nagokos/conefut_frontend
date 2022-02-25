@@ -3,11 +3,11 @@ import { Button } from '@mui/material';
 import { StyledSelectMenuItem } from '../index';
 import { Competition, Type, useGetCompetitionsQuery } from '../../generated/graphql';
 import { Control, Controller } from 'react-hook-form';
-import { CreateRecruitmentInput } from '../../generated/graphql';
+import { RecruitmentInput } from '../../generated/graphql';
 import Menu from '@mui/material/Menu';
 
 type Props = {
-  control: Control<CreateRecruitmentInput, object>;
+  control: Control<RecruitmentInput, object>;
   watchIsPublished: boolean;
   watchType: Type;
 };

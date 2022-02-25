@@ -1,11 +1,11 @@
 import { memo, VFC } from 'react';
 import { InputBase, Paper } from '@mui/material';
 
-import { CreateRecruitmentInput, Type } from '../../generated/graphql';
+import { RecruitmentInput, Type } from '../../generated/graphql';
 import { Control, Controller } from 'react-hook-form';
 
 type Props = {
-  control: Control<CreateRecruitmentInput, object>;
+  control: Control<RecruitmentInput, object>;
   watchIsPublished: boolean;
   watchType: Type;
 };

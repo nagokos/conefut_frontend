@@ -1,25 +1,28 @@
 import { memo, VFC, useState } from 'react';
-import { Control, Controller } from 'react-hook-form';
+import { Control, Controller, UseFormGetValues } from 'react-hook-form';
 import { InputLabel } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import ja from 'date-fns/locale/ja';
 
-import { CreateRecruitmentInput, Type } from '../../generated/graphql';
+import { RecruitmentInput, Type } from '../../generated/graphql';
 import { StyledRecruitmentInput } from '../index';
 import { format } from 'date-fns';
 
 type Props = {
-  control: Control<CreateRecruitmentInput, object>;
+  control: Control<RecruitmentInput, object>;
   watchIsPublished: boolean;
   watchType: Type;
+  getValues: UseFormGetValues<RecruitmentInput>;
 };
 
 export const RecruitmentFormStart: VFC<Props> = memo((props) => {
-  const { control, watchIsPublished, watchType } = props;
+  const { control, watchIsPublished, watchType, getValues } = props;
 
-  const [valueHold, setValueHold] = useState<Date | null>(null);
+  const start = new Date(getValues('startAt'));
+
+  const [valueHold, setValueHold] = useState<Date | null>(start);
   const [pickerHold, setPickerHold] = useState<boolean>(false);
 
   return (
@@ -51,6 +54,9 @@ export const RecruitmentFormStart: VFC<Props> = memo((props) => {
               value={valueHold}
               onChange={(newValue) => {
                 setValueHold(newValue);
+                if (!newValue) {
+                  return;
+                }
                 field.onChange(format(new Date(String(newValue)), 'yyyy/MM/dd HH:mm'));
               }}
             />

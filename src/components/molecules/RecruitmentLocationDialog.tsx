@@ -5,40 +5,44 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
-import { UseFormSetValue } from 'react-hook-form';
+import { UseFormGetValues, UseFormSetValue } from 'react-hook-form';
 import CloseIcon from '@mui/icons-material/Close';
 import { GoogleMap, StandaloneSearchBox, useJsApiLoader, Marker } from '@react-google-maps/api';
 import Autocomplete from '@mui/material/Autocomplete';
 import Popper from '@mui/material/Popper';
 
-import { CreateRecruitmentInput, Type } from '../../generated/graphql';
+import { RecruitmentInput, Type } from '../../generated/graphql';
 import { Typography } from '@mui/material';
 import { StyledLocationSearchInput } from '../index';
 
 type Props = {
-  setValue: UseFormSetValue<CreateRecruitmentInput>;
+  setValue: UseFormSetValue<RecruitmentInput>;
+  getValues: UseFormGetValues<RecruitmentInput>;
   open: boolean;
   handleClose: () => void;
   watchType: Type;
 };
 
-interface LocationObject {
+type LocationObject = {
   lat: number;
   lng: number;
-}
+};
 
 type Libraries = ['places'];
 const libraries: Libraries = ['places'];
 
 export const RecruitmentLocationDialog: VFC<Props> = memo((props) => {
-  const { open, setValue, handleClose, watchType } = props;
+  const { open, setValue, handleClose, watchType, getValues } = props;
   const [searchBox, setSearchBox] = useState<google.maps.places.SearchBox | null>(null);
+
+  const defaultLat = getValues('locationLat');
+  const defaultLng = getValues('locationLng');
 
   const googleMapApiKey: string = import.meta.env.VITE_GOOGLE_MAP_API_KEY;
 
   const [location, setLocation] = useState<LocationObject>({
-    lat: 35.69575,
-    lng: 139.77521,
+    lat: defaultLat ? defaultLat : 35.69575,
+    lng: defaultLng ? defaultLng : 139.77521,
   });
 
   const { isLoaded } = useJsApiLoader({

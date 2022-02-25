@@ -1,11 +1,11 @@
 import { memo, VFC } from 'react';
 import { InputBase } from '@mui/material';
 
-import { CreateRecruitmentInput } from '../../generated/graphql';
+import { RecruitmentInput } from '../../generated/graphql';
 import { Controller, Control } from 'react-hook-form';
 
 type Props = {
-  control: Control<CreateRecruitmentInput, object>;
+  control: Control<RecruitmentInput, object>;
 };
 export const RecruitmentFormTitle: VFC<Props> = memo((props) => {
   const { control } = props;
