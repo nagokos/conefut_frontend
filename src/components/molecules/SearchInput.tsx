@@ -29,7 +29,7 @@ export const SearchInput: VFC = memo(() => {
   };
 
   return (
-    <Box>
+    <Box maxWidth={228}>
       <Typography fontWeight="bold" color="#9e9e9e" fontSize={13}>
         検索条件
       </Typography>
