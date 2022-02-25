@@ -88,6 +88,46 @@ mutation CreateRecruitment(
   }
 }
 
+mutation UpdateRecruitment(
+  $id: String!
+  $title: String!
+  $competitionId: String
+  $closingAt: DateTime
+  $content: String
+  $level: Level!
+  $type: Type!
+  $locationLat: Float
+  $locationLng: Float
+  $startAt: DateTime
+  $prefectureId: String
+  $isPublished: Boolean!
+  $capacity: Int
+  $place: String
+) {
+  updateRecruitment(
+    id: $id
+    input: {
+      title: $title
+      competitionId: $competitionId
+      closingAt: $closingAt
+      content: $content
+      level: $level
+      type: $type
+      locationLat: $locationLat
+      locationLng: $locationLng
+      isPublished: $isPublished
+      startAt: $startAt
+      capacity: $capacity
+      place: $place
+      prefectureId: $prefectureId
+    }
+  ) {
+    id
+    title
+    isPublished
+  }
+}
+
 mutation DeleteRecruitment($id: String!) {
   deleteRecruitment(id: $id)
 }
