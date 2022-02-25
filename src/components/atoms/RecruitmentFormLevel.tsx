@@ -10,10 +10,10 @@ type Props = {
   watchType: Type;
 };
 
-interface MenuItem {
+type MenuItem = {
   id: string;
   value: string;
-}
+};
 
 export const RecruitmentFormLevel: VFC<Props> = memo((props) => {
   const { control, watchIsPublished, watchType } = props;
