@@ -1,25 +1,28 @@
 import { memo, VFC, useState } from 'react';
 import { InputLabel } from '@mui/material';
-import { Control, Controller } from 'react-hook-form';
+import { Control, Controller, UseFormGetValues } from 'react-hook-form';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import ja from 'date-fns/locale/ja';
 
-import { CreateRecruitmentInput, Type } from '../../generated/graphql';
+import { RecruitmentInput, Type } from '../../generated/graphql';
 import { StyledRecruitmentInput } from '../index';
 import { format } from 'date-fns';
 
 type Props = {
-  control: Control<CreateRecruitmentInput, object>;
+  control: Control<RecruitmentInput, object>;
   watchIsPublished: boolean;
   watchType: Type;
+  getValues: UseFormGetValues<RecruitmentInput>;
 };
 
 export const RecruitmentFormDeadline: VFC<Props> = memo((props) => {
-  const { control, watchIsPublished, watchType } = props;
+  const { control, watchIsPublished, watchType, getValues } = props;
 
-  const [valueDeadline, setValueDeadline] = useState<Date | null>(null);
+  const deadline = new Date(getValues('closingAt'));
+
+  const [valueDeadline, setValueDeadline] = useState<Date | null>(deadline);
   const [pickerDeadline, setPickerDeadline] = useState<boolean>(false);
 
   return (
@@ -51,6 +54,9 @@ export const RecruitmentFormDeadline: VFC<Props> = memo((props) => {
               value={valueDeadline}
               onChange={(newValue) => {
                 setValueDeadline(newValue);
+                if (!newValue) {
+                  return;
+                }
                 field.onChange(format(new Date(String(newValue)), 'yyyy/MM/dd HH:mm'));
               }}
             />
