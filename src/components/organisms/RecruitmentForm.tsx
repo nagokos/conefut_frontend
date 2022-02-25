@@ -1,10 +1,7 @@
 import { memo, useEffect, useState, VFC } from 'react';
 import Box from '@mui/material/Box';
 import { Container, Grid } from '@mui/material';
-import { useForm } from 'react-hook-form';
 import { useSetRecoilState } from 'recoil';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { recruitmentSchema } from '../../yup/recruitmentSchema';
 
 import {
   RecruitmentFormType,
@@ -24,18 +21,34 @@ import {
   RecruitmentFormHelp,
   RecruitmentLocationDialog,
 } from '../index';
-import { CreateRecruitmentInput, Level, Type, useCreateRecruitmentMutation } from '../../generated/graphql';
+import { RecruitmentInput, Type } from '../../generated/graphql';
 import { flashMessage, flashState, flashType } from '../../store/flash';
+import {
+  Control,
+  FormState,
+  UseFormClearErrors,
+  UseFormGetValues,
+  UseFormResetField,
+  UseFormSetError,
+  UseFormSetValue,
+  UseFormTrigger,
+  UseFormWatch,
+} from 'react-hook-form';
 
-export const RecruitmentForm: VFC = memo(() => {
-  const setState = useSetRecoilState(flashState);
-  const setMessage = useSetRecoilState(flashMessage);
-  const setType = useSetRecoilState(flashType);
+type Props = {
+  control: Control<RecruitmentInput, object>;
+  formState: FormState<RecruitmentInput>;
+  getValues: UseFormGetValues<RecruitmentInput>;
+  trigger: UseFormTrigger<RecruitmentInput>;
+  clearErrors: UseFormClearErrors<RecruitmentInput>;
+  setValue: UseFormSetValue<RecruitmentInput>;
+  watch: UseFormWatch<RecruitmentInput>;
+  resetField: UseFormResetField<RecruitmentInput>;
+  setError: UseFormSetError<RecruitmentInput>;
+  onClick: (isPublished: boolean) => void;
+};
 
-  const [open, setOpen] = useState<boolean>(false);
-
-  const [createRecruitment, { data, error }] = useCreateRecruitmentMutation();
-
+export const RecruitmentForm: VFC<Props> = memo((props) => {
   const {
     control,
     formState: { errors },
@@ -46,66 +59,17 @@ export const RecruitmentForm: VFC = memo(() => {
     watch,
     resetField,
     setError,
-  } = useForm<CreateRecruitmentInput>({
-    defaultValues: {
-      title: '',
-      content: '',
-      startAt: '',
-      closingAt: '',
-      prefectureId: undefined,
-      competitionId: undefined,
-      type: Type.Unnecessary,
-      level: Level.Unnecessary,
-      locationLat: undefined,
-      locationLng: undefined,
-      isPublished: false,
-      capacity: 0,
-      place: '',
-    },
-    resolver: yupResolver(recruitmentSchema),
-    mode: 'onChange',
-  });
+    onClick,
+  } = props;
+
+  const setState = useSetRecoilState(flashState);
+  const setMessage = useSetRecoilState(flashMessage);
+  const setType = useSetRecoilState(flashType);
+
+  const [open, setOpen] = useState<boolean>(false);
 
   const watchType = watch('type');
   const watchIsPublished = watch('isPublished');
-
-  const onClick = async (isPublish: boolean) => {
-    setValue('isPublished', isPublish);
-
-    clearErrors();
-
-    const result: boolean = await trigger();
-
-    if (result) {
-      const res = await createRecruitment({
-        variables: {
-          title: getValues('title'),
-          competitionId: getValues('competitionId'),
-          closingAt: getValues('closingAt'),
-          level: getValues('level'),
-          type: getValues('type'),
-          content: getValues('content'),
-          place: getValues('place'),
-          locationLat: getValues('locationLat'),
-          locationLng: getValues('locationLng'),
-          isPublished: getValues('isPublished'),
-          capacity: getValues('capacity') === 0 ? null : getValues('capacity'),
-          startAt: getValues('startAt'),
-          prefectureId: getValues('prefectureId') === '' ? null : getValues('prefectureId'),
-        },
-      });
-      let message = '';
-      if (isPublish) {
-        message = '募集を公開しました';
-      } else {
-        message = '下書きに保存しました';
-      }
-      console.log(res);
-      setState(true);
-      setMessage(message);
-      setType('success');
-    }
-  };
 
   useEffect(() => {
     let message: string | undefined = '';
@@ -237,6 +201,7 @@ export const RecruitmentForm: VFC = memo(() => {
                     <Grid mt={4} item xs={6}>
                       <Box maxWidth={320}>
                         <RecruitmentFormStart
+                          getValues={getValues}
                           watchType={watchType}
                           watchIsPublished={watchIsPublished}
                           control={control}
@@ -247,6 +212,7 @@ export const RecruitmentForm: VFC = memo(() => {
                   <Grid mt={4} item xs={6}>
                     <Box maxWidth={320} ml={watchType === Type.Joining ? '' : 'auto'}>
                       <RecruitmentFormDeadline
+                        getValues={getValues}
                         watchType={watchType}
                         watchIsPublished={watchIsPublished}
                         control={control}
@@ -280,7 +246,13 @@ export const RecruitmentForm: VFC = memo(() => {
           </Grid>
         </Grid>
       </Grid>
-      <RecruitmentLocationDialog watchType={watchType} setValue={setValue} open={open} handleClose={handleClose} />
+      <RecruitmentLocationDialog
+        getValues={getValues}
+        watchType={watchType}
+        setValue={setValue}
+        open={open}
+        handleClose={handleClose}
+      />
     </>
   );
 });
