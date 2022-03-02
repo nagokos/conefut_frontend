@@ -12,7 +12,7 @@
     "generate": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
-    "@apollo/client": "^3.5.9",
+    "@apollo/client": "^3.5.10",
     "@date-io/date-fns": "^2.13.1",
     "@emotion/react": "^11.8.1",
     "@emotion/styled": "^11.8.1",
