@@ -1,0 +1,7 @@
+mutation CreateStock($recruitmentId: String!) {
+  createStock(recruitmentId: $recruitmentId)
+}
+
+mutation DeleteStock($recruitmentId: String!) {
+  deleteStock(recruitmentId: $recruitmentId)
+}
