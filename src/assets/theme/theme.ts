@@ -67,7 +67,7 @@ export const theme = createTheme({
       main: '#212121',
     },
     error: {
-      main: 'rgb(244, 33, 46)',
+      main: '#f42121',
     },
   },
   typography: {
