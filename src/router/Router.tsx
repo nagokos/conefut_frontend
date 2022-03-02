@@ -1,5 +1,15 @@
 import { Navigate } from 'react-router-dom';
-import { Home, Signup, Login, RecruitmentNew, Dashboard, RecruitmentEdit } from '../pages';
+import {
+  Home,
+  Signup,
+  Login,
+  RecruitmentNew,
+  Dashboard,
+  RecruitmentEdit,
+  RecruitmentDetails,
+  DashboardRecruitments,
+  DashboardStocks,
+} from '../pages';
 
 export const routes = (isLoggedIn: boolean) => [
   {
@@ -7,23 +17,31 @@ export const routes = (isLoggedIn: boolean) => [
     element: <Home />,
   },
   {
-    path: '/signup',
+    path: 'signup',
     element: <Signup />,
   },
   {
-    path: '/login',
+    path: 'login',
     element: <Login />,
   },
   {
-    path: '/recruitments/new',
+    path: 'recruitments/new',
     element: isLoggedIn ? <RecruitmentNew /> : <Navigate to="/login" />,
   },
   {
-    path: '/recruitments/:recruitmentId/edit',
+    path: 'recruitments/:recruitmentId/edit',
     element: isLoggedIn ? <RecruitmentEdit /> : <Navigate to="/login" />,
   },
   {
-    path: '/dashboard',
+    path: 'recruitments/:recruitmentId',
+    element: <RecruitmentDetails />,
+  },
+  {
+    path: 'dashboard',
     element: isLoggedIn ? <Dashboard /> : <Navigate to="/login" />,
+    children: [
+      { path: '/dashboard', element: <DashboardRecruitments /> },
+      { path: 'stocks', element: <DashboardStocks /> },
+    ],
   },
 ];
