@@ -193,59 +193,84 @@ export const RecruitmentCard: VFC<Props> = memo((props) => {
             {subStrTitle()}
           </Typography>
           <Box>
-            <Box sx={{ fontSize: 10 }} mt={1.5}>
-              <Box component="span" mr={0.2}>
-                ■
-              </Box>
-              募集タイプ:
-              <Box ml={1} px={1} py={0.5} borderRadius={1} component="span" bgcolor="#f0f5f4">
-                <Box component="span" mr={0.6} fontSize={13} position="relative" top={3.5}>
-                  <Emoji emoji={typeEmoji()} size={16} />
-                </Box>
-                <Box component="span">{typeString()}</Box>
-              </Box>
-            </Box>
-            {!!recruitment.capacity && (
-              <Box sx={{ fontSize: 10 }} mt={2}>
+            <Box sx={{ fontSize: 10, display: 'flex', mt: 2, alignItems: 'center' }}>
+              <Box sx={{ minWidth: recruitment.type === Type.Opponent ? 91 : 80 }}>
                 <Box component="span" mr={0.2}>
                   ■
                 </Box>
-                募集人数:&emsp;
-                <Box ml={1} px={1} py={0.5} borderRadius={1} component="span" bgcolor="#f0f5f4">
-                  <Box component="span" mr={0.6} fontSize={13} position="relative" top={3.2}>
-                    <Emoji emoji=":raising_hand:" size={15} />
+                募集タイプ:
+              </Box>
+              <Box>
+                <Box px={1} py={0.6} borderRadius={1} component="span" bgcolor="#f0f5f4">
+                  <Box component="span" mr={0.6} fontSize={10} position="relative" top={2.7}>
+                    <Emoji emoji={typeEmoji()} size={14} />
                   </Box>
-                  <Box component="span">{recruitment.capacity}人募集</Box>
+                  <Box component="span" sx={{ fontSize: 10 }}>
+                    {typeString()}
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+            {!!recruitment.capacity && (
+              <Box sx={{ fontSize: 10, display: 'flex', mt: 2, alignItems: 'center' }}>
+                <Box sx={{ minWidth: recruitment.type === Type.Opponent ? 91 : 80 }}>
+                  <Box component="span" mr={0.2}>
+                    ■
+                  </Box>
+                  {recruitment.type === Type.Opponent ? '募集チーム数' : '募集人数'}:&emsp;
+                </Box>
+                <Box>
+                  <Box px={1} py={0.6} borderRadius={1} component="span" bgcolor="#f0f5f4">
+                    <Box component="span" mr={0.6} fontSize={10} position="relative" top={2.7}>
+                      <Emoji emoji=":raising_hand:" size={14} />
+                    </Box>
+                    <Box component="span" sx={{ fontSize: 10 }}>
+                      {recruitment.type === Type.Opponent
+                        ? `${recruitment.capacity}チーム`
+                        : `${recruitment.capacity}人`}
+                      募集
+                    </Box>
+                  </Box>
                 </Box>
               </Box>
             )}
             {recruitment.startAt && (
-              <Box sx={{ fontSize: 10 }} mt={2}>
-                <Box component="span" mr={0.2}>
-                  ■
-                </Box>
-                開催日時:&emsp;
-                <Box ml={1} px={1} py={0.5} borderRadius={1} component="span" bgcolor="#f0f5f4">
-                  <Box component="span" mr={0.6} fontSize={13} position="relative" top={3.5}>
-                    <Emoji emoji=":spiral_calendar_pad:" size={14} />
+              <Box sx={{ fontSize: 10, display: 'flex', mt: 2, alignItems: 'center' }}>
+                <Box sx={{ minWidth: recruitment.type === Type.Opponent ? 91 : 80 }}>
+                  <Box component="span" mr={0.2}>
+                    ■
                   </Box>
-                  <Box component="span">{recruitment.startAt}</Box>
+                  開催日時:
+                </Box>
+                <Box>
+                  <Box px={1} py={0.6} borderRadius={1} component="span" bgcolor="#f0f5f4">
+                    <Box component="span" mr={0.6} fontSize={10} position="relative" top={2.7}>
+                      <Emoji emoji=":spiral_calendar_pad:" size={13} />
+                    </Box>
+                    <Box component="span" sx={{ fontSize: 10 }}>
+                      {recruitment.startAt}
+                    </Box>
+                  </Box>
                 </Box>
               </Box>
             )}
-            <Box sx={{ fontSize: 10 }} mt={2}>
-              <Box component="span" mr={0.2}>
-                ■
-              </Box>
-              募集期限:&emsp;
-              <Box ml={1} px={1} py={0.5} borderRadius={1} component="span" bgcolor="#f0f5f4">
-                <Box component="span" mr={0.6} fontSize={13} position="relative" top={3.5}>
-                  <Emoji emoji=":alarm_clock:" size={14} />
+            <Box sx={{ fontSize: 10, display: 'flex', mt: 2, alignItems: 'center' }}>
+              <Box sx={{ minWidth: recruitment.type === Type.Opponent ? 91 : 80 }}>
+                <Box component="span" mr={0.2}>
+                  ■
                 </Box>
-                <Box component="span">
-                  <Box component="span">残り{distanceToNowFromClosingAt}</Box>
-                  <Box component="span" sx={{ ml: -0.4, color: '#616161' }}>
-                    （{recruitment.closingAt}）
+                募集期限:
+              </Box>
+              <Box>
+                <Box px={1} py={0.6} borderRadius={1} component="span" bgcolor="#f0f5f4">
+                  <Box component="span" mr={0.6} fontSize={10} position="relative" top={2.7}>
+                    <Emoji emoji=":alarm_clock:" size={13} />
+                  </Box>
+                  <Box component="span" sx={{ fontSize: 10 }}>
+                    残り{distanceToNowFromClosingAt}
+                  </Box>
+                  <Box component="span" sx={{ color: '#424242', fontSize: 10 }}>
+                    （ {recruitment.closingAt} ）
                   </Box>
                 </Box>
               </Box>
