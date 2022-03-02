@@ -13,6 +13,7 @@ import {
   Type,
   useCreateRecruitmentMutation,
   useGetCurrentUserRecruitmentsLazyQuery,
+  Status,
 } from '../generated/graphql';
 import { RecruitmentForm } from '../components';
 import { recruitmentSchema } from '../yup/recruitmentSchema';
@@ -42,7 +43,7 @@ export const RecruitmentNew: VFC = memo(() => {
         level: Level.Unnecessary,
         locationLat: undefined,
         locationLng: undefined,
-        isPublished: false,
+        status: Status.Draft,
         capacity: 0,
         place: '',
       },
@@ -50,8 +51,8 @@ export const RecruitmentNew: VFC = memo(() => {
       mode: 'onChange',
     });
 
-  const onClick = async (isPublished: boolean) => {
-    setValue('isPublished', isPublished);
+  const onClick = async (status: Status) => {
+    setValue('status', status);
 
     clearErrors();
 
@@ -69,20 +70,23 @@ export const RecruitmentNew: VFC = memo(() => {
           place: getValues('place'),
           locationLat: getValues('locationLat'),
           locationLng: getValues('locationLng'),
-          isPublished: getValues('isPublished'),
+          status: getValues('status'),
           capacity: getValues('capacity') === 0 ? null : getValues('capacity'),
           startAt: getValues('startAt'),
           prefectureId: getValues('prefectureId') === '' ? null : getValues('prefectureId'),
         },
       });
+      console.log(res);
+
       await getRecruitments();
       let message = '';
-      if (isPublished) {
+      if (status === Status.Published) {
         message = '募集を公開しました';
-      } else {
+        navigate('/dashboard');
+      } else if (status === Status.Draft) {
         message = '下書きに保存しました';
+        navigate('/dashboard');
       }
-      navigate('/dashboard');
       setState(true);
       setMessage(message);
       setType('success');
