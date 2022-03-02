@@ -4,3 +4,6 @@ export { Login } from './Login';
 export { RecruitmentNew } from './RecruitmentNew';
 export { RecruitmentEdit } from './RecruitmentEdit';
 export { Dashboard } from './Dashboard';
+export { DashboardRecruitments } from './DashboardRecruitments';
+export { DashboardStocks } from './DashboardStocks';
+export { RecruitmentDetails } from './RecruitmentDetails';
