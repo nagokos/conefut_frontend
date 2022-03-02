@@ -1,17 +1,34 @@
-import { memo, useState, VFC } from 'react';
+import { memo, MouseEvent, useState, VFC } from 'react';
 
-import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import { IconButton, ListItem, ListItemText, Paper, styled, Typography } from '@mui/material';
-import { RecruitmentDeleteDialog, StyledTooltip } from '../index';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import {
+  Box,
+  Divider,
+  IconButton,
+  ListItem,
+  ListItemText,
+  Menu,
+  MenuItem,
+  MenuList,
+  styled,
+  Typography,
+} from '@mui/material';
+import { RecruitmentDeleteDialog, StyledSelectMenuItem, StyledTooltip } from '../index';
 import { useNavigate } from 'react-router-dom';
-import { useGetEditRecruitmentLazyQuery } from '../../generated/graphql';
+import { Status, useGetEditRecruitmentLazyQuery } from '../../generated/graphql';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 type Recruitment = {
   id: string;
   title: string;
-  isPublished: boolean;
+  status: Status;
+  competition?: Competition | null | undefined;
+};
+
+type Competition = {
+  name: string;
 };
 
 type Props = {
@@ -19,6 +36,14 @@ type Props = {
   recruitment: Recruitment;
   deleteCurrentUserRecruitment: (id: string) => void;
 };
+
+const StyledMyZeroDivider = styled(Divider)(() => ({
+  '&.MuiDivider-root': {
+    marginTop: 0,
+    marginBottom: 0,
+    border: '0.6px solid #ebf2f2',
+  },
+}));
 
 const StyledListButton = styled(IconButton)(() => ({
   '&.MuiIconButton-root': {
@@ -45,6 +70,7 @@ export const RecruitmentList: VFC<Props> = memo((props) => {
   const [open, setOpen] = useState<boolean>(false);
   const handleClickOpen = () => {
     setOpen(true);
+    setAnchorEl(null);
   };
 
   const handleClose = () => {
@@ -56,10 +82,39 @@ export const RecruitmentList: VFC<Props> = memo((props) => {
     navigate(`/recruitments/${recruitment.id}/edit`);
   };
 
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const menuOpen = Boolean(anchorEl);
+  const handleClickMenu = (event: MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const statusString = () => {
+    if (recruitment.status === Status.Published) {
+      return '公開中';
+    } else if (recruitment.status === Status.Closed) {
+      return '締切';
+    } else if (recruitment.status === Status.Draft) {
+      return '下書き';
+    }
+  };
+
+  const statusBgcolor = () => {
+    if (recruitment.status === Status.Published) {
+      return '#009688';
+    } else if (recruitment.status === Status.Closed) {
+      return '#f42121';
+    } else if (recruitment.status === Status.Draft) {
+      return '#2196f3';
+    }
+  };
+
   return (
     <>
       <ListItem sx={{ mt: 1.5, mb: 1.5, px: 0 }}>
-        <Paper
+        {/* <Paper
           elevation={0}
           sx={{
             bgcolor: color,
@@ -71,31 +126,39 @@ export const RecruitmentList: VFC<Props> = memo((props) => {
             borderRadius: 3.5,
           }}
         >
-          <ArticleOutlinedIcon sx={{ color: '#cfd8dc', fontSize: 33 }} />
-        </Paper>
+          <ArticleOutlined sx={{ color: '#cfd8dc', fontSize: 33 }} />
+        </Paper> */}
         <ListItemText
-          sx={{ mx: 2, mt: 1 }}
+          onClick={() => pushEditRecruitment()}
+          sx={{ mr: 5, cursor: 'pointer' }}
           primary={
-            <Typography component="span" sx={{ position: 'relative', bottom: 2 }} fontSize={15} fontWeight="bold">
+            <Typography
+              component="div"
+              sx={{ position: 'relative', bottom: 3, color: '#263238' }}
+              fontSize={18}
+              fontWeight="bold"
+            >
               {recruitment.title}
             </Typography>
           }
           secondary={
             <>
-              <Typography
+              <Box
                 component="span"
                 fontSize={11}
                 sx={{
-                  border: '1px solid #e0e0e0',
-                  color: '#424242',
+                  border: '1px solid',
                   maxWidth: 33,
-                  px: 0.6,
+                  bgcolor: `${statusBgcolor()}`,
+                  color: 'white',
+                  px: 0.7,
+                  mr: 0.3,
                   borderRadius: 1,
-                  py: 0.1,
+                  py: 0.4,
                 }}
               >
-                {recruitment.isPublished ? '公開中' : '下書き'}
-              </Typography>
+                {statusString()}
+              </Box>
             </>
           }
         />
@@ -104,11 +167,54 @@ export const RecruitmentList: VFC<Props> = memo((props) => {
             <EditOutlinedIcon fontSize="small" />
           </StyledListButton>
         </StyledTooltip>
-        <StyledTooltip onClick={handleClickOpen} title="削除する" placement="bottom">
-          <StyledListButton disableRipple size="medium">
-            <DeleteOutlineOutlinedIcon fontSize="small" />
+        <StyledTooltip onClick={handleClickOpen} title="もっとみる" placement="bottom">
+          <StyledListButton onClick={handleClickMenu} disableRipple size="medium">
+            <MoreHorizIcon fontSize="small" />
           </StyledListButton>
         </StyledTooltip>
+        <Menu
+          elevation={0}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          MenuListProps={{
+            sx: {
+              py: 0,
+            },
+          }}
+          PaperProps={{
+            sx: {
+              borderRadius: 1.5,
+              minWidth: 180,
+              boxShadow:
+                'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
+            },
+          }}
+          anchorEl={anchorEl}
+          open={menuOpen}
+          onClose={handleCloseMenu}
+        >
+          <MenuList sx={{ py: 0 }}>
+            <StyledSelectMenuItem disableRipple>
+              <CheckCircleOutlineIcon fontSize="small" sx={{ mr: 1 }} />
+              締め切る
+            </StyledSelectMenuItem>
+            <StyledMyZeroDivider />
+            <MenuItem
+              sx={{ py: 1, color: '#f42121', fontWeight: 'bold', fontSize: 12, ':hover': { bgcolor: '#fff0f0' } }}
+              disableRipple
+              onClick={handleClickOpen}
+            >
+              <DeleteOutlineOutlinedIcon fontSize="small" sx={{ mr: 1 }} />
+              削除する
+            </MenuItem>
+          </MenuList>
+        </Menu>
       </ListItem>
       <RecruitmentDeleteDialog
         deleteCurrentUserRecruitment={deleteCurrentUserRecruitment}

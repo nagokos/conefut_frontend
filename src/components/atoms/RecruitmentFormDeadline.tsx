@@ -6,19 +6,19 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import ja from 'date-fns/locale/ja';
 
-import { RecruitmentInput, Type } from '../../generated/graphql';
+import { RecruitmentInput, Status, Type } from '../../generated/graphql';
 import { StyledRecruitmentInput } from '../index';
 import { format } from 'date-fns';
 
 type Props = {
   control: Control<RecruitmentInput, object>;
-  watchIsPublished: boolean;
+  watchStatus: Status;
   watchType: Type;
   getValues: UseFormGetValues<RecruitmentInput>;
 };
 
 export const RecruitmentFormDeadline: VFC<Props> = memo((props) => {
-  const { control, watchIsPublished, watchType, getValues } = props;
+  const { control, watchStatus, watchType, getValues } = props;
 
   const deadline = new Date(getValues('closingAt'));
 

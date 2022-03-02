@@ -23,12 +23,43 @@ query GetCurrentUserRecruitments {
   getCurrentUserRecruitments {
     id
     title
-    isPublished
+    status
+    competition {
+      name
+    }
+  }
+}
+
+query GetRecruitment($id: String!) {
+  getRecruitment(id: $id) {
+    id
+    title
+    type
+    level
+    place
+    startAt
+    content
+    capacity
+    updatedAt
+    closingAt
+    competition {
+      name
+    }
+    prefecture {
+      name
+    }
+    user {
+      id
+      name
+      avatar
+    }
+    locationLat
+    locationLng
   }
 }
 
 query GetEditRecruitment($id: String!) {
-  getEditRecruitment(id: $id) {
+  getRecruitment(id: $id) {
     id
     title
     type
@@ -46,7 +77,7 @@ query GetEditRecruitment($id: String!) {
     }
     locationLat
     locationLng
-    isPublished
+    status
   }
 }
 
@@ -61,7 +92,7 @@ mutation CreateRecruitment(
   $locationLng: Float
   $startAt: DateTime
   $prefectureId: String
-  $isPublished: Boolean!
+  $status: Status!
   $capacity: Int
   $place: String
 ) {
@@ -75,7 +106,7 @@ mutation CreateRecruitment(
       type: $type
       locationLat: $locationLat
       locationLng: $locationLng
-      isPublished: $isPublished
+      status: $status
       startAt: $startAt
       capacity: $capacity
       place: $place
@@ -100,7 +131,7 @@ mutation UpdateRecruitment(
   $locationLng: Float
   $startAt: DateTime
   $prefectureId: String
-  $isPublished: Boolean!
+  $status: Status!
   $capacity: Int
   $place: String
 ) {
@@ -115,7 +146,7 @@ mutation UpdateRecruitment(
       type: $type
       locationLat: $locationLat
       locationLng: $locationLng
-      isPublished: $isPublished
+      status: $status
       startAt: $startAt
       capacity: $capacity
       place: $place
@@ -124,7 +155,7 @@ mutation UpdateRecruitment(
   ) {
     id
     title
-    isPublished
+    status
   }
 }
 

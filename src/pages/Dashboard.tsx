@@ -9,13 +9,9 @@ import EventNoteIcon from '@mui/icons-material/EventNote';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import { styled } from '@mui/material/styles';
-import { CircularProgress, Divider, List, Typography } from '@mui/material';
 
-import { useDeleteRecruitmentMutation, useGetCurrentUserRecruitmentsQuery } from '../generated/graphql';
-
-import { RecruitmentList } from '../components/index';
-import { useSetRecoilState } from 'recoil';
-import { flashMessage, flashState, flashType } from '../store/flash';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useLocationChange } from '../hooks';
 
 const StyledDashboardButton = styled(Button)(() => ({
   '&:hover': {
@@ -24,55 +20,48 @@ const StyledDashboardButton = styled(Button)(() => ({
 }));
 
 export const Dashboard: VFC = memo(() => {
-  const colors = ['#3f51b5', '#e91e63', '#4caf50', '#607d8b', '#f44336', '#9c27b0'];
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const [selected, setSelected] = useState<number>(1);
-
-  const { loading, data, refetch } = useGetCurrentUserRecruitmentsQuery();
-  const [deleteRecruitment] = useDeleteRecruitmentMutation();
-
-  const setState = useSetRecoilState(flashState);
-  const setMessage = useSetRecoilState(flashMessage);
-  const setType = useSetRecoilState(flashType);
-
-  const deleteCurrentUserRecruitment = async (id: string) => {
-    const res = await deleteRecruitment({
-      variables: {
-        id: id,
-      },
-      onCompleted() {
-        refetch();
-      },
-    });
-    if (res.data?.deleteRecruitment) {
-      setState(true);
-      setMessage('削除しました');
-      setType('success');
+  const selectButton = () => {
+    if (location.pathname.includes('stocks')) {
+      return 'stocks';
+    } else if (location.pathname.includes('applied')) {
+      return 'applied';
+    } else {
+      return 'recruitments';
     }
   };
 
-  let count = 0;
+  const select = selectButton;
+
+  const [selected, setSelected] = useState<string>(select);
+
+  useLocationChange(() => {
+    window.scrollTo(0, 0);
+  });
 
   return (
     <>
       <Box maxWidth={1120} margin="auto" mt={7}>
         <Grid container>
           <Grid item xs={3}>
-            <Grid container spacing={1}>
+            <Grid container spacing={1} sx={{ position: 'fixed' }}>
               <Grid item xs={12} sx={{ pl: 0 }}>
                 <StyledDashboardButton
                   color="dark"
                   disableRipple
                   size="large"
-                  startIcon={selected === 1 ? <ArticleIcon /> : <ArticleOutlinedIcon />}
+                  startIcon={selected === 'recruitments' ? <ArticleIcon /> : <ArticleOutlinedIcon />}
                   onClick={() => {
-                    setSelected(1);
+                    setSelected('recruitments');
+                    navigate('/dashboard');
                   }}
                   sx={{
                     fontSize: 20,
                     px: 3,
-                    fontWeight: selected === 1 ? 'bold' : 100,
-                    backgroundColor: selected === 1 ? '#f5f5f5' : '',
+                    fontWeight: selected === 'recruitments' ? 'bold' : 100,
+                    backgroundColor: selected === 'recruitments' ? '#f5f5f5' : '',
                   }}
                 >
                   Recruitments
@@ -83,15 +72,16 @@ export const Dashboard: VFC = memo(() => {
                   disableRipple
                   size="large"
                   color="dark"
-                  startIcon={selected === 2 ? <EventNoteIcon /> : <EventNoteOutlinedIcon />}
+                  startIcon={selected === 'applied' ? <EventNoteIcon /> : <EventNoteOutlinedIcon />}
                   onClick={() => {
-                    setSelected(2);
+                    setSelected('applied');
+                    navigate('/dashboard/applied');
                   }}
                   sx={{
                     fontSize: 20,
                     px: 3,
-                    fontWeight: selected === 2 ? 'bold' : 100,
-                    background: selected === 2 ? '#f5f5f5' : '',
+                    fontWeight: selected === 'applied' ? 'bold' : 100,
+                    background: selected === 'applied' ? '#f5f5f5' : '',
                   }}
                 >
                   Applied
@@ -102,15 +92,16 @@ export const Dashboard: VFC = memo(() => {
                   disableRipple
                   size="large"
                   color="dark"
-                  startIcon={selected === 3 ? <BookmarkIcon /> : <BookmarkBorderIcon />}
+                  startIcon={selected === 'stocks' ? <BookmarkIcon /> : <BookmarkBorderIcon />}
                   onClick={() => {
-                    setSelected(3);
+                    setSelected('stocks');
+                    navigate('/dashboard/stocks');
                   }}
                   sx={{
                     fontSize: 20,
                     px: 3,
-                    fontWeight: selected === 3 ? 'bold' : 100,
-                    background: selected === 3 ? '#f5f5f5' : '',
+                    fontWeight: selected === 'stocks' ? 'bold' : 100,
+                    background: selected === 'stocks' ? '#f5f5f5' : '',
                   }}
                 >
                   Stocks
@@ -119,35 +110,7 @@ export const Dashboard: VFC = memo(() => {
             </Grid>
           </Grid>
           <Grid item pl={3} xs={9}>
-            <Typography fontSize={35} fontWeight="bold">
-              Recruitments
-            </Typography>
-            <List>
-              {loading ? (
-                <Box mt={1} sx={{ textAlign: 'center' }}>
-                  <CircularProgress size={30} color="primary" />
-                </Box>
-              ) : (
-                <>
-                  {data?.getCurrentUserRecruitments.map((recruitment) => {
-                    if (count === 6) {
-                      count = 0;
-                    }
-                    count += 1;
-                    return (
-                      <Box key={recruitment.id}>
-                        <RecruitmentList
-                          deleteCurrentUserRecruitment={deleteCurrentUserRecruitment}
-                          color={colors[count - 1]}
-                          recruitment={recruitment}
-                        />
-                        <Divider sx={{ border: '0.6px solid #ebf2f2' }} />
-                      </Box>
-                    );
-                  })}
-                </>
-              )}
-            </List>
+            <Outlet />
           </Grid>
         </Grid>
       </Box>

@@ -1,13 +1,13 @@
 import { memo, useState, VFC, MouseEvent } from 'react';
 import { Button } from '@mui/material';
 import { StyledSelectMenuItem } from '../index';
-import { RecruitmentInput, Type } from '../../generated/graphql';
+import { RecruitmentInput, Status, Type } from '../../generated/graphql';
 import { Control, Controller } from 'react-hook-form';
 import Menu from '@mui/material/Menu';
 
 type Props = {
   control: Control<RecruitmentInput, object>;
-  watchIsPublished: boolean;
+  watchStatus: Status;
   watchType: Type;
 };
 
@@ -17,7 +17,7 @@ type MenuItem = {
 };
 
 export const RecruitmentFormType: VFC<Props> = memo((props) => {
-  const { control, watchIsPublished, watchType } = props;
+  const { control, watchStatus, watchType } = props;
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -59,9 +59,14 @@ export const RecruitmentFormType: VFC<Props> = memo((props) => {
               vertical: 'top',
               horizontal: 'left',
             }}
+            MenuListProps={{
+              sx: {
+                py: 0,
+              },
+            }}
             PaperProps={{
               sx: {
-                borderRadius: 2,
+                borderRadius: 1.5,
                 minWidth: 180,
                 boxShadow:
                   'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
@@ -80,7 +85,7 @@ export const RecruitmentFormType: VFC<Props> = memo((props) => {
                   handleClose();
                   field.onChange(type.id);
                 }}
-                sx={{ display: type.id === Type.Unnecessary ? 'none' : '' }}
+                sx={{ display: type.id === Type.Unnecessary ? 'none' : '', py: 1.1 }}
                 disableRipple
               >
                 {type.value}

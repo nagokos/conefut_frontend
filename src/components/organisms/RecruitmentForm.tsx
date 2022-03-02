@@ -15,13 +15,12 @@ import {
   RecruitmentFormStart,
   RecruitmentFormDeadline,
   RecruitmentFormPublish,
-  RecruitmentFormPreview,
   RecruitmentFormLocation,
   RecruitmentFormDraft,
   RecruitmentFormHelp,
   RecruitmentLocationDialog,
 } from '../index';
-import { RecruitmentInput, Type } from '../../generated/graphql';
+import { Level, RecruitmentInput, Status, Type } from '../../generated/graphql';
 import { flashMessage, flashState, flashType } from '../../store/flash';
 import {
   Control,
@@ -45,7 +44,7 @@ type Props = {
   watch: UseFormWatch<RecruitmentInput>;
   resetField: UseFormResetField<RecruitmentInput>;
   setError: UseFormSetError<RecruitmentInput>;
-  onClick: (isPublished: boolean) => void;
+  onClick: (status: Status) => void;
 };
 
 export const RecruitmentForm: VFC<Props> = memo((props) => {
@@ -69,7 +68,7 @@ export const RecruitmentForm: VFC<Props> = memo((props) => {
   const [open, setOpen] = useState<boolean>(false);
 
   const watchType = watch('type');
-  const watchIsPublished = watch('isPublished');
+  const watchStatus = watch('status');
 
   useEffect(() => {
     let message: string | undefined = '';
@@ -112,23 +111,23 @@ export const RecruitmentForm: VFC<Props> = memo((props) => {
 
   useEffect(() => {
     if (watchType === Type.Teammate || watchType === Type.Coaching) {
-      resetField('locationLat');
-      resetField('locationLng');
-      resetField('place');
-      resetField('startAt');
+      setValue('locationLat', undefined);
+      setValue('locationLng', undefined);
+      setValue('place', '');
+      setValue('startAt', '');
     } else if (watchType === Type.Joining) {
-      resetField('locationLat');
-      resetField('locationLng');
-      resetField('place');
-      resetField('startAt');
-      resetField('capacity');
+      setValue('locationLat', undefined);
+      setValue('locationLng', undefined);
+      setValue('place', '');
+      setValue('startAt', '');
+      setValue('capacity', 0);
     } else if (watchType === Type.Others) {
-      resetField('locationLat');
-      resetField('locationLng');
-      resetField('place');
-      resetField('startAt');
-      resetField('capacity');
-      resetField('level');
+      setValue('locationLat', undefined);
+      setValue('locationLng', undefined);
+      setValue('place', '');
+      setValue('startAt', '');
+      setValue('capacity', 0);
+      setValue('level', Level.Unnecessary);
     }
   }, [watchType]);
 
@@ -138,8 +137,8 @@ export const RecruitmentForm: VFC<Props> = memo((props) => {
         <Grid item xs={10}>
           <RecruitmentFormTitle control={control} />
           <Box px={2.4} mt={0.8}>
-            <RecruitmentFormCompetition watchType={watchType} watchIsPublished={watchIsPublished} control={control} />
-            <RecruitmentFormType watchType={watchType} watchIsPublished={watchIsPublished} control={control} />
+            <RecruitmentFormCompetition watchType={watchType} watchStatus={watchStatus} control={control} />
+            <RecruitmentFormType watchType={watchType} watchStatus={watchStatus} control={control} />
           </Box>
         </Grid>
         <Grid display="none" item xs={2} />
@@ -148,14 +147,14 @@ export const RecruitmentForm: VFC<Props> = memo((props) => {
         <Grid item xs={10}>
           <Box sx={{ mt: -1 }}>
             <Container>
-              <RecruitmentFormContent watchType={watchType} watchIsPublished={watchIsPublished} control={control} />
+              <RecruitmentFormContent watchType={watchType} watchStatus={watchStatus} control={control} />
               {watchType !== Type.Unnecessary && (
                 <Grid container>
                   <Grid mt={4} item xs={6}>
                     <Box maxWidth={320}>
                       <RecruitmentFormArea
                         watchType={watchType}
-                        watchIsPublished={watchIsPublished}
+                        watchStatus={watchStatus}
                         getValues={getValues}
                         control={control}
                       />
@@ -164,11 +163,7 @@ export const RecruitmentForm: VFC<Props> = memo((props) => {
                   {watchType === Type.Opponent || watchType === Type.Individual ? (
                     <Grid mt={4} item xs={6}>
                       <Box maxWidth={320} ml="auto">
-                        <RecruitmentFormPlace
-                          watchType={watchType}
-                          watchIsPublished={watchIsPublished}
-                          control={control}
-                        />
+                        <RecruitmentFormPlace watchType={watchType} watchStatus={watchStatus} control={control} />
                       </Box>
                     </Grid>
                   ) : null}
@@ -178,22 +173,14 @@ export const RecruitmentForm: VFC<Props> = memo((props) => {
                         maxWidth={320}
                         ml={watchType === Type.Opponent || watchType === Type.Individual ? '' : 'auto'}
                       >
-                        <RecruitmentFormLevel
-                          watchType={watchType}
-                          watchIsPublished={watchIsPublished}
-                          control={control}
-                        />
+                        <RecruitmentFormLevel watchType={watchType} watchStatus={watchStatus} control={control} />
                       </Box>
                     </Grid>
                   )}
                   {watchType === Type.Joining || watchType === Type.Others ? null : (
                     <Grid mt={4} item xs={6}>
                       <Box maxWidth={320} ml={watchType === Type.Teammate || watchType === Type.Coaching ? '' : 'auto'}>
-                        <RecruitmentFormCapacity
-                          watchType={watchType}
-                          watchIsPublished={watchIsPublished}
-                          control={control}
-                        />
+                        <RecruitmentFormCapacity watchType={watchType} watchStatus={watchStatus} control={control} />
                       </Box>
                     </Grid>
                   )}
@@ -203,7 +190,7 @@ export const RecruitmentForm: VFC<Props> = memo((props) => {
                         <RecruitmentFormStart
                           getValues={getValues}
                           watchType={watchType}
-                          watchIsPublished={watchIsPublished}
+                          watchStatus={watchStatus}
                           control={control}
                         />
                       </Box>
@@ -214,7 +201,7 @@ export const RecruitmentForm: VFC<Props> = memo((props) => {
                       <RecruitmentFormDeadline
                         getValues={getValues}
                         watchType={watchType}
-                        watchIsPublished={watchIsPublished}
+                        watchStatus={watchStatus}
                         control={control}
                       />
                     </Box>
@@ -229,9 +216,9 @@ export const RecruitmentForm: VFC<Props> = memo((props) => {
             <Grid item xs={12}>
               <RecruitmentFormPublish onClick={onClick} />
             </Grid>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <RecruitmentFormPreview />
-            </Grid>
+            </Grid> */}
             {watchType === Type.Opponent || watchType === Type.Individual ? (
               <Grid item xs={12}>
                 <RecruitmentFormLocation handleClickOpen={handleClickOpen} />
