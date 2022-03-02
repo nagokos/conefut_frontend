@@ -84,13 +84,13 @@ export type Query = {
   getCompetitions: Array<Competition>;
   getCurrentUser?: Maybe<User>;
   getCurrentUserRecruitments: Array<Recruitment>;
-  getEditRecruitment: Recruitment;
   getPrefectures: Array<Prefecture>;
+  getRecruitment: Recruitment;
   getRecruitments: Array<Recruitment>;
 };
 
 
-export type QueryGetEditRecruitmentArgs = {
+export type QueryGetRecruitmentArgs = {
   id: Scalars['String'];
 };
 
@@ -101,13 +101,13 @@ export type Recruitment = {
   competition?: Maybe<Competition>;
   content?: Maybe<Scalars['String']>;
   id: Scalars['String'];
-  isPublished: Scalars['Boolean'];
   level: Level;
   locationLat?: Maybe<Scalars['Float']>;
   locationLng?: Maybe<Scalars['Float']>;
   place?: Maybe<Scalars['String']>;
   prefecture?: Maybe<Prefecture>;
   startAt?: Maybe<Scalars['DateTime']>;
+  status: Status;
   title: Scalars['String'];
   type: Type;
   updatedAt: Scalars['DateTime'];
@@ -117,6 +117,12 @@ export type Recruitment = {
 export enum Role {
   Admin = 'ADMIN',
   General = 'GENERAL'
+}
+
+export enum Status {
+  Closed = 'CLOSED',
+  Draft = 'DRAFT',
+  Published = 'PUBLISHED'
 }
 
 export enum Type {
@@ -156,13 +162,13 @@ export type RecruitmentInput = {
   closingAt?: InputMaybe<Scalars['DateTime']>;
   competitionId?: InputMaybe<Scalars['String']>;
   content?: InputMaybe<Scalars['String']>;
-  isPublished: Scalars['Boolean'];
   level: Level;
   locationLat?: InputMaybe<Scalars['Float']>;
   locationLng?: InputMaybe<Scalars['Float']>;
   place?: InputMaybe<Scalars['String']>;
   prefectureId?: InputMaybe<Scalars['String']>;
   startAt?: InputMaybe<Scalars['DateTime']>;
+  status: Status;
   title: Scalars['String'];
   type: Type;
 };
@@ -185,14 +191,21 @@ export type GetRecruitmentsQuery = { __typename?: 'Query', getRecruitments: Arra
 export type GetCurrentUserRecruitmentsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCurrentUserRecruitmentsQuery = { __typename?: 'Query', getCurrentUserRecruitments: Array<{ __typename?: 'Recruitment', id: string, title: string, isPublished: boolean }> };
+export type GetCurrentUserRecruitmentsQuery = { __typename?: 'Query', getCurrentUserRecruitments: Array<{ __typename?: 'Recruitment', id: string, title: string, status: Status, competition?: { __typename?: 'Competition', name: string } | null }> };
+
+export type GetRecruitmentQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type GetRecruitmentQuery = { __typename?: 'Query', getRecruitment: { __typename?: 'Recruitment', id: string, title: string, type: Type, level: Level, place?: string | null, startAt?: any | null, content?: string | null, capacity?: number | null, updatedAt: any, closingAt?: any | null, locationLat?: number | null, locationLng?: number | null, competition?: { __typename?: 'Competition', name: string } | null, prefecture?: { __typename?: 'Prefecture', name: string } | null, user: { __typename?: 'User', id: string, name: string, avatar: string } } };
 
 export type GetEditRecruitmentQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
 
 
-export type GetEditRecruitmentQuery = { __typename?: 'Query', getEditRecruitment: { __typename?: 'Recruitment', id: string, title: string, type: Type, level: Level, place?: string | null, startAt?: any | null, content?: string | null, capacity?: number | null, closingAt?: any | null, locationLat?: number | null, locationLng?: number | null, isPublished: boolean, competition?: { __typename?: 'Competition', id: string } | null, prefecture?: { __typename?: 'Prefecture', id: string } | null } };
+export type GetEditRecruitmentQuery = { __typename?: 'Query', getRecruitment: { __typename?: 'Recruitment', id: string, title: string, type: Type, level: Level, place?: string | null, startAt?: any | null, content?: string | null, capacity?: number | null, closingAt?: any | null, locationLat?: number | null, locationLng?: number | null, status: Status, competition?: { __typename?: 'Competition', id: string } | null, prefecture?: { __typename?: 'Prefecture', id: string } | null } };
 
 export type CreateRecruitmentMutationVariables = Exact<{
   title: Scalars['String'];
@@ -205,7 +218,7 @@ export type CreateRecruitmentMutationVariables = Exact<{
   locationLng?: InputMaybe<Scalars['Float']>;
   startAt?: InputMaybe<Scalars['DateTime']>;
   prefectureId?: InputMaybe<Scalars['String']>;
-  isPublished: Scalars['Boolean'];
+  status: Status;
   capacity?: InputMaybe<Scalars['Int']>;
   place?: InputMaybe<Scalars['String']>;
 }>;
@@ -225,13 +238,13 @@ export type UpdateRecruitmentMutationVariables = Exact<{
   locationLng?: InputMaybe<Scalars['Float']>;
   startAt?: InputMaybe<Scalars['DateTime']>;
   prefectureId?: InputMaybe<Scalars['String']>;
-  isPublished: Scalars['Boolean'];
+  status: Status;
   capacity?: InputMaybe<Scalars['Int']>;
   place?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type UpdateRecruitmentMutation = { __typename?: 'Mutation', updateRecruitment: { __typename?: 'Recruitment', id: string, title: string, isPublished: boolean } };
+export type UpdateRecruitmentMutation = { __typename?: 'Mutation', updateRecruitment: { __typename?: 'Recruitment', id: string, title: string, status: Status } };
 
 export type DeleteRecruitmentMutationVariables = Exact<{
   id: Scalars['String'];
@@ -393,7 +406,10 @@ export const GetCurrentUserRecruitmentsDocument = gql`
   getCurrentUserRecruitments {
     id
     title
-    isPublished
+    status
+    competition {
+      name
+    }
   }
 }
     `;
@@ -424,9 +440,66 @@ export function useGetCurrentUserRecruitmentsLazyQuery(baseOptions?: Apollo.Lazy
 export type GetCurrentUserRecruitmentsQueryHookResult = ReturnType<typeof useGetCurrentUserRecruitmentsQuery>;
 export type GetCurrentUserRecruitmentsLazyQueryHookResult = ReturnType<typeof useGetCurrentUserRecruitmentsLazyQuery>;
 export type GetCurrentUserRecruitmentsQueryResult = Apollo.QueryResult<GetCurrentUserRecruitmentsQuery, GetCurrentUserRecruitmentsQueryVariables>;
+export const GetRecruitmentDocument = gql`
+    query GetRecruitment($id: String!) {
+  getRecruitment(id: $id) {
+    id
+    title
+    type
+    level
+    place
+    startAt
+    content
+    capacity
+    updatedAt
+    closingAt
+    competition {
+      name
+    }
+    prefecture {
+      name
+    }
+    user {
+      id
+      name
+      avatar
+    }
+    locationLat
+    locationLng
+  }
+}
+    `;
+
+/**
+ * __useGetRecruitmentQuery__
+ *
+ * To run a query within a React component, call `useGetRecruitmentQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRecruitmentQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRecruitmentQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetRecruitmentQuery(baseOptions: Apollo.QueryHookOptions<GetRecruitmentQuery, GetRecruitmentQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetRecruitmentQuery, GetRecruitmentQueryVariables>(GetRecruitmentDocument, options);
+      }
+export function useGetRecruitmentLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetRecruitmentQuery, GetRecruitmentQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetRecruitmentQuery, GetRecruitmentQueryVariables>(GetRecruitmentDocument, options);
+        }
+export type GetRecruitmentQueryHookResult = ReturnType<typeof useGetRecruitmentQuery>;
+export type GetRecruitmentLazyQueryHookResult = ReturnType<typeof useGetRecruitmentLazyQuery>;
+export type GetRecruitmentQueryResult = Apollo.QueryResult<GetRecruitmentQuery, GetRecruitmentQueryVariables>;
 export const GetEditRecruitmentDocument = gql`
     query GetEditRecruitment($id: String!) {
-  getEditRecruitment(id: $id) {
+  getRecruitment(id: $id) {
     id
     title
     type
@@ -444,7 +517,7 @@ export const GetEditRecruitmentDocument = gql`
     }
     locationLat
     locationLng
-    isPublished
+    status
   }
 }
     `;
@@ -477,9 +550,9 @@ export type GetEditRecruitmentQueryHookResult = ReturnType<typeof useGetEditRecr
 export type GetEditRecruitmentLazyQueryHookResult = ReturnType<typeof useGetEditRecruitmentLazyQuery>;
 export type GetEditRecruitmentQueryResult = Apollo.QueryResult<GetEditRecruitmentQuery, GetEditRecruitmentQueryVariables>;
 export const CreateRecruitmentDocument = gql`
-    mutation CreateRecruitment($title: String!, $competitionId: String, $closingAt: DateTime, $content: String, $level: Level!, $type: Type!, $locationLat: Float, $locationLng: Float, $startAt: DateTime, $prefectureId: String, $isPublished: Boolean!, $capacity: Int, $place: String) {
+    mutation CreateRecruitment($title: String!, $competitionId: String, $closingAt: DateTime, $content: String, $level: Level!, $type: Type!, $locationLat: Float, $locationLng: Float, $startAt: DateTime, $prefectureId: String, $status: Status!, $capacity: Int, $place: String) {
   createRecruitment(
-    input: {title: $title, competitionId: $competitionId, closingAt: $closingAt, content: $content, level: $level, type: $type, locationLat: $locationLat, locationLng: $locationLng, isPublished: $isPublished, startAt: $startAt, capacity: $capacity, place: $place, prefectureId: $prefectureId}
+    input: {title: $title, competitionId: $competitionId, closingAt: $closingAt, content: $content, level: $level, type: $type, locationLat: $locationLat, locationLng: $locationLng, status: $status, startAt: $startAt, capacity: $capacity, place: $place, prefectureId: $prefectureId}
   ) {
     title
     content
@@ -512,7 +585,7 @@ export type CreateRecruitmentMutationFn = Apollo.MutationFunction<CreateRecruitm
  *      locationLng: // value for 'locationLng'
  *      startAt: // value for 'startAt'
  *      prefectureId: // value for 'prefectureId'
- *      isPublished: // value for 'isPublished'
+ *      status: // value for 'status'
  *      capacity: // value for 'capacity'
  *      place: // value for 'place'
  *   },
@@ -526,14 +599,14 @@ export type CreateRecruitmentMutationHookResult = ReturnType<typeof useCreateRec
 export type CreateRecruitmentMutationResult = Apollo.MutationResult<CreateRecruitmentMutation>;
 export type CreateRecruitmentMutationOptions = Apollo.BaseMutationOptions<CreateRecruitmentMutation, CreateRecruitmentMutationVariables>;
 export const UpdateRecruitmentDocument = gql`
-    mutation UpdateRecruitment($id: String!, $title: String!, $competitionId: String, $closingAt: DateTime, $content: String, $level: Level!, $type: Type!, $locationLat: Float, $locationLng: Float, $startAt: DateTime, $prefectureId: String, $isPublished: Boolean!, $capacity: Int, $place: String) {
+    mutation UpdateRecruitment($id: String!, $title: String!, $competitionId: String, $closingAt: DateTime, $content: String, $level: Level!, $type: Type!, $locationLat: Float, $locationLng: Float, $startAt: DateTime, $prefectureId: String, $status: Status!, $capacity: Int, $place: String) {
   updateRecruitment(
     id: $id
-    input: {title: $title, competitionId: $competitionId, closingAt: $closingAt, content: $content, level: $level, type: $type, locationLat: $locationLat, locationLng: $locationLng, isPublished: $isPublished, startAt: $startAt, capacity: $capacity, place: $place, prefectureId: $prefectureId}
+    input: {title: $title, competitionId: $competitionId, closingAt: $closingAt, content: $content, level: $level, type: $type, locationLat: $locationLat, locationLng: $locationLng, status: $status, startAt: $startAt, capacity: $capacity, place: $place, prefectureId: $prefectureId}
   ) {
     id
     title
-    isPublished
+    status
   }
 }
     `;
@@ -563,7 +636,7 @@ export type UpdateRecruitmentMutationFn = Apollo.MutationFunction<UpdateRecruitm
  *      locationLng: // value for 'locationLng'
  *      startAt: // value for 'startAt'
  *      prefectureId: // value for 'prefectureId'
- *      isPublished: // value for 'isPublished'
+ *      status: // value for 'status'
  *      capacity: // value for 'capacity'
  *      place: // value for 'place'
  *   },
