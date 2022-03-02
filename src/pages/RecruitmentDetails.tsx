@@ -9,7 +9,6 @@ import { GoogleMap, Marker, LoadScript } from '@react-google-maps/api';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import SendIcon from '@mui/icons-material/Send';
 
-
 type LocationObject = {
   lat: number;
   lng: number;
@@ -114,7 +113,7 @@ export const RecruitmentDetails: VFC = memo(() => {
               </ListItem>
               <Box sx={{ fontWeight: 'bold', fontSize: 25, mt: 3 }}>{recruitment?.title}</Box>
               <Stack spacing={3.5} sx={{ mt: 3 }}>
-                <Box sx={{ fontSize: 14, display: 'flex' }}>
+                <Box sx={{ fontSize: 14, display: 'flex', alignItems: 'center' }}>
                   <Box sx={{ minWidth: 124 }}>
                     <Box component="span" mr={0.2}>
                       ■
@@ -132,7 +131,7 @@ export const RecruitmentDetails: VFC = memo(() => {
                     </Box>
                   </Box>
                 </Box>
-                <Box sx={{ fontSize: 14, display: 'flex' }}>
+                <Box sx={{ fontSize: 14, display: 'flex', alignItems: 'center' }}>
                   <Box sx={{ minWidth: 124 }}>
                     <Box component="span" mr={0.2}>
                       ■
@@ -151,7 +150,7 @@ export const RecruitmentDetails: VFC = memo(() => {
                   </Box>
                 </Box>
                 {!!recruitment.startAt && (
-                  <Box sx={{ fontSize: 14, display: 'flex' }}>
+                  <Box sx={{ fontSize: 14, display: 'flex', alignItems: 'center' }}>
                     <Box sx={{ minWidth: 124 }}>
                       <Box component="span" mr={0.2}>
                         ■
@@ -170,7 +169,7 @@ export const RecruitmentDetails: VFC = memo(() => {
                     </Box>
                   </Box>
                 )}
-                <Box sx={{ fontSize: 14, display: 'flex' }}>
+                <Box sx={{ fontSize: 14, display: 'flex', alignItems: 'center' }}>
                   <Box sx={{ minWidth: 124 }}>
                     <Box component="span" mr={0.2}>
                       ■
@@ -192,7 +191,7 @@ export const RecruitmentDetails: VFC = memo(() => {
                   </Box>
                 </Box>
                 {recruitment.level !== Level.Unnecessary && (
-                  <Box sx={{ fontSize: 14, display: 'flex' }}>
+                  <Box sx={{ fontSize: 14, display: 'flex', alignItems: 'center' }}>
                     <Box sx={{ minWidth: 124 }}>
                       <Box component="span" mr={0.2}>
                         ■
@@ -214,12 +213,12 @@ export const RecruitmentDetails: VFC = memo(() => {
                   </Box>
                 )}
                 {!!recruitment.capacity && (
-                  <Box sx={{ fontSize: 14, display: 'flex' }}>
+                  <Box sx={{ fontSize: 14, display: 'flex', alignItems: 'center' }}>
                     <Box sx={{ minWidth: 124 }}>
                       <Box component="span" mr={0.2}>
                         ■
                       </Box>
-                      募集人数:
+                      {recruitment.type === Type.Opponent ? '募集チーム数' : '募集人数'}
                     </Box>
                     <Box>
                       <Box px={1} py={0.6} borderRadius={1} component="span" bgcolor="#f0f5f4">
@@ -228,7 +227,10 @@ export const RecruitmentDetails: VFC = memo(() => {
                         </Box>
                         <Box sx={{ fontSize: 14 }} component="span">
                           <Box component="span" sx={{ color: '#424242' }}>
-                            {recruitment.capacity}人募集
+                            {recruitment.type === Type.Opponent
+                              ? `${recruitment.capacity}チーム`
+                              : `${recruitment.capacity}人`}
+                            募集
                           </Box>
                         </Box>
                       </Box>
@@ -261,7 +263,7 @@ export const RecruitmentDetails: VFC = memo(() => {
                   </Box>
                 </Box>
                 {!!recruitment.locationLat && !!recruitment.locationLng && (
-                  <Box sx={{ fontSize: 14, display: 'flex' }}>
+                  <Box sx={{ fontSize: 14, display: 'flex', alignItems: 'center' }}>
                     <Box sx={{ minWidth: 124 }} />
                     <Box>
                       <LoadScript googleMapsApiKey={googleMapApiKey}>
