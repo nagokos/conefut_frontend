@@ -1,17 +1,17 @@
 import { memo, VFC } from 'react';
 import { Select, InputLabel } from '@mui/material';
 import { StyledSelectMenuItem, StyledRecruitmentSelectInput } from '../index';
-import { RecruitmentInput, Type, useGetPrefecturesQuery } from '../../generated/graphql';
+import { RecruitmentInput, Status, Type, useGetPrefecturesQuery } from '../../generated/graphql';
 import { Control, Controller, UseFormGetValues } from 'react-hook-form';
 
 type Props = {
   control: Control<RecruitmentInput, object>;
   getValues: UseFormGetValues<RecruitmentInput>;
-  watchIsPublished: boolean;
+  watchStatus: Status;
   watchType: Type;
 };
 export const RecruitmentFormArea: VFC<Props> = memo((props) => {
-  const { control, getValues, watchIsPublished, watchType } = props;
+  const { control, getValues, watchStatus, watchType } = props;
   const { loading, data } = useGetPrefecturesQuery();
 
   return (
