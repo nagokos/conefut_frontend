@@ -7,7 +7,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import { UseFormGetValues, UseFormSetValue } from 'react-hook-form';
 import CloseIcon from '@mui/icons-material/Close';
-import { GoogleMap, StandaloneSearchBox, useJsApiLoader, Marker } from '@react-google-maps/api';
+import { GoogleMap, StandaloneSearchBox, Marker, LoadScript } from '@react-google-maps/api';
 import Autocomplete from '@mui/material/Autocomplete';
 import Popper from '@mui/material/Popper';
 
@@ -43,12 +43,6 @@ export const RecruitmentLocationDialog: VFC<Props> = memo((props) => {
   const [location, setLocation] = useState<LocationObject>({
     lat: defaultLat ? defaultLat : 35.69575,
     lng: defaultLng ? defaultLng : 139.77521,
-  });
-
-  const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
-    googleMapsApiKey: googleMapApiKey,
-    libraries,
   });
 
   const onPlacesChanged = () => {
@@ -106,66 +100,61 @@ export const RecruitmentLocationDialog: VFC<Props> = memo((props) => {
       open={open}
       onClose={handleClose}
     >
-      {isLoaded && (
-        <>
-          <DialogTitle sx={{ margin: '0 auto', fontWeight: 'bold', fontSize: 23 }}>
-            会場を埋め込む
-            <IconButton
-              disableTouchRipple
-              size="small"
-              onClick={handleClose}
-              sx={{ position: 'absolute', right: 8, top: 17 }}
-            >
-              <CloseIcon />
-            </IconButton>
-          </DialogTitle>
-          <DialogContent>
-            <Typography sx={{ color: '#757575' }} mb={2} fontSize={13}>
-              会場を埋め込むためにマーカーを設置してください。
-              <br />
-              マーカーを設置するにはマップをクリック、検索することで設置できます。
-              <br />
-              ※マーカーを指定の位置に設置後、必ず保存するをクリックしてください。
-            </Typography>
-
-            <GoogleMap
-              mapContainerStyle={{ width: '500px', height: '400px' }}
-              center={{ lat: location.lat, lng: location.lng }}
-              zoom={16}
-              onClick={mapOnClick}
-            >
-              <>
-                <StandaloneSearchBox onPlacesChanged={onPlacesChanged} onLoad={onSBLoad}>
-                  <Autocomplete
-                    freeSolo
-                    disableClearable
-                    options={[]}
-                    sx={{ width: 250, fontSize: 20 }}
-                    ListboxProps={{
-                      style: {
-                        fontSize: 13,
-                      },
-                    }}
-                    PopperComponent={(props) => <Popper {...props} style={{ width: 264 }} placement="bottom-start" />}
-                    renderInput={(params) => {
-                      const { InputLabelProps, InputProps, ...rest } = params;
-                      return (
-                        <StyledLocationSearchInput ref={InputProps.ref} placeholder="検索ワードを入力" {...rest} />
-                      );
-                    }}
-                  />
-                </StandaloneSearchBox>
-                <Marker position={location} />
-              </>
-            </GoogleMap>
-          </DialogContent>
-          <DialogActions sx={{ justifyContent: 'center', mb: 1, pt: 0 }}>
-            <Button size="large" disableElevation variant="contained" onClick={setLatLng} autoFocus>
-              保存する
-            </Button>
-          </DialogActions>
-        </>
-      )}
+      <DialogTitle sx={{ margin: '0 auto', fontWeight: 'bold', fontSize: 23 }}>
+        会場を埋め込む
+        <IconButton
+          disableTouchRipple
+          size="small"
+          onClick={handleClose}
+          sx={{ position: 'absolute', right: 8, top: 17 }}
+        >
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent>
+        <Typography sx={{ color: '#757575' }} mb={2} fontSize={13}>
+          会場を埋め込むためにマーカーを設置してください。
+          <br />
+          マーカーを設置するにはマップをクリック、検索することで設置できます。
+          <br />
+          ※マーカーを指定の位置に設置後、必ず保存するをクリックしてください。
+        </Typography>
+        <LoadScript libraries={['places']} googleMapsApiKey={googleMapApiKey}>
+          <GoogleMap
+            mapContainerStyle={{ width: '500px', height: '400px' }}
+            center={{ lat: location.lat, lng: location.lng }}
+            zoom={16}
+            onClick={mapOnClick}
+          >
+            <>
+              <StandaloneSearchBox onPlacesChanged={onPlacesChanged} onLoad={onSBLoad}>
+                <Autocomplete
+                  freeSolo
+                  disableClearable
+                  options={[]}
+                  sx={{ width: 250, fontSize: 20 }}
+                  ListboxProps={{
+                    style: {
+                      fontSize: 13,
+                    },
+                  }}
+                  PopperComponent={(props) => <Popper {...props} style={{ width: 264 }} placement="bottom-start" />}
+                  renderInput={(params) => {
+                    const { InputLabelProps, InputProps, ...rest } = params;
+                    return <StyledLocationSearchInput ref={InputProps.ref} placeholder="検索ワードを入力" {...rest} />;
+                  }}
+                />
+              </StandaloneSearchBox>
+              <Marker position={location} />
+            </>
+          </GoogleMap>
+        </LoadScript>
+      </DialogContent>
+      <DialogActions sx={{ justifyContent: 'center', mb: 1, pt: 0 }}>
+        <Button size="large" disableElevation variant="contained" onClick={setLatLng} autoFocus>
+          保存する
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 });
