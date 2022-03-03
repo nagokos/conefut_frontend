@@ -93,17 +93,29 @@ export type Prefecture = {
 
 export type Query = {
   __typename?: 'Query';
+  checkStocked: Scalars['Boolean'];
   getCompetitions: Array<Competition>;
   getCurrentUser?: Maybe<User>;
   getCurrentUserRecruitments: Array<Recruitment>;
   getPrefectures: Array<Prefecture>;
   getRecruitment: Recruitment;
   getRecruitments: Array<Recruitment>;
+  getStockedCount: Scalars['Int'];
+};
+
+
+export type QueryCheckStockedArgs = {
+  recruitmentId: Scalars['String'];
 };
 
 
 export type QueryGetRecruitmentArgs = {
   id: Scalars['String'];
+};
+
+
+export type QueryGetStockedCountArgs = {
+  recruitmentId: Scalars['String'];
 };
 
 export type Recruitment = {
@@ -264,6 +276,20 @@ export type DeleteRecruitmentMutationVariables = Exact<{
 
 
 export type DeleteRecruitmentMutation = { __typename?: 'Mutation', deleteRecruitment: boolean };
+
+export type CheckStockedQueryVariables = Exact<{
+  recruitmentId: Scalars['String'];
+}>;
+
+
+export type CheckStockedQuery = { __typename?: 'Query', checkStocked: boolean };
+
+export type GetStockedCountQueryVariables = Exact<{
+  recruitmentId: Scalars['String'];
+}>;
+
+
+export type GetStockedCountQuery = { __typename?: 'Query', getStockedCount: number };
 
 export type CreateStockMutationVariables = Exact<{
   recruitmentId: Scalars['String'];
@@ -706,6 +732,72 @@ export function useDeleteRecruitmentMutation(baseOptions?: Apollo.MutationHookOp
 export type DeleteRecruitmentMutationHookResult = ReturnType<typeof useDeleteRecruitmentMutation>;
 export type DeleteRecruitmentMutationResult = Apollo.MutationResult<DeleteRecruitmentMutation>;
 export type DeleteRecruitmentMutationOptions = Apollo.BaseMutationOptions<DeleteRecruitmentMutation, DeleteRecruitmentMutationVariables>;
+export const CheckStockedDocument = gql`
+    query CheckStocked($recruitmentId: String!) {
+  checkStocked(recruitmentId: $recruitmentId)
+}
+    `;
+
+/**
+ * __useCheckStockedQuery__
+ *
+ * To run a query within a React component, call `useCheckStockedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCheckStockedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCheckStockedQuery({
+ *   variables: {
+ *      recruitmentId: // value for 'recruitmentId'
+ *   },
+ * });
+ */
+export function useCheckStockedQuery(baseOptions: Apollo.QueryHookOptions<CheckStockedQuery, CheckStockedQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CheckStockedQuery, CheckStockedQueryVariables>(CheckStockedDocument, options);
+      }
+export function useCheckStockedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CheckStockedQuery, CheckStockedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CheckStockedQuery, CheckStockedQueryVariables>(CheckStockedDocument, options);
+        }
+export type CheckStockedQueryHookResult = ReturnType<typeof useCheckStockedQuery>;
+export type CheckStockedLazyQueryHookResult = ReturnType<typeof useCheckStockedLazyQuery>;
+export type CheckStockedQueryResult = Apollo.QueryResult<CheckStockedQuery, CheckStockedQueryVariables>;
+export const GetStockedCountDocument = gql`
+    query GetStockedCount($recruitmentId: String!) {
+  getStockedCount(recruitmentId: $recruitmentId)
+}
+    `;
+
+/**
+ * __useGetStockedCountQuery__
+ *
+ * To run a query within a React component, call `useGetStockedCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetStockedCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetStockedCountQuery({
+ *   variables: {
+ *      recruitmentId: // value for 'recruitmentId'
+ *   },
+ * });
+ */
+export function useGetStockedCountQuery(baseOptions: Apollo.QueryHookOptions<GetStockedCountQuery, GetStockedCountQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetStockedCountQuery, GetStockedCountQueryVariables>(GetStockedCountDocument, options);
+      }
+export function useGetStockedCountLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetStockedCountQuery, GetStockedCountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetStockedCountQuery, GetStockedCountQueryVariables>(GetStockedCountDocument, options);
+        }
+export type GetStockedCountQueryHookResult = ReturnType<typeof useGetStockedCountQuery>;
+export type GetStockedCountLazyQueryHookResult = ReturnType<typeof useGetStockedCountLazyQuery>;
+export type GetStockedCountQueryResult = Apollo.QueryResult<GetStockedCountQuery, GetStockedCountQueryVariables>;
 export const CreateStockDocument = gql`
     mutation CreateStock($recruitmentId: String!) {
   createStock(recruitmentId: $recruitmentId)
