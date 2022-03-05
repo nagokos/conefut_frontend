@@ -40,8 +40,10 @@ export enum Level {
 export type Mutation = {
   __typename?: 'Mutation';
   createRecruitment: Recruitment;
+  createStock: Scalars['Boolean'];
   createUser: User;
   deleteRecruitment: Scalars['Boolean'];
+  deleteStock: Scalars['Boolean'];
   loginUser: User;
   logoutUser: Scalars['Boolean'];
   updateRecruitment: Recruitment;
@@ -53,6 +55,11 @@ export type MutationCreateRecruitmentArgs = {
 };
 
 
+export type MutationCreateStockArgs = {
+  recruitmentId: Scalars['String'];
+};
+
+
 export type MutationCreateUserArgs = {
   input: CreateUserInput;
 };
@@ -60,6 +67,11 @@ export type MutationCreateUserArgs = {
 
 export type MutationDeleteRecruitmentArgs = {
   id: Scalars['String'];
+};
+
+
+export type MutationDeleteStockArgs = {
+  recruitmentId: Scalars['String'];
 };
 
 
@@ -252,6 +264,20 @@ export type DeleteRecruitmentMutationVariables = Exact<{
 
 
 export type DeleteRecruitmentMutation = { __typename?: 'Mutation', deleteRecruitment: boolean };
+
+export type CreateStockMutationVariables = Exact<{
+  recruitmentId: Scalars['String'];
+}>;
+
+
+export type CreateStockMutation = { __typename?: 'Mutation', createStock: boolean };
+
+export type DeleteStockMutationVariables = Exact<{
+  recruitmentId: Scalars['String'];
+}>;
+
+
+export type DeleteStockMutation = { __typename?: 'Mutation', deleteStock: boolean };
 
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -680,6 +706,68 @@ export function useDeleteRecruitmentMutation(baseOptions?: Apollo.MutationHookOp
 export type DeleteRecruitmentMutationHookResult = ReturnType<typeof useDeleteRecruitmentMutation>;
 export type DeleteRecruitmentMutationResult = Apollo.MutationResult<DeleteRecruitmentMutation>;
 export type DeleteRecruitmentMutationOptions = Apollo.BaseMutationOptions<DeleteRecruitmentMutation, DeleteRecruitmentMutationVariables>;
+export const CreateStockDocument = gql`
+    mutation CreateStock($recruitmentId: String!) {
+  createStock(recruitmentId: $recruitmentId)
+}
+    `;
+export type CreateStockMutationFn = Apollo.MutationFunction<CreateStockMutation, CreateStockMutationVariables>;
+
+/**
+ * __useCreateStockMutation__
+ *
+ * To run a mutation, you first call `useCreateStockMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateStockMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createStockMutation, { data, loading, error }] = useCreateStockMutation({
+ *   variables: {
+ *      recruitmentId: // value for 'recruitmentId'
+ *   },
+ * });
+ */
+export function useCreateStockMutation(baseOptions?: Apollo.MutationHookOptions<CreateStockMutation, CreateStockMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateStockMutation, CreateStockMutationVariables>(CreateStockDocument, options);
+      }
+export type CreateStockMutationHookResult = ReturnType<typeof useCreateStockMutation>;
+export type CreateStockMutationResult = Apollo.MutationResult<CreateStockMutation>;
+export type CreateStockMutationOptions = Apollo.BaseMutationOptions<CreateStockMutation, CreateStockMutationVariables>;
+export const DeleteStockDocument = gql`
+    mutation DeleteStock($recruitmentId: String!) {
+  deleteStock(recruitmentId: $recruitmentId)
+}
+    `;
+export type DeleteStockMutationFn = Apollo.MutationFunction<DeleteStockMutation, DeleteStockMutationVariables>;
+
+/**
+ * __useDeleteStockMutation__
+ *
+ * To run a mutation, you first call `useDeleteStockMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteStockMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteStockMutation, { data, loading, error }] = useDeleteStockMutation({
+ *   variables: {
+ *      recruitmentId: // value for 'recruitmentId'
+ *   },
+ * });
+ */
+export function useDeleteStockMutation(baseOptions?: Apollo.MutationHookOptions<DeleteStockMutation, DeleteStockMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteStockMutation, DeleteStockMutationVariables>(DeleteStockDocument, options);
+      }
+export type DeleteStockMutationHookResult = ReturnType<typeof useDeleteStockMutation>;
+export type DeleteStockMutationResult = Apollo.MutationResult<DeleteStockMutation>;
+export type DeleteStockMutationOptions = Apollo.BaseMutationOptions<DeleteStockMutation, DeleteStockMutationVariables>;
 export const GetCurrentUserDocument = gql`
     query GetCurrentUser {
   getCurrentUser {
