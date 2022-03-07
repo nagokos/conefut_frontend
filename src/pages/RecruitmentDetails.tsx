@@ -1,22 +1,16 @@
 import { Avatar, Box, Button, Grid, ListItem, ListItemAvatar, ListItemText, Stack, Typography } from '@mui/material';
 import { memo, VFC } from 'react';
 import { useParams } from 'react-router-dom';
-import { Level, Type, useGetRecruitmentQuery } from '../generated/graphql';
+import { Type, useGetRecruitmentQuery } from '../generated/graphql';
 import { formatDistanceToNow } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import { Emoji } from 'emoji-mart';
 import { GoogleMap, Marker, LoadScript } from '@react-google-maps/api';
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
-import SendIcon from '@mui/icons-material/Send';
 
-type LocationObject = {
-  lat: number;
-  lng: number;
-};
+import { RecruitmentDetailsApply } from '../components/index';
 
 export const RecruitmentDetails: VFC = memo(() => {
   const { recruitmentId } = useParams();
-  console.log(recruitmentId);
 
   const { data, loading } = useGetRecruitmentQuery({
     variables: {
@@ -42,13 +36,11 @@ export const RecruitmentDetails: VFC = memo(() => {
     if (recruitment.type === Type.Opponent) {
       return '試合相手の募集';
     } else if (recruitment.type === Type.Individual) {
-      return '個人での参加の募集';
-    } else if (recruitment.type === Type.Teammate) {
-      return 'チームメイトの募集';
+      return '個人参加の募集';
+    } else if (recruitment.type === Type.Member) {
+      return 'メンバーの募集';
     } else if (recruitment.type === Type.Joining) {
       return 'チームに入りたい募集';
-    } else if (recruitment.type === Type.Coaching) {
-      return 'コーチの募集';
     } else if (recruitment.type === Type.Others) {
       return 'その他';
     }
@@ -59,30 +51,14 @@ export const RecruitmentDetails: VFC = memo(() => {
       return ':handshake:';
     } else if (recruitment.type === Type.Individual) {
       return ':raised_hand:';
-    } else if (recruitment.type === Type.Teammate) {
+    } else if (recruitment.type === Type.Member) {
       return ':people_holding_hands:';
     } else if (recruitment.type === Type.Joining) {
       return ':pray:';
-    } else if (recruitment.type === Type.Coaching) {
-      return ':teacher:';
     } else if (recruitment.type === Type.Others) {
       return ':thought_balloon:';
     } else {
       return '';
-    }
-  };
-
-  const levelString = () => {
-    if (recruitment.level === Level.Enjoy) {
-      return 'エンジョイ';
-    } else if (recruitment.level === Level.Beginner) {
-      return 'ビギナー';
-    } else if (recruitment.level === Level.Middle) {
-      return 'ミドル';
-    } else if (recruitment.level === Level.Expert) {
-      return 'エキスパート';
-    } else if (recruitment.level === Level.Open) {
-      return 'オープン';
     }
   };
 
@@ -190,35 +166,13 @@ export const RecruitmentDetails: VFC = memo(() => {
                     </Box>
                   </Box>
                 </Box>
-                {recruitment.level !== Level.Unnecessary && (
-                  <Box sx={{ fontSize: 14, display: 'flex', alignItems: 'center' }}>
-                    <Box sx={{ minWidth: 124 }}>
-                      <Box component="span" mr={0.2}>
-                        ■
-                      </Box>
-                      募集レベル:
-                    </Box>
-                    <Box>
-                      <Box px={1} py={0.6} borderRadius={1} component="span" bgcolor="#f0f5f4">
-                        <Box component="span" mr={0.6} fontSize={13} position="relative" top={2.7}>
-                          <Emoji emoji=":muscle:" size={15} />
-                        </Box>
-                        <Box sx={{ fontSize: 14 }} component="span">
-                          <Box component="span" sx={{ color: '#424242' }}>
-                            {levelString()}
-                          </Box>
-                        </Box>
-                      </Box>
-                    </Box>
-                  </Box>
-                )}
                 {!!recruitment.capacity && (
                   <Box sx={{ fontSize: 14, display: 'flex', alignItems: 'center' }}>
                     <Box sx={{ minWidth: 124 }}>
                       <Box component="span" mr={0.2}>
                         ■
                       </Box>
-                      {recruitment.type === Type.Opponent ? '募集チーム数' : '募集人数'}
+                      {recruitment.type === Type.Opponent ? '募集チーム数:' : '募集人数:'}
                     </Box>
                     <Box>
                       <Box px={1} py={0.6} borderRadius={1} component="span" bgcolor="#f0f5f4">
@@ -268,7 +222,7 @@ export const RecruitmentDetails: VFC = memo(() => {
                     <Box>
                       <LoadScript googleMapsApiKey={googleMapApiKey}>
                         <GoogleMap
-                          mapContainerStyle={{ width: 600, height: 300 }}
+                          mapContainerStyle={{ width: 600, height: 300, borderRadius: 3 }}
                           center={{
                             lat: recruitment.locationLat ? recruitment.locationLat : 0,
                             lng: recruitment.locationLng ? recruitment.locationLng : 0,
@@ -298,7 +252,7 @@ export const RecruitmentDetails: VFC = memo(() => {
                       sx={{
                         color: '#424242',
                         fontSize: 14,
-                        py: 1.2,
+                        py: 1.7,
                         px: 2,
                         whiteSpace: 'pre-wrap',
                       }}
@@ -311,58 +265,7 @@ export const RecruitmentDetails: VFC = memo(() => {
             </Box>
           </Grid>
           <Grid item xs={3.5} sx={{ pl: 2 }}>
-            <Box
-              sx={{
-                bgcolor: 'white',
-                px: 3,
-                py: 3,
-                borderRadius: 2,
-              }}
-            >
-              <Box sx={{ fontSize: 16, fontWeight: 'bold', color: '#616161' }}>1人が応募中</Box>
-              <Box sx={{ mt: 2 }}>
-                <Button
-                  disableElevation
-                  fullWidth
-                  disableRipple
-                  variant="contained"
-                  startIcon={<SendIcon />}
-                  sx={{
-                    py: 1.2,
-                    fontSize: 13,
-                    boxShadow: '0 0 0 1px rgb(0 0 0 / 2%), 0 5px 8px 0 rgb(0 0 0 / 10%)',
-                    ':hover': {
-                      boxShadow: '0 0 0 1px rgb(0 0 0 / 2%), 0 5px 8px 0 rgb(0 0 0 / 10%)',
-                      bgcolor: '#00897b',
-                    },
-                  }}
-                >
-                  応募する
-                </Button>
-              </Box>
-              <Box sx={{ mt: 2 }}>
-                <Button
-                  disableElevation
-                  disableRipple
-                  fullWidth
-                  variant="contained"
-                  startIcon={<BookmarkBorderIcon sx={{ color: '#616161' }} />}
-                  sx={{
-                    py: 1.2,
-                    fontSize: 13,
-                    bgcolor: 'white',
-                    color: '#616161',
-                    boxShadow: '0 0 0 1px rgb(0 0 0 / 2%), 0 2px 6px 0 rgb(0 0 0 / 10%)',
-                    ':hover': {
-                      bgcolor: '#fafafa',
-                      boxShadow: '0 0 0 1px rgb(0 0 0 / 2%), 0 2px 6px 0 rgb(0 0 0 / 10%)',
-                    },
-                  }}
-                >
-                  ストックする
-                </Button>
-              </Box>
-            </Box>
+            <RecruitmentDetailsApply type={recruitment.type} />
             <Box
               sx={{
                 bgcolor: 'white',
