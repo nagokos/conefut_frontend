@@ -3,27 +3,24 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { Level, Type } from '../../generated/graphql';
+import { Type } from '../../generated/graphql';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import { Emoji } from 'emoji-mart';
-import { IconButton, styled } from '@mui/material';
+import { styled } from '@mui/material';
 import { formatDistanceToNow } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import { useNavigate } from 'react-router-dom';
-
-import { StyledTooltip } from '..';
+import { RecruitmentCardStock } from '..';
 
 type Recruitment = {
   id: string;
   title: string;
   content?: string | null | undefined;
   type: Type;
-  level: Level;
   prefecture?: Prefecture | null | undefined;
   user: User;
   capacity?: number | null | undefined;
@@ -52,17 +49,6 @@ type Props = {
 const StyledCardContent = styled(CardContent)(() => ({
   '&.MuiCardContent-root': {
     paddingBottom: 11,
-  },
-}));
-
-const StyledListButton = styled(IconButton)(() => ({
-  '&.MuiIconButton-root': {
-    background: '#f0f5f4',
-    fontSize: 10,
-    color: '#90a4ae',
-  },
-  '&:hover': {
-    background: '#e9f2f2',
   },
 }));
 
@@ -95,12 +81,10 @@ export const RecruitmentCard: VFC<Props> = memo((props) => {
       return ':handshake:';
     } else if (recruitment.type === Type.Individual) {
       return ':raised_hand:';
-    } else if (recruitment.type === Type.Teammate) {
+    } else if (recruitment.type === Type.Member) {
       return ':people_holding_hands:';
     } else if (recruitment.type === Type.Joining) {
       return ':pray:';
-    } else if (recruitment.type === Type.Coaching) {
-      return ':teacher:';
     } else if (recruitment.type === Type.Others) {
       return ':thought_balloon:';
     } else {
@@ -112,29 +96,13 @@ export const RecruitmentCard: VFC<Props> = memo((props) => {
     if (recruitment.type === Type.Opponent) {
       return '試合相手';
     } else if (recruitment.type === Type.Individual) {
-      return '個人での参加';
-    } else if (recruitment.type === Type.Teammate) {
-      return 'チームメイト';
+      return '個人参加';
+    } else if (recruitment.type === Type.Member) {
+      return 'メンバー';
     } else if (recruitment.type === Type.Joining) {
       return 'チームに入りたい';
-    } else if (recruitment.type === Type.Coaching) {
-      return 'コーチ';
     } else if (recruitment.type === Type.Others) {
       return 'その他';
-    }
-  };
-
-  const levelString = () => {
-    if (recruitment.level === Level.Enjoy) {
-      return 'エンジョイ';
-    } else if (recruitment.level === Level.Beginner) {
-      return 'ビギナー';
-    } else if (recruitment.level === Level.Middle) {
-      return 'ミドル';
-    } else if (recruitment.level === Level.Expert) {
-      return 'エキスパート';
-    } else if (recruitment.level === Level.Open) {
-      return 'オープン';
     }
   };
 
@@ -164,7 +132,7 @@ export const RecruitmentCard: VFC<Props> = memo((props) => {
           cursor: 'pointer',
         }}
       >
-        <Box
+        {/* <Box
           sx={{
             fontSize: 13,
             position: 'absolute',
@@ -180,7 +148,7 @@ export const RecruitmentCard: VFC<Props> = memo((props) => {
           }}
         >
           New
-        </Box>
+        </Box> */}
         <Box
           minHeight={110}
           bgcolor={'#f0f5f4'}
@@ -303,22 +271,9 @@ export const RecruitmentCard: VFC<Props> = memo((props) => {
                 {recruitment.place}
               </Box>
             )}
-            {recruitment.level !== Level.Unnecessary && (
-              <Box
-                bgcolor="#009688"
-                color="white"
-                px={0.8}
-                py={0.3}
-                borderRadius={1.3}
-                component="span"
-                border={'1px solid'}
-              >
-                {levelString()}
-              </Box>
-            )}
           </Box>
           <Box sx={{ fontSize: 10 }} mt={1.5}>
-            <ListItem alignItems="center" sx={{ px: 0, py: 0 }}>
+            <ListItem key={recruitment.id} alignItems="center" sx={{ px: 0, py: 0 }}>
               <ListItemAvatar>
                 <Avatar sx={{ width: 36, height: 36 }} alt="user image" src={recruitment.user.avatar} />
               </ListItemAvatar>
@@ -343,18 +298,7 @@ export const RecruitmentCard: VFC<Props> = memo((props) => {
                 }
               />
               <Box textAlign="center">
-                <StyledTooltip title="ストック" placement="bottom">
-                  <StyledListButton
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      console.log('add stock');
-                    }}
-                    disableRipple
-                    size="medium"
-                  >
-                    <BookmarkBorderIcon fontSize="small" />
-                  </StyledListButton>
-                </StyledTooltip>
+                <RecruitmentCardStock id={recruitment.id} />
               </Box>
             </ListItem>
           </Box>

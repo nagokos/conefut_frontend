@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { Level, Status, Type } from '../generated/graphql';
+import { Status, Type } from '../generated/graphql';
 import { differenceInMinutes } from 'date-fns';
 
 export const recruitmentSchema = yup.object().shape({
@@ -45,39 +45,19 @@ export const recruitmentSchema = yup.object().shape({
     }),
     otherwise: yup.string().notRequired(),
   }),
-  level: yup.string().when('status', {
-    is: Status.Published,
-    then: yup.string().when('type', {
-      is: (value: Type) =>
-        value === Type.Opponent ||
-        value === Type.Individual ||
-        value === Type.Teammate ||
-        value === Type.Joining ||
-        value === Type.Coaching,
-      then: yup.string().test('required_if_unnecessary_level', 'レベルを選択してください', (value) => {
-        if (value === Level.Unnecessary) {
-          return false;
-        } else {
-          return true;
-        }
-      }),
-      otherwise: yup.string().notRequired(),
-    }),
-    otherwise: yup.string().notRequired(),
-  }),
   capacity: yup.number().when('status', {
     is: Status.Published,
     then: yup.number().when('type', {
-      is: (value: Type) =>
-        value === Type.Opponent || value === Type.Individual || value === Type.Teammate || value === Type.Coaching,
+      is: (value: Type) => value === Type.Opponent || value === Type.Individual,
       then: yup
         .number()
         .required('募集人数を入力してください')
         .min(1, '募集人数は1名以上にしてください')
         .positive('募集人数は1名以上にしてください')
         .integer(),
+      otherwise: yup.number().nullable(),
     }),
-    otherwise: yup.number().notRequired(),
+    otherwise: yup.number().nullable(),
   }),
   startAt: yup.string().when('status', {
     is: Status.Published,
@@ -117,7 +97,7 @@ export const recruitmentSchema = yup.object().shape({
       }),
     otherwise: yup.string().notRequired(),
   }),
-  locationLat: yup.number(),
-  locationLng: yup.number(),
+  locationLat: yup.number().nullable(),
+  locationLng: yup.number().nullable(),
   status: yup.string(),
 });

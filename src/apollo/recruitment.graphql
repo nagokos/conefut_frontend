@@ -4,7 +4,6 @@ query GetRecruitments {
     title
     content
     type
-    level
     place
     startAt
     closingAt
@@ -25,6 +24,7 @@ query GetCurrentUserRecruitments {
     title
     status
     competition {
+      id
       name
     }
   }
@@ -35,7 +35,6 @@ query GetRecruitment($id: String!) {
     id
     title
     type
-    level
     place
     startAt
     content
@@ -43,9 +42,11 @@ query GetRecruitment($id: String!) {
     updatedAt
     closingAt
     competition {
+      id
       name
     }
     prefecture {
+      id
       name
     }
     user {
@@ -63,7 +64,6 @@ query GetEditRecruitment($id: String!) {
     id
     title
     type
-    level
     place
     startAt
     content
@@ -71,9 +71,11 @@ query GetEditRecruitment($id: String!) {
     closingAt
     competition {
       id
+      name
     }
     prefecture {
       id
+      name
     }
     locationLat
     locationLng
@@ -86,7 +88,6 @@ mutation CreateRecruitment(
   $competitionId: String
   $closingAt: DateTime
   $content: String
-  $level: Level!
   $type: Type!
   $locationLat: Float
   $locationLng: Float
@@ -102,7 +103,6 @@ mutation CreateRecruitment(
       competitionId: $competitionId
       closingAt: $closingAt
       content: $content
-      level: $level
       type: $type
       locationLat: $locationLat
       locationLng: $locationLng
@@ -125,7 +125,6 @@ mutation UpdateRecruitment(
   $competitionId: String
   $closingAt: DateTime
   $content: String
-  $level: Level!
   $type: Type!
   $locationLat: Float
   $locationLng: Float
@@ -142,7 +141,6 @@ mutation UpdateRecruitment(
       competitionId: $competitionId
       closingAt: $closingAt
       content: $content
-      level: $level
       type: $type
       locationLat: $locationLat
       locationLng: $locationLng

@@ -20,8 +20,8 @@ export const RecruitmentFormCapacity: VFC<Props> = memo((props) => {
       control={control}
       render={({ field }) => (
         <>
-          <InputLabel color="dark" sx={{ fontWeight: 'bold' }} shrink htmlFor="input-prefecture">
-            募集人数
+          <InputLabel color="dark" sx={{ fontWeight: 'bold' }}>
+            {watchType === Type.Opponent ? '募集チーム数' : '募集人数'}
           </InputLabel>
           <StyledRecruitmentInput {...field} type="number" fullWidth />
         </>

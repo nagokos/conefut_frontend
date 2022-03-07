@@ -76,12 +76,7 @@ export const RecruitmentLocationDialog: VFC<Props> = memo((props) => {
   };
 
   useEffect(() => {
-    if (
-      watchType === Type.Teammate ||
-      watchType === Type.Joining ||
-      watchType === Type.Coaching ||
-      watchType === Type.Others
-    ) {
+    if (watchType === Type.Member || watchType === Type.Joining || watchType === Type.Others) {
       setLocation({
         lat: 35.69575,
         lng: 139.77521,
@@ -119,7 +114,7 @@ export const RecruitmentLocationDialog: VFC<Props> = memo((props) => {
           <br />
           ※マーカーを指定の位置に設置後、必ず保存するをクリックしてください。
         </Typography>
-        <LoadScript libraries={['places']} googleMapsApiKey={googleMapApiKey}>
+        <LoadScript libraries={libraries} googleMapsApiKey={googleMapApiKey}>
           <GoogleMap
             mapContainerStyle={{ width: '500px', height: '400px' }}
             center={{ lat: location.lat, lng: location.lng }}

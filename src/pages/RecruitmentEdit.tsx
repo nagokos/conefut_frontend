@@ -5,7 +5,6 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import {
-  Level,
   Type,
   RecruitmentInput,
   useGetEditRecruitmentQuery,
@@ -47,13 +46,14 @@ export const RecruitmentEdit: VFC = memo(() => {
     const result: boolean = await trigger();
 
     if (result) {
+      console.log(getValues('locationLat'));
+
       const res = await updateRecruitment({
         variables: {
           id: String(recruitmentId),
           title: getValues('title'),
           competitionId: getValues('competitionId'),
           closingAt: getValues('closingAt'),
-          level: getValues('level'),
           type: getValues('type'),
           content: getValues('content'),
           place: getValues('place'),
@@ -89,7 +89,6 @@ export const RecruitmentEdit: VFC = memo(() => {
       prefectureId: recruitment?.prefecture?.id,
       competitionId: recruitment?.competition?.id,
       type: !recruitment?.type ? Type.Unnecessary : recruitment.type,
-      level: !recruitment?.level ? Level.Unnecessary : recruitment.level,
       locationLat: recruitment?.locationLat,
       locationLng: recruitment?.locationLng,
       status: recruitment?.status,
