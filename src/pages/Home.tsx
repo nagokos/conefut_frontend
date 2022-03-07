@@ -32,7 +32,7 @@ export const Home: VFC = memo(() => {
           )}
           <Grid container>
             {!isMobile && (
-              <Grid item md={4} pl={2}>
+              <Grid item md={4} sx={{ pl: 5 }}>
                 <SearchInput />
               </Grid>
             )}
@@ -45,7 +45,11 @@ export const Home: VFC = memo(() => {
                 <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                   {data?.getRecruitments.map((recruitment) => (
                     <Grid item xs={2} sm={6} md={6} key={recruitment.id}>
-                      <RecruitmentCard recruitment={recruitment} color={colors[Math.floor(Math.random() * 6)]} />
+                      <RecruitmentCard
+                        key={recruitment.id}
+                        recruitment={recruitment}
+                        color={colors[Math.floor(Math.random() * 6)]}
+                      />
                     </Grid>
                   ))}
                 </Grid>
