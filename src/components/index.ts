@@ -35,7 +35,6 @@ export { RecruitmentFormType } from './atoms/RecruitmentFormType';
 export { RecruitmentFormContent } from './atoms/RecruitmentFormContent';
 export { RecruitmentFormArea } from './atoms/RecruitmentFormArea';
 export { RecruitmentFormPlace } from './atoms/RecruitmentFormPlace';
-export { RecruitmentFormLevel } from './atoms/RecruitmentFormLevel';
 export { RecruitmentFormCapacity } from './atoms/RecruitmentFormCapacity';
 export { RecruitmentFormStart } from './atoms/RecruitmentFormStart';
 export { RecruitmentFormDeadline } from './atoms/RecruitmentFormDeadline';
@@ -43,6 +42,7 @@ export { RecruitmentFormPublish } from './atoms/RecruitmentFormPublish';
 export { RecruitmentFormPreview } from './atoms/RecruitmentFormPreview';
 export { RecruitmentFormLocation } from './atoms/RecruitmentFormLocation';
 export { RecruitmentFormDraft } from './atoms/RecruitmentFormDraft';
+export { RecruitmentFormTags } from './atoms/RecruitmentFormTags';
 export { RecruitmentFormHelp } from './atoms/RecruitmentFormHelp';
 
 // recruitment
@@ -50,3 +50,5 @@ export { RecruitmentLocationDialog } from './molecules/RecruitmentLocationDialog
 export { RecruitmentDeleteDialog } from './molecules/RecruitmentDeleteDiaglog';
 export { RecruitmentList } from './molecules/RecruitmentList';
 export { StockList } from './molecules/StockList';
+export { RecruitmentDetailsApply } from './molecules/RecruitmentDetailsApply';
+export { RecruitmentCardStock } from './atoms/RecruitmentCardStock';

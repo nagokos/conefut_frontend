@@ -31,10 +31,9 @@ export const RecruitmentFormType: VFC<Props> = memo((props) => {
   const types: Array<MenuItem> = [
     { id: Type.Unnecessary, value: '' },
     { id: Type.Opponent, value: '試合相手の募集' },
-    { id: Type.Individual, value: '個人での参加の募集' },
-    { id: Type.Teammate, value: 'チームメイトの募集' },
+    { id: Type.Individual, value: '個人参加の募集' },
+    { id: Type.Member, value: 'メンバーの募集' },
     { id: Type.Joining, value: 'チームに入りたい募集' },
-    { id: Type.Coaching, value: 'コーチの募集' },
     { id: Type.Others, value: 'その他' },
   ];
 

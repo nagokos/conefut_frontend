@@ -37,10 +37,8 @@ export const RecruitmentFormCompetition: VFC<Props> = memo((props) => {
       render={({ field }) => (
         <>
           <Button
-            aria-controls={open ? 'demo-customized-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
             size="small"
+            defaultValue={Type.Unnecessary}
             sx={{ fontSize: 12, px: 1 }}
             disableRipple
             onClick={handleClick}

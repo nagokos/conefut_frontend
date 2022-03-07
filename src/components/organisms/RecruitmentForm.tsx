@@ -10,17 +10,16 @@ import {
   RecruitmentFormContent,
   RecruitmentFormPlace,
   RecruitmentFormArea,
-  RecruitmentFormLevel,
   RecruitmentFormCapacity,
   RecruitmentFormStart,
   RecruitmentFormDeadline,
   RecruitmentFormPublish,
   RecruitmentFormLocation,
   RecruitmentFormDraft,
-  RecruitmentFormHelp,
+  RecruitmentFormTags,
   RecruitmentLocationDialog,
 } from '../index';
-import { Level, RecruitmentInput, Status, Type } from '../../generated/graphql';
+import { RecruitmentInput, Status, Type } from '../../generated/graphql';
 import { flashMessage, flashState, flashType } from '../../store/flash';
 import {
   Control,
@@ -85,8 +84,6 @@ export const RecruitmentForm: VFC<Props> = memo((props) => {
         message = errors.content.message;
       } else if (errors.prefectureId) {
         message = errors.prefectureId.message;
-      } else if (errors.level) {
-        message = errors.level.message;
       } else if (errors.place) {
         message = errors.place.message;
       } else if (errors.capacity) {
@@ -94,7 +91,6 @@ export const RecruitmentForm: VFC<Props> = memo((props) => {
       } else if (errors.startAt) {
         message = errors.startAt.message;
       }
-
       setState(true);
       setMessage(message);
       setType('error');
@@ -110,24 +106,14 @@ export const RecruitmentForm: VFC<Props> = memo((props) => {
   };
 
   useEffect(() => {
-    if (watchType === Type.Teammate || watchType === Type.Coaching) {
+    if (watchType === Type.Joining || watchType === Type.Member || watchType === Type.Others) {
       setValue('locationLat', undefined);
       setValue('locationLng', undefined);
       setValue('place', '');
       setValue('startAt', '');
-    } else if (watchType === Type.Joining) {
-      setValue('locationLat', undefined);
-      setValue('locationLng', undefined);
-      setValue('place', '');
-      setValue('startAt', '');
-      setValue('capacity', 0);
-    } else if (watchType === Type.Others) {
-      setValue('locationLat', undefined);
-      setValue('locationLng', undefined);
-      setValue('place', '');
-      setValue('startAt', '');
-      setValue('capacity', 0);
-      setValue('level', Level.Unnecessary);
+      setValue('capacity', undefined);
+    } else {
+      setValue('capacity', 1);
     }
   }, [watchType]);
 
@@ -167,23 +153,6 @@ export const RecruitmentForm: VFC<Props> = memo((props) => {
                       </Box>
                     </Grid>
                   ) : null}
-                  {watchType !== Type.Others && (
-                    <Grid mt={4} item xs={6}>
-                      <Box
-                        maxWidth={320}
-                        ml={watchType === Type.Opponent || watchType === Type.Individual ? '' : 'auto'}
-                      >
-                        <RecruitmentFormLevel watchType={watchType} watchStatus={watchStatus} control={control} />
-                      </Box>
-                    </Grid>
-                  )}
-                  {watchType === Type.Joining || watchType === Type.Others ? null : (
-                    <Grid mt={4} item xs={6}>
-                      <Box maxWidth={320} ml={watchType === Type.Teammate || watchType === Type.Coaching ? '' : 'auto'}>
-                        <RecruitmentFormCapacity watchType={watchType} watchStatus={watchStatus} control={control} />
-                      </Box>
-                    </Grid>
-                  )}
                   {watchType === Type.Opponent || watchType === Type.Individual ? (
                     <Grid mt={4} item xs={6}>
                       <Box maxWidth={320}>
@@ -197,7 +166,7 @@ export const RecruitmentForm: VFC<Props> = memo((props) => {
                     </Grid>
                   ) : null}
                   <Grid mt={4} item xs={6}>
-                    <Box maxWidth={320} ml={watchType === Type.Joining ? '' : 'auto'}>
+                    <Box maxWidth={320} sx={{ ml: 'auto' }}>
                       <RecruitmentFormDeadline
                         getValues={getValues}
                         watchType={watchType}
@@ -206,6 +175,13 @@ export const RecruitmentForm: VFC<Props> = memo((props) => {
                       />
                     </Box>
                   </Grid>
+                  {watchType === Type.Joining || watchType === Type.Others || watchType === Type.Member ? null : (
+                    <Grid mt={4} item xs={6}>
+                      <Box maxWidth={320}>
+                        <RecruitmentFormCapacity watchType={watchType} watchStatus={watchStatus} control={control} />
+                      </Box>
+                    </Grid>
+                  )}
                 </Grid>
               )}
             </Container>
@@ -225,11 +201,14 @@ export const RecruitmentForm: VFC<Props> = memo((props) => {
               </Grid>
             ) : null}
             <Grid item xs={12}>
-              <RecruitmentFormDraft onClick={onClick} />
+              <RecruitmentFormTags />
             </Grid>
             <Grid item xs={12}>
-              <RecruitmentFormHelp />
+              <RecruitmentFormDraft onClick={onClick} />
             </Grid>
+            {/* <Grid item xs={12}>
+              <RecruitmentFormHelp />
+            </Grid> */}
           </Grid>
         </Grid>
       </Grid>
