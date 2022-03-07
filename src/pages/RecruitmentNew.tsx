@@ -9,7 +9,6 @@ import { useSetRecoilState } from 'recoil';
 
 import {
   RecruitmentInput,
-  Level,
   Type,
   useCreateRecruitmentMutation,
   useGetCurrentUserRecruitmentsLazyQuery,
@@ -40,7 +39,6 @@ export const RecruitmentNew: VFC = memo(() => {
         prefectureId: undefined,
         competitionId: undefined,
         type: Type.Unnecessary,
-        level: Level.Unnecessary,
         locationLat: undefined,
         locationLng: undefined,
         status: Status.Draft,
@@ -59,12 +57,13 @@ export const RecruitmentNew: VFC = memo(() => {
     const result: boolean = await trigger();
 
     if (result) {
+      console.log(getValues('capacity'));
+
       const res = await createRecruitment({
         variables: {
           title: getValues('title'),
           competitionId: getValues('competitionId'),
           closingAt: getValues('closingAt'),
-          level: getValues('level'),
           type: getValues('type'),
           content: getValues('content'),
           place: getValues('place'),
