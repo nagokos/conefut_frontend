@@ -1,3 +1,11 @@
+query CheckStocked($recruitmentId: String!) {
+  checkStocked(recruitmentId: $recruitmentId)
+}
+
+query GetStockedCount($recruitmentId: String!) {
+  getStockedCount(recruitmentId: $recruitmentId)
+}
+
 mutation CreateStock($recruitmentId: String!) {
   createStock(recruitmentId: $recruitmentId)
 }
