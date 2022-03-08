@@ -76,22 +76,6 @@ export const RecruitmentCard: VFC<Props> = memo((props) => {
     ''
   );
 
-  const typeEmoji = (): string => {
-    if (recruitment.type === Type.Opponent) {
-      return ':handshake:';
-    } else if (recruitment.type === Type.Individual) {
-      return ':raised_hand:';
-    } else if (recruitment.type === Type.Member) {
-      return ':people_holding_hands:';
-    } else if (recruitment.type === Type.Joining) {
-      return ':pray:';
-    } else if (recruitment.type === Type.Others) {
-      return ':thought_balloon:';
-    } else {
-      return '';
-    }
-  };
-
   const typeString = () => {
     if (recruitment.type === Type.Opponent) {
       return '試合相手';
@@ -100,9 +84,25 @@ export const RecruitmentCard: VFC<Props> = memo((props) => {
     } else if (recruitment.type === Type.Member) {
       return 'メンバー';
     } else if (recruitment.type === Type.Joining) {
-      return 'チームに入りたい';
+      return 'チーム加入';
     } else if (recruitment.type === Type.Others) {
       return 'その他';
+    }
+  };
+
+  const typeEmoji = (): string => {
+    if (recruitment.type === Type.Opponent) {
+      return ':handshake:';
+    } else if (recruitment.type === Type.Individual) {
+      return ':muscle:';
+    } else if (recruitment.type === Type.Member) {
+      return ':people_holding_hands:';
+    } else if (recruitment.type === Type.Joining) {
+      return ':pray:';
+    } else if (recruitment.type === Type.Others) {
+      return ':thought_balloon:';
+    } else {
+      return '';
     }
   };
 
@@ -132,29 +132,29 @@ export const RecruitmentCard: VFC<Props> = memo((props) => {
           cursor: 'pointer',
         }}
       >
-        {/* <Box
+        <Box
           sx={{
-            fontSize: 13,
+            fontSize: 10,
             position: 'absolute',
             ml: 2,
             mt: 1.5,
-            bgcolor: '#f50057',
+            bgcolor: '#009688',
             border: '1px solid',
             color: 'white',
             borderRadius: 20,
             fontWeight: 'bold',
-            px: 1.3,
+            px: 1,
             py: 0.3,
           }}
         >
-          New
-        </Box> */}
+          {typeString()}
+        </Box>
         <Box
           minHeight={110}
           bgcolor={'#f0f5f4'}
           sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
         >
-          <Emoji emoji=":soccer:" size={65} />
+          <Emoji emoji={typeEmoji()} size={55} native />
         </Box>
         <StyledCardContent>
           <Typography minHeight={48} gutterBottom fontWeight="bold" variant="body1" component="div">
@@ -162,68 +162,26 @@ export const RecruitmentCard: VFC<Props> = memo((props) => {
           </Typography>
           <Box>
             <Box sx={{ fontSize: 10, display: 'flex', mt: 2, alignItems: 'center' }}>
-              <Box sx={{ minWidth: recruitment.type === Type.Opponent ? 91 : 80 }}>
+              <Box sx={{ minWidth: 75 }}>
                 <Box component="span" mr={0.2}>
                   ■
                 </Box>
-                募集タイプ:
+                募集エリア:
               </Box>
               <Box>
                 <Box px={1} py={0.6} borderRadius={1} component="span" bgcolor="#f0f5f4">
-                  <Box component="span" mr={0.6} fontSize={10} position="relative" top={2.7}>
-                    <Emoji emoji={typeEmoji()} size={14} />
+                  <Box component="span" mr={0.3} fontSize={10} position="relative" top={2.5}>
+                    <Emoji emoji="round_pushpin" native size={14} />
                   </Box>
                   <Box component="span" sx={{ fontSize: 10 }}>
-                    {typeString()}
+                    {recruitment.prefecture?.name}
+                    {!!recruitment.place && <>（{recruitment.place}）</>}
                   </Box>
                 </Box>
               </Box>
             </Box>
-            {!!recruitment.capacity && (
-              <Box sx={{ fontSize: 10, display: 'flex', mt: 2, alignItems: 'center' }}>
-                <Box sx={{ minWidth: recruitment.type === Type.Opponent ? 91 : 80 }}>
-                  <Box component="span" mr={0.2}>
-                    ■
-                  </Box>
-                  {recruitment.type === Type.Opponent ? '募集チーム数' : '募集人数'}:&emsp;
-                </Box>
-                <Box>
-                  <Box px={1} py={0.6} borderRadius={1} component="span" bgcolor="#f0f5f4">
-                    <Box component="span" mr={0.6} fontSize={10} position="relative" top={2.7}>
-                      <Emoji emoji=":raising_hand:" size={14} />
-                    </Box>
-                    <Box component="span" sx={{ fontSize: 10 }}>
-                      {recruitment.type === Type.Opponent
-                        ? `${recruitment.capacity}チーム`
-                        : `${recruitment.capacity}人`}
-                      募集
-                    </Box>
-                  </Box>
-                </Box>
-              </Box>
-            )}
-            {recruitment.startAt && (
-              <Box sx={{ fontSize: 10, display: 'flex', mt: 2, alignItems: 'center' }}>
-                <Box sx={{ minWidth: recruitment.type === Type.Opponent ? 91 : 80 }}>
-                  <Box component="span" mr={0.2}>
-                    ■
-                  </Box>
-                  開催日時:
-                </Box>
-                <Box>
-                  <Box px={1} py={0.6} borderRadius={1} component="span" bgcolor="#f0f5f4">
-                    <Box component="span" mr={0.6} fontSize={10} position="relative" top={2.7}>
-                      <Emoji emoji=":spiral_calendar_pad:" size={13} />
-                    </Box>
-                    <Box component="span" sx={{ fontSize: 10 }}>
-                      {recruitment.startAt}
-                    </Box>
-                  </Box>
-                </Box>
-              </Box>
-            )}
-            <Box sx={{ fontSize: 10, display: 'flex', mt: 2, alignItems: 'center' }}>
-              <Box sx={{ minWidth: recruitment.type === Type.Opponent ? 91 : 80 }}>
+            <Box sx={{ fontSize: 10, display: 'flex', mt: 2.3, alignItems: 'center' }}>
+              <Box sx={{ minWidth: 75 }}>
                 <Box component="span" mr={0.2}>
                   ■
                 </Box>
@@ -231,48 +189,20 @@ export const RecruitmentCard: VFC<Props> = memo((props) => {
               </Box>
               <Box>
                 <Box px={1} py={0.6} borderRadius={1} component="span" bgcolor="#f0f5f4">
-                  <Box component="span" mr={0.6} fontSize={10} position="relative" top={2.7}>
-                    <Emoji emoji=":alarm_clock:" size={13} />
+                  <Box component="span" mr={0.6} fontSize={10} position="relative" top={1.8}>
+                    <Emoji emoji=":alarm_clock:" native size={13} />
                   </Box>
                   <Box component="span" sx={{ fontSize: 10 }}>
                     残り{distanceToNowFromClosingAt}
                   </Box>
                   <Box component="span" sx={{ color: '#424242', fontSize: 10 }}>
-                    （ {recruitment.closingAt} ）
+                    （{recruitment.closingAt}）
                   </Box>
                 </Box>
               </Box>
             </Box>
           </Box>
-          <Box minHeight={15} sx={{ fontSize: 10 }} mt={2.5}>
-            <Box
-              bgcolor="#009688"
-              color="white"
-              px={0.8}
-              py={0.3}
-              borderRadius={1.3}
-              mr={0.2}
-              component="span"
-              border={'1px solid'}
-            >
-              {recruitment.prefecture?.name}
-            </Box>
-            {recruitment.place && (
-              <Box
-                bgcolor="#009688"
-                color="white"
-                px={0.8}
-                py={0.3}
-                mr={0.2}
-                borderRadius={1.3}
-                component="span"
-                border={'1px solid'}
-              >
-                {recruitment.place}
-              </Box>
-            )}
-          </Box>
-          <Box sx={{ fontSize: 10 }} mt={1.5}>
+          <Box sx={{ fontSize: 10 }} mt={1.8}>
             <ListItem key={recruitment.id} alignItems="center" sx={{ px: 0, py: 0 }}>
               <ListItemAvatar>
                 <Avatar sx={{ width: 36, height: 36 }} alt="user image" src={recruitment.user.avatar} />

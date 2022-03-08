@@ -60,6 +60,7 @@ export const RecruitmentDetailsApply: VFC<Props> = memo((props) => {
         px: 3,
         py: 3,
         borderRadius: 2,
+        boxShadow: '0 2px 4px #4385bb12;',
       }}
     >
       {type === Type.Opponent || type === Type.Individual ? (
