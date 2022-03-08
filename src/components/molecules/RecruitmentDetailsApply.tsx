@@ -74,7 +74,7 @@ export const RecruitmentDetailsApply: VFC<Props> = memo((props) => {
           variant="contained"
           startIcon={<GrSend size="18" className="ico-white" style={{ position: 'relative', right: 1 }} />}
           sx={{
-            py: 1.2,
+            py: 1.5,
             fontSize: 13,
             boxShadow: '0 0 0 1px rgb(0 0 0 / 2%), 0 5px 8px 0 rgb(0 0 0 / 10%)',
             ':hover': {
@@ -96,7 +96,7 @@ export const RecruitmentDetailsApply: VFC<Props> = memo((props) => {
             onClick={removeStock}
             startIcon={<BookmarkIcon sx={{ color: '#ff784e' }} />}
             sx={{
-              py: 1.2,
+              py: 1.5,
               fontSize: 13,
               bgcolor: '#fce7e1',
               color: 'black',
