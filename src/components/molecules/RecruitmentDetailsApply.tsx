@@ -1,4 +1,4 @@
-import { Box, Button } from '@mui/material';
+import { Box, Button, Divider } from '@mui/material';
 import { memo, VFC } from 'react';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
@@ -64,9 +64,11 @@ export const RecruitmentDetailsApply: VFC<Props> = memo((props) => {
       }}
     >
       {type === Type.Opponent || type === Type.Individual ? (
-        <Box sx={{ fontSize: 16, fontWeight: 'bold', color: '#616161' }}>1人が応募中</Box>
-      ) : null}
-      <Box sx={{ mt: type === Type.Opponent || type === Type.Individual ? 2 : 0 }}>
+        <Box sx={{ fontSize: 14, fontWeight: 'bold', color: '#616161' }}>1人が応募中</Box>
+      ) : (
+        <Box sx={{ fontSize: 14, fontWeight: 'bold', color: '#616161' }}>1人がメッセージを送信</Box>
+      )}
+      <Box sx={{ mt: 1.5 }}>
         <Button
           disableElevation
           fullWidth
@@ -86,7 +88,9 @@ export const RecruitmentDetailsApply: VFC<Props> = memo((props) => {
           {type === Type.Opponent || type === Type.Individual ? '応募する' : 'メッセージを送る'}
         </Button>
       </Box>
-      <Box sx={{ mt: 2 }}>
+      <Divider sx={{ mt: 3, mb: 2, border: '0.2px solid #e0e0e0' }} />
+      <Box sx={{ fontSize: 14, fontWeight: 'bold', color: '#616161' }}>1人がストック中</Box>
+      <Box sx={{ mt: 1.5 }}>
         {isStocked ? (
           <Button
             disableElevation
@@ -118,7 +122,7 @@ export const RecruitmentDetailsApply: VFC<Props> = memo((props) => {
             onClick={addStock}
             startIcon={<BookmarkBorderIcon sx={{ color: '#616161' }} />}
             sx={{
-              py: 1.2,
+              py: 1.5,
               fontSize: 13,
               bgcolor: 'white',
               color: '#616161',
