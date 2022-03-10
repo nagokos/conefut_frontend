@@ -1,0 +1,6 @@
+query GetCompetitions {
+  getCompetitions {
+    id
+    name
+  }
+}

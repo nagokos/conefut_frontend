@@ -1,0 +1,179 @@
+query GetRecruitments {
+  getRecruitments {
+    id
+    title
+    content
+    type
+    place
+    startAt
+    closingAt
+    updatedAt
+    capacity
+    prefecture {
+      name
+    }
+    user {
+      name
+      avatar
+    }
+  }
+}
+query GetCurrentUserRecruitments {
+  getCurrentUserRecruitments {
+    id
+    title
+    status
+    type
+    closingAt
+    competition {
+      id
+      name
+    }
+  }
+}
+
+query GetStockedRecruitments {
+  getStockedRecruitments {
+    id
+    title
+    type
+    status
+    user {
+      id
+      name
+      avatar
+    }
+  }
+}
+
+query GetRecruitment($id: String!) {
+  getRecruitment(id: $id) {
+    id
+    title
+    type
+    status
+    place
+    startAt
+    content
+    capacity
+    updatedAt
+    closingAt
+    competition {
+      id
+      name
+    }
+    prefecture {
+      id
+      name
+    }
+    user {
+      id
+      name
+      avatar
+    }
+    locationLat
+    locationLng
+  }
+}
+
+query GetEditRecruitment($id: String!) {
+  getRecruitment(id: $id) {
+    id
+    title
+    type
+    place
+    startAt
+    content
+    capacity
+    closingAt
+    competition {
+      id
+      name
+    }
+    prefecture {
+      id
+      name
+    }
+    locationLat
+    locationLng
+    status
+  }
+}
+
+mutation CreateRecruitment(
+  $title: String!
+  $competitionId: String
+  $closingAt: DateTime
+  $content: String
+  $type: Type!
+  $locationLat: Float
+  $locationLng: Float
+  $startAt: DateTime
+  $prefectureId: String
+  $status: Status!
+  $capacity: Int
+  $place: String
+) {
+  createRecruitment(
+    input: {
+      title: $title
+      competitionId: $competitionId
+      closingAt: $closingAt
+      content: $content
+      type: $type
+      locationLat: $locationLat
+      locationLng: $locationLng
+      status: $status
+      startAt: $startAt
+      capacity: $capacity
+      place: $place
+      prefectureId: $prefectureId
+    }
+  ) {
+    title
+    content
+    closingAt
+  }
+}
+
+mutation UpdateRecruitment(
+  $id: String!
+  $title: String!
+  $competitionId: String
+  $closingAt: DateTime
+  $content: String
+  $type: Type!
+  $locationLat: Float
+  $locationLng: Float
+  $startAt: DateTime
+  $prefectureId: String
+  $status: Status!
+  $capacity: Int
+  $place: String
+) {
+  updateRecruitment(
+    id: $id
+    input: {
+      title: $title
+      competitionId: $competitionId
+      closingAt: $closingAt
+      content: $content
+      type: $type
+      locationLat: $locationLat
+      locationLng: $locationLng
+      status: $status
+      startAt: $startAt
+      capacity: $capacity
+      place: $place
+      prefectureId: $prefectureId
+    }
+  ) {
+    id
+    title
+    status
+  }
+}
+
+mutation DeleteRecruitment($id: String!) {
+  deleteRecruitment(id: $id)
+}

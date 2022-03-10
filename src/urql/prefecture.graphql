@@ -1,0 +1,6 @@
+query GetPrefectures {
+  getPrefectures {
+    id
+    name
+  }
+}

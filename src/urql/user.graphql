@@ -1,0 +1,39 @@
+query GetCurrentUser {
+  getCurrentUser {
+    id
+    name
+    email
+    role
+    avatar
+    introduction
+    emailVerificationStatus
+  }
+}
+
+mutation CreateUser($name: String!, $email: String!, $password: String!) {
+  createUser(input: { name: $name, email: $email, password: $password }) {
+    id
+    name
+    email
+    role
+    avatar
+    introduction
+    emailVerificationStatus
+  }
+}
+
+mutation LoginUser($email: String!, $password: String!) {
+  loginUser(input: { email: $email, password: $password }) {
+    id
+    name
+    email
+    role
+    avatar
+    introduction
+    emailVerificationStatus
+  }
+}
+
+mutation LogoutUser {
+  logoutUser
+}
