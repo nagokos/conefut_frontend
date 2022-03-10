@@ -23,9 +23,25 @@ query GetCurrentUserRecruitments {
     id
     title
     status
+    type
+    closingAt
     competition {
       id
       name
+    }
+  }
+}
+
+query GetStockedRecruitments {
+  getStockedRecruitments {
+    id
+    title
+    type
+    status
+    user {
+      id
+      name
+      avatar
     }
   }
 }
@@ -35,6 +51,7 @@ query GetRecruitment($id: String!) {
     id
     title
     type
+    status
     place
     startAt
     content

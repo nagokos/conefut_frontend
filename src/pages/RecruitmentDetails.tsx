@@ -50,7 +50,7 @@ export const RecruitmentDetails: VFC = memo(() => {
     if (recruitment.type === Type.Opponent) {
       return ':handshake:';
     } else if (recruitment.type === Type.Individual) {
-      return ':raised_hand:';
+      return ':muscle:';
     } else if (recruitment.type === Type.Member) {
       return ':people_holding_hands:';
     } else if (recruitment.type === Type.Joining) {
@@ -73,6 +73,7 @@ export const RecruitmentDetails: VFC = memo(() => {
                 px: 3,
                 py: 3,
                 borderRadius: 2,
+                boxShadow: '0 2px 4px #4385bb12;',
               }}
             >
               <ListItem sx={{ px: 0, py: 0 }}>
@@ -98,8 +99,8 @@ export const RecruitmentDetails: VFC = memo(() => {
                   </Box>
                   <Box>
                     <Box px={1} py={0.6} borderRadius={1} component="span" bgcolor="#f0f5f4">
-                      <Box component="span" mr={0.6} fontSize={13} position="relative" top={2.7}>
-                        <Emoji emoji=":soccer:" size={15} />
+                      <Box component="span" mr={0.7} fontSize={13} position="relative" top={0.7}>
+                        <Emoji emoji=":soccer:" native size={15} />
                       </Box>
                       <Box sx={{ fontSize: 14 }} component="span">
                         {recruitment.competition?.name}
@@ -116,8 +117,8 @@ export const RecruitmentDetails: VFC = memo(() => {
                   </Box>
                   <Box>
                     <Box px={1} py={0.6} borderRadius={1} component="span" bgcolor="#f0f5f4">
-                      <Box component="span" mr={0.6} fontSize={14} position="relative" top={2.7}>
-                        <Emoji emoji={typeEmoji()} size={15} />
+                      <Box component="span" mr={0.7} fontSize={14} position="relative" top={0.7}>
+                        <Emoji emoji={typeEmoji()} native size={15} />
                       </Box>
                       <Box sx={{ fontSize: 14 }} component="span">
                         {typeString()}
@@ -135,8 +136,8 @@ export const RecruitmentDetails: VFC = memo(() => {
                     </Box>
                     <Box>
                       <Box px={1} py={0.6} borderRadius={1} component="span" bgcolor="#f0f5f4">
-                        <Box component="span" mr={0.6} fontSize={13} position="relative" top={2.7}>
-                          <Emoji emoji=":spiral_calendar_pad:" size={15} />
+                        <Box component="span" mr={0.7} fontSize={13} position="relative" top={0.8}>
+                          <Emoji emoji=":spiral_calendar_pad:" native size={15} />
                         </Box>
                         <Box sx={{ fontSize: 14 }} component="span">
                           {recruitment.startAt}
@@ -154,14 +155,14 @@ export const RecruitmentDetails: VFC = memo(() => {
                   </Box>
                   <Box>
                     <Box px={1} py={0.6} borderRadius={1} component="span" bgcolor="#f0f5f4">
-                      <Box component="span" mr={0.6} fontSize={13} position="relative" top={2.7}>
-                        <Emoji emoji=":alarm_clock:" size={15} />
+                      <Box component="span" mr={0.7} fontSize={13} position="relative" top={0.7}>
+                        <Emoji emoji=":alarm_clock:" native size={15} />
                       </Box>
                       <Box component="span" sx={{ fontSize: 14 }}>
                         残り{distanceToNowFromClosingAt}
                       </Box>
                       <Box component="span" sx={{ color: '#424242', fontSize: 14 }}>
-                        （ {recruitment.closingAt} ）
+                        （{recruitment.closingAt}）
                       </Box>
                     </Box>
                   </Box>
@@ -176,8 +177,8 @@ export const RecruitmentDetails: VFC = memo(() => {
                     </Box>
                     <Box>
                       <Box px={1} py={0.6} borderRadius={1} component="span" bgcolor="#f0f5f4">
-                        <Box component="span" mr={0.6} fontSize={13} position="relative" top={2.7}>
-                          <Emoji emoji=":raising_hand:" size={16} />
+                        <Box component="span" mr={0.7} fontSize={13} position="relative" top={0.6}>
+                          <Emoji emoji=":raising_hand:" native size={16} />
                         </Box>
                         <Box sx={{ fontSize: 14 }} component="span">
                           <Box component="span" sx={{ color: '#424242' }}>
@@ -200,8 +201,8 @@ export const RecruitmentDetails: VFC = memo(() => {
                   </Box>
                   <Box>
                     <Box px={1} py={0.6} borderRadius={1} component="span" bgcolor="#f0f5f4">
-                      <Box component="span" mr={0.6} fontSize={14} position="relative" top={2.7}>
-                        <Emoji emoji=":round_pushpin:" size={15} />
+                      <Box component="span" mr={0.7} fontSize={14} position="relative" top={0.7}>
+                        <Emoji emoji=":round_pushpin:" native size={15} />
                       </Box>
                       <Box sx={{ fontSize: 14 }} component="span">
                         <Box component="span" sx={{ fontSize: 14 }}>
@@ -209,7 +210,7 @@ export const RecruitmentDetails: VFC = memo(() => {
                         </Box>
                         {!!recruitment.place && (
                           <Box component="span" sx={{ color: '#424242' }}>
-                            （ {recruitment.place} ）
+                            （{recruitment.place}）
                           </Box>
                         )}
                       </Box>
@@ -273,6 +274,7 @@ export const RecruitmentDetails: VFC = memo(() => {
                 py: 3,
                 mt: 3,
                 borderRadius: 2,
+                boxShadow: '0 2px 4px #4385bb12;',
               }}
             >
               <ListItem alignItems="center" sx={{ px: 0, py: 0 }}>

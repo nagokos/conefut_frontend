@@ -1,4 +1,4 @@
-import { Box, Button } from '@mui/material';
+import { Box, Button, Divider } from '@mui/material';
 import { memo, VFC } from 'react';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
@@ -60,12 +60,15 @@ export const RecruitmentDetailsApply: VFC<Props> = memo((props) => {
         px: 3,
         py: 3,
         borderRadius: 2,
+        boxShadow: '0 2px 4px #4385bb12;',
       }}
     >
       {type === Type.Opponent || type === Type.Individual ? (
-        <Box sx={{ fontSize: 16, fontWeight: 'bold', color: '#616161' }}>1人が応募中</Box>
-      ) : null}
-      <Box sx={{ mt: type === Type.Opponent || type === Type.Individual ? 2 : 0 }}>
+        <Box sx={{ fontSize: 14, fontWeight: 'bold', color: '#616161' }}>1人が応募中</Box>
+      ) : (
+        <Box sx={{ fontSize: 14, fontWeight: 'bold', color: '#616161' }}>1人がメッセージを送信</Box>
+      )}
+      <Box sx={{ mt: 1.5 }}>
         <Button
           disableElevation
           fullWidth
@@ -73,7 +76,7 @@ export const RecruitmentDetailsApply: VFC<Props> = memo((props) => {
           variant="contained"
           startIcon={<GrSend size="18" className="ico-white" style={{ position: 'relative', right: 1 }} />}
           sx={{
-            py: 1.2,
+            py: 1.5,
             fontSize: 13,
             boxShadow: '0 0 0 1px rgb(0 0 0 / 2%), 0 5px 8px 0 rgb(0 0 0 / 10%)',
             ':hover': {
@@ -85,7 +88,9 @@ export const RecruitmentDetailsApply: VFC<Props> = memo((props) => {
           {type === Type.Opponent || type === Type.Individual ? '応募する' : 'メッセージを送る'}
         </Button>
       </Box>
-      <Box sx={{ mt: 2 }}>
+      <Divider sx={{ mt: 3, mb: 2, border: '0.2px solid #e0e0e0' }} />
+      <Box sx={{ fontSize: 14, fontWeight: 'bold', color: '#616161' }}>1人がストック中</Box>
+      <Box sx={{ mt: 1.5 }}>
         {isStocked ? (
           <Button
             disableElevation
@@ -95,7 +100,7 @@ export const RecruitmentDetailsApply: VFC<Props> = memo((props) => {
             onClick={removeStock}
             startIcon={<BookmarkIcon sx={{ color: '#ff784e' }} />}
             sx={{
-              py: 1.2,
+              py: 1.5,
               fontSize: 13,
               bgcolor: '#fce7e1',
               color: 'black',
@@ -117,7 +122,7 @@ export const RecruitmentDetailsApply: VFC<Props> = memo((props) => {
             onClick={addStock}
             startIcon={<BookmarkBorderIcon sx={{ color: '#616161' }} />}
             sx={{
-              py: 1.2,
+              py: 1.5,
               fontSize: 13,
               bgcolor: 'white',
               color: '#616161',
