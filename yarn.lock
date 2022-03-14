@@ -888,14 +888,14 @@
     "@graphql-tools/utils" "^8.1.1"
     tslib "~2.3.0"
 
-"@graphql-codegen/typescript-operations@2.3.2":
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-operations/-/typescript-operations-2.3.2.tgz#1a94c352b196030d0bf3701ed38343c8619c94e0"
-  integrity sha512-VLB466ffcT25imuq85ANVqVotVaT4T1gJ6FLJsiJkn5U/iMMZa8CvP+l9oSqDlaBotv38LIZX6pdWGNGAn7kDA==
+"@graphql-codegen/typescript-operations@2.3.4":
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-operations/-/typescript-operations-2.3.4.tgz#3341f940d7fae0417e5738787fa8793696277d54"
+  integrity sha512-Jnsx+YTCqwq8F0ebyZAJGVtt+PQNuB/0uv9mEMbgcUbo/7w6EX6NZ8JArRuuz8MUb/gbpeO+GkfuNX+F6A8ikw==
   dependencies:
     "@graphql-codegen/plugin-helpers" "^2.4.0"
-    "@graphql-codegen/typescript" "^2.4.5"
-    "@graphql-codegen/visitor-plugin-common" "2.7.1"
+    "@graphql-codegen/typescript" "^2.4.7"
+    "@graphql-codegen/visitor-plugin-common" "2.7.3"
     auto-bind "~4.0.0"
     tslib "~2.3.0"
 
@@ -909,7 +909,7 @@
     auto-bind "~4.0.0"
     tslib "~2.3.0"
 
-"@graphql-codegen/typescript@2.4.7", "@graphql-codegen/typescript@^2.4.5":
+"@graphql-codegen/typescript@2.4.7", "@graphql-codegen/typescript@^2.4.7":
   version "2.4.7"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript/-/typescript-2.4.7.tgz#e72e87cd47a51b2bc232293762573a86182de469"
   integrity sha512-1YAK+m9SZRS1Uy8hdXVQAaAG/WF2jdFD76wbMRQ8Lf5e9YbmtJuy1RpI13nZJTZbhFopd9zqoWFJHsU/oy4i7g==
@@ -918,22 +918,6 @@
     "@graphql-codegen/schema-ast" "^2.4.1"
     "@graphql-codegen/visitor-plugin-common" "2.7.3"
     auto-bind "~4.0.0"
-    tslib "~2.3.0"
-
-"@graphql-codegen/visitor-plugin-common@2.7.1":
-  version "2.7.1"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/visitor-plugin-common/-/visitor-plugin-common-2.7.1.tgz#bdcded24d1d6f329d32b90704397d6001374b893"
-  integrity sha512-Ew/+0GwGwL3ZSXS0cYz6lVvE7S5SkbTr7caRpLa4FpAdLGNskCgdA1n6W5tX5c7qsaYstqlxp30hJTfgTsYS6A==
-  dependencies:
-    "@graphql-codegen/plugin-helpers" "^2.4.0"
-    "@graphql-tools/optimize" "^1.0.1"
-    "@graphql-tools/relay-operation-optimizer" "^6.3.7"
-    "@graphql-tools/utils" "^8.3.0"
-    auto-bind "~4.0.0"
-    change-case-all "1.0.14"
-    dependency-graph "^0.11.0"
-    graphql-tag "^2.11.0"
-    parse-filepath "^1.0.2"
     tslib "~2.3.0"
 
 "@graphql-codegen/visitor-plugin-common@2.7.3":
@@ -1540,10 +1524,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^17.0.39":
-  version "17.0.39"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.39.tgz#d0f4cde092502a6db00a1cded6e6bf2abb7633ce"
-  integrity sha512-UVavlfAxDd/AgAacMa60Azl7ygyQNRwC/DsHZmKgNvPmRR5p70AJ5Q9EAmL2NWOJmeV+vVUI4IAP7GZrN8h8Ug==
+"@types/react@*", "@types/react@^17.0.40":
+  version "17.0.40"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.40.tgz#dc010cee6254d5239a138083f3799a16638e6bad"
+  integrity sha512-UrXhD/JyLH+W70nNSufXqMZNuUD2cXHu6UjCllC6pmOQgBX4SGXOH8fjRka0O0Ee0HrFxapDD8Bwn81Kmiz6jQ==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -2659,10 +2643,10 @@ eslint-config-prettier@^8.5.0:
   resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-8.5.0.tgz#5a81680ec934beca02c7b1a61cf8ca34b66feab1"
   integrity sha512-obmWKLUNCnhtQRKc+tmnYuQl0pFU1ibYJQ5BGhTVB08bHe9wC8qUeG7c08dj9XX+AuPj1YSGSQIHl1pnDHZR0Q==
 
-eslint-plugin-react@^7.29.3:
-  version "7.29.3"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.29.3.tgz#f4eab757f2756d25d6d4c2a58a9e20b004791f05"
-  integrity sha512-MzW6TuCnDOcta67CkpDyRfRsEVx9FNMDV8wZsDqe1luHPdGTrQIUaUXD27Ja3gHsdOIs/cXzNchWGlqm+qRVRg==
+eslint-plugin-react@^7.29.4:
+  version "7.29.4"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.29.4.tgz#4717de5227f55f3801a5fd51a16a4fa22b5914d2"
+  integrity sha512-CVCXajliVh509PcZYRFyu/BoUEz452+jtQJq2b3Bae4v3xBUWPLCmtmBM+ZinG4MzwmxJgJ2M5rMqhqLVn7MtQ==
   dependencies:
     array-includes "^3.1.4"
     array.prototype.flatmap "^1.2.5"
@@ -4411,10 +4395,10 @@ react-dom@^17.0.2:
     object-assign "^4.1.1"
     scheduler "^0.20.2"
 
-react-hook-form@^7.27.1:
-  version "7.27.1"
-  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.27.1.tgz#fe5fbcb6bf58751f66d9569e998d671480cc57f6"
-  integrity sha512-N3a7A6zIQ8DJeThisVZGtOUabTbJw+7DHJidmB9w8m3chckv2ZWKb5MHps9d2pPJqmCDoWe53Bos56bYmJms5w==
+react-hook-form@^7.28.0:
+  version "7.28.0"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.28.0.tgz#40f385da1f31a3c26bb7491d7d77c111b6ad6909"
+  integrity sha512-mmLpT86BkMGPr0r6ca8zxV0WH4Y1FW5MKs7Rq1+uHLVeeg5pSWbF5Z/qLCnM5vPVblHNM6lRBRRotnfEAf0ALA==
 
 react-icons@^4.3.1:
   version "4.3.1"
