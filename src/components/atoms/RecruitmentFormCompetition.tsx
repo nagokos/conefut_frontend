@@ -18,7 +18,7 @@ export const RecruitmentFormCompetition: VFC<Props> = memo((props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const { data, loading } = useGetCompetitionsQuery();
+  const [data] = useGetCompetitionsQuery();
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -27,8 +27,6 @@ export const RecruitmentFormCompetition: VFC<Props> = memo((props) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  if (loading) return null;
 
   return (
     <Controller
@@ -44,7 +42,7 @@ export const RecruitmentFormCompetition: VFC<Props> = memo((props) => {
             onClick={handleClick}
           >
             {field.value
-              ? data?.getCompetitions.find((competition) => competition.id === field.value)?.name
+              ? data.data?.getCompetitions.find((competition) => competition.id === field.value)?.name
               : '募集競技を選択'}
           </Button>
           <Menu
@@ -76,7 +74,7 @@ export const RecruitmentFormCompetition: VFC<Props> = memo((props) => {
             open={open}
             onClose={handleClose}
           >
-            {data?.getCompetitions.map((competition: Competition) => (
+            {data.data?.getCompetitions.map((competition: Competition) => (
               <StyledSelectMenuItem
                 value={competition.id}
                 key={competition.id}
