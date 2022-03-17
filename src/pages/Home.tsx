@@ -15,7 +15,7 @@ export const Home: VFC = memo(() => {
 
   const { isMobile } = useSize();
 
-  const { data, loading } = useGetRecruitmentsQuery();
+  const [data] = useGetRecruitmentsQuery();
 
   return (
     <>
@@ -37,13 +37,13 @@ export const Home: VFC = memo(() => {
               </Grid>
             )}
             <Grid item md={8}>
-              {loading ? (
+              {data.fetching ? (
                 <Box textAlign="center">
                   <CircularProgress size={35} />
                 </Box>
               ) : (
                 <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-                  {data?.getRecruitments.map((recruitment) => (
+                  {data.data?.getRecruitments.map((recruitment) => (
                     <Grid item xs={2} sm={6} md={6} key={recruitment.id}>
                       <RecruitmentCard
                         key={recruitment.id}
