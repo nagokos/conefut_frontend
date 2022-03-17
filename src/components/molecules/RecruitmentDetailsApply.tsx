@@ -77,7 +77,7 @@ export const RecruitmentDetailsApply: VFC<Props> = memo((props) => {
         bgcolor: 'white',
         px: 3,
         py: 3,
-        borderRadius: 2,
+        borderRadius: 3,
         boxShadow: '0 2px 4px #4385bb12;',
       }}
     >
@@ -94,7 +94,7 @@ export const RecruitmentDetailsApply: VFC<Props> = memo((props) => {
           variant="contained"
           disabled={recruitment.status === Status.Closed}
           sx={{
-            py: 1.2,
+            py: 1.4,
             fontSize: 13,
             boxShadow: '0 0 0 1px rgb(0 0 0 / 2%), 0 5px 8px 0 rgb(0 0 0 / 10%)',
             ':hover': {
@@ -106,7 +106,7 @@ export const RecruitmentDetailsApply: VFC<Props> = memo((props) => {
           {sendMessage()}
         </Button>
       </Box>
-      <Divider sx={{ mt: 3, mb: 2, border: '0.2px solid #e0e0e0' }} />
+      <Divider sx={{ borderColor: '#ebf2f2', mt: 3, mb: 2 }} />
       <Box sx={{ fontSize: 14, fontWeight: 'bold', color: '#616161' }}>1人がストック中</Box>
       <Box sx={{ mt: 1.5 }}>
         {isStocked ? (
@@ -118,7 +118,7 @@ export const RecruitmentDetailsApply: VFC<Props> = memo((props) => {
             onClick={removeStock}
             startIcon={<BookmarkIcon sx={{ color: '#ff784e' }} />}
             sx={{
-              py: 1.2,
+              py: 1.4,
               fontSize: 13,
               bgcolor: '#fce7e1',
               color: 'black',
@@ -140,7 +140,7 @@ export const RecruitmentDetailsApply: VFC<Props> = memo((props) => {
             onClick={addStock}
             startIcon={<BookmarkBorderIcon sx={{ color: '#616161' }} />}
             sx={{
-              py: 1.2,
+              py: 1.4,
               fontSize: 13,
               bgcolor: 'white',
               color: '#616161',
