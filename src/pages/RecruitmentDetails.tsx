@@ -1,7 +1,7 @@
-import { Avatar, Box, Button, Grid, ListItem, ListItemAvatar, ListItemText, Stack, Typography } from '@mui/material';
+import { Avatar, Box, Button, Grid, ListItem, ListItemAvatar, ListItemText, Stack } from '@mui/material';
 import { memo, VFC } from 'react';
 import { useParams } from 'react-router-dom';
-import { Type, useGetRecruitmentQuery } from '../generated/graphql';
+import { Status, Type, useGetRecruitmentQuery } from '../generated/graphql';
 import { formatDistanceToNow } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import { Emoji } from 'emoji-mart';
@@ -12,7 +12,7 @@ import { RecruitmentDetailsApply } from '../components/index';
 export const RecruitmentDetails: VFC = memo(() => {
   const { recruitmentId } = useParams();
 
-  const { data, loading } = useGetRecruitmentQuery({
+  const [data] = useGetRecruitmentQuery({
     variables: {
       id: String(recruitmentId),
     },
@@ -20,7 +20,7 @@ export const RecruitmentDetails: VFC = memo(() => {
 
   const googleMapApiKey: string = import.meta.env.VITE_GOOGLE_MAP_API_KEY;
 
-  const recruitment = data?.getRecruitment;
+  const recruitment = data.data?.getRecruitment;
   if (!recruitment) return null;
 
   const distanceToNowFromUpdated = formatDistanceToNow(new Date(recruitment.updatedAt), { locale: ja }).replace(
