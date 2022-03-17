@@ -45,7 +45,10 @@ export const RecruitmentDeleteDialog: VFC<Props> = memo((props) => {
         <Grid mt={1} textAlign="center" container spacing={1.5}>
           <Grid item xs={12}>
             <Button
-              onClick={() => deleteCurrentUserRecruitment(id)}
+              onClick={() => {
+                deleteCurrentUserRecruitment(id);
+                handleClose();
+              }}
               disableRipple
               sx={{ fontSize: 14 }}
               size="large"
