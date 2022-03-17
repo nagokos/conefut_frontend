@@ -4,23 +4,29 @@ import { routes } from './router/Router';
 import { theme } from './assets/theme/theme';
 import { Header, SnackbarNotification } from './components/index';
 import { useGetCurrentUserQuery } from './generated/graphql';
-import { isLoggedIn } from './reactive/user';
 import { useRoutes } from 'react-router-dom';
+import { Box } from '@mui/material';
 
 export const App: VFC = memo(() => {
-  const { data, loading } = useGetCurrentUserQuery();
+  const [data] = useGetCurrentUserQuery();
 
-  const routing = useRoutes(routes(isLoggedIn(!!data?.getCurrentUser)));
+  const routing = useRoutes(routes(!!data.data?.getCurrentUser));
 
   return (
-    <ThemeProvider theme={theme}>
-      {!loading && (
-        <>
+    <>
+      {data.fetching ? (
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+          <Box>
+            <img src="/src/assets/img/main-logo.png" width="30" height="30" />
+          </Box>
+        </Box>
+      ) : (
+        <ThemeProvider theme={theme}>
           <Header />
           <SnackbarNotification />
           {routing}
-        </>
+        </ThemeProvider>
       )}
-    </ThemeProvider>
+    </>
   );
 });
