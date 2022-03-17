@@ -1,91 +1,85 @@
-import { memo, MouseEvent, useState, VFC } from 'react';
+import { memo, VFC } from 'react';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import CircularProgress from '@mui/material/CircularProgress';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 
-import { RecruitmentList } from '../components/index';
-import { Status, useDeleteRecruitmentMutation, useGetCurrentUserRecruitmentsQuery } from '../generated/graphql';
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+import { RecruitmentList, StyledTooltip } from '../components/index';
+import {
+  useDeleteRecruitmentMutation,
+  useGetCurrentUserRecruitmentsQuery,
+  useGetRecruitmentsQuery,
+} from '../generated/graphql';
 import { flashMessage, flashState, flashType } from '../store/flash';
+import { IconButton, Typography } from '@mui/material';
 
 export const DashboardRecruitments: VFC = memo(() => {
-  const colors = ['#3f51b5', '#e91e63', '#4caf50', '#607d8b', '#f44336', '#9c27b0'];
-
-  const navigate = useNavigate();
-  const search = useLocation().search;
-  const query = new URLSearchParams(search);
-
-  const getQueryStatus = (status: string | null): Status => {
-    if (status === 'published') {
-      return Status.Published;
-    } else if (status === 'draft') {
-      return Status.Draft;
-    } else if (status === 'closed') {
-      return Status.Closed;
-    } else {
-      return Status.Published;
-    }
-  };
-
-  const status = getQueryStatus(query.get('status'));
-
-  const [alignment, setAlignment] = useState<Status>(status);
+  const [data, executeQuery] = useGetCurrentUserRecruitmentsQuery();
+  const [, executeRecruitmetnsQuery] = useGetRecruitmentsQuery();
+  const [result, deleteRecruitment] = useDeleteRecruitmentMutation();
 
   const setState = useSetRecoilState(flashState);
   const setMessage = useSetRecoilState(flashMessage);
   const setType = useSetRecoilState(flashType);
 
-  const handleChange = (event: MouseEvent<HTMLElement>, newAlignment: Status) => {
-    setAlignment(newAlignment);
-  };
-
   const deleteCurrentUserRecruitment = async (id: string) => {
-    const res = await deleteRecruitment({
-      variables: {
-        id: id,
-      },
-      onCompleted() {
-        refetch();
-      },
-    });
-    if (res.data?.deleteRecruitment) {
+    const variables = { id: id };
+    const res = await deleteRecruitment(variables);
+    if (!res.error) {
+      executeQuery({
+        requestPolicy: 'network-only',
+      });
+      executeRecruitmetnsQuery({
+        requestPolicy: 'network-only',
+      });
       setState(true);
       setMessage('削除しました');
       setType('success');
     }
   };
 
-  const { loading, data, refetch } = useGetCurrentUserRecruitmentsQuery();
-  const [deleteRecruitment] = useDeleteRecruitmentMutation();
-
-  let count = 0;
-
   return (
     <>
-      <Box>
-        <Box fontSize={35} fontWeight="bold">
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Typography fontSize={35} fontWeight="bold" sx={{ mr: 0.5 }}>
           Recruitments
-        </Box>
+        </Typography>
+        <StyledTooltip
+          title={<Box sx={{ textAlign: 'center' }}>作成した募集の一覧</Box>}
+          placement="bottom"
+          sx={{ position: 'relative', bottom: 10 }}
+        >
+          <IconButton
+            size="small"
+            disableRipple
+            sx={{
+              height: 17,
+              width: 17,
+              position: 'relative',
+              top: 2,
+              bgcolor: '#455a64',
+              color: 'white',
+              ':hover': { bgcolor: '#455a64', color: 'white' },
+            }}
+          >
+            <QuestionMarkIcon fontSize="small" style={{ fontSize: 11 }} />
+          </IconButton>
+        </StyledTooltip>
       </Box>
       <List sx={{ mt: 0.2 }}>
-        {loading ? (
+        {data.fetching ? (
           <Box mt={2} sx={{ textAlign: 'center' }}>
             <CircularProgress size={40} color="primary" />
           </Box>
         ) : (
           <>
-            {data?.getCurrentUserRecruitments.map((recruitment) => {
-              if (count === 6) {
-                count = 0;
-              }
-              count += 1;
+            {data.data?.getCurrentUserRecruitments.map((recruitment) => {
               return (
                 <Box key={recruitment.id} sx={{ mt: 2 }}>
                   <RecruitmentList
                     deleteCurrentUserRecruitment={deleteCurrentUserRecruitment}
-                    color={colors[count - 1]}
                     recruitment={recruitment}
                   />
                   <Divider sx={{ border: '0.6px solid #ebf2f2' }} />
