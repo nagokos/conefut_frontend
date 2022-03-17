@@ -110,7 +110,7 @@ export const RecruitmentLocationDialog: VFC<Props> = memo((props) => {
         <Typography sx={{ color: '#757575' }} mb={2} fontSize={13}>
           会場を埋め込むためにマーカーを設置してください。
           <br />
-          マーカーを設置するにはマップをクリック、検索することで設置できます。
+          マーカーを設置するにはマップをクリック又は検索ワードを入力してください。
           <br />
           ※マーカーを指定の位置に設置後、必ず保存するをクリックしてください。
         </Typography>
