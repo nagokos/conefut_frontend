@@ -1,106 +1,72 @@
 import { memo, VFC } from 'react';
 
-import { Avatar, Box, ListItem, ListItemText, Typography } from '@mui/material';
+import { Avatar, Box, ListItem, ListItemText, Paper, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { Status } from '../../generated/graphql';
+import { Status, Type } from '../../generated/graphql';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
+import { Emoji } from 'emoji-mart';
 
 type Recruitment = {
   id: string;
   title: string;
+  type: Type;
   status: Status;
-  competition?: Competition | null | undefined;
+  user?: User | null | undefined;
 };
 
-type Competition = {
+type User = {
+  id: string;
   name: string;
+  avatar: string;
 };
 
 type Props = {
-  color: string;
   recruitment: Recruitment;
 };
 
 export const StockList: VFC<Props> = memo((props) => {
-  const { recruitment, color } = props;
+  const { recruitment } = props;
 
   const navigate = useNavigate();
 
-  const statusString = () => {
-    if (recruitment.status === Status.Published) {
-      return '公開中';
-    } else if (recruitment.status === Status.Closed) {
-      return '締切';
-    } else if (recruitment.status === Status.Draft) {
-      return '下書き';
-    }
-  };
-
-  const statusBgcolor = () => {
-    if (recruitment.status === Status.Published) {
-      return '#009688';
-    } else if (recruitment.status === Status.Closed) {
-      return '#f42121';
-    } else if (recruitment.status === Status.Draft) {
-      return '#2196f3';
+  const typeEmoji = (): string => {
+    if (recruitment.type === Type.Opponent) {
+      return ':handshake:';
+    } else if (recruitment.type === Type.Individual) {
+      return ':muscle:';
+    } else if (recruitment.type === Type.Member) {
+      return ':people_holding_hands:';
+    } else if (recruitment.type === Type.Joining) {
+      return ':pray:';
+    } else if (recruitment.type === Type.Others) {
+      return ':thought_balloon:';
+    } else {
+      return '';
     }
   };
 
   return (
     <>
-      <Box
-        onClick={() => {
-          navigate(`/recruitments/${recruitment.id}`);
-        }}
-        sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
-      >
-        <Box
-          component="span"
-          fontSize={10}
+      <ListItem sx={{ px: 0, mb: 1.5, pt: 0.9 }}>
+        <Paper
+          onClick={() => {
+            navigate(`/recruitments/${recruitment.id}`);
+          }}
+          elevation={0}
           sx={{
-            border: '1px solid',
-            bgcolor: `${statusBgcolor()}`,
-            color: 'white',
-            px: 0.7,
-            mr: 0.3,
-            borderRadius: 1,
-            py: 0.4,
+            bgcolor: '#f0f5f4',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: 65,
+            minWidth: 65,
+            borderRadius: 3.5,
+            mr: 2.5,
+            cursor: 'pointer',
           }}
         >
-          公開中
-        </Box>
-        <Box
-          component="span"
-          fontSize={10}
-          sx={{
-            border: '1px solid',
-            bgcolor: `${statusBgcolor()}`,
-            color: 'white',
-            px: 0.7,
-            mr: 0.3,
-            borderRadius: 1,
-            py: 0.4,
-          }}
-        >
-          サッカー
-        </Box>
-        <Box
-          component="span"
-          fontSize={10}
-          sx={{
-            border: '1px solid',
-            bgcolor: `${statusBgcolor()}`,
-            color: 'white',
-            px: 0.7,
-            mr: 0.3,
-            borderRadius: 1,
-            py: 0.4,
-          }}
-        >
-          試合相手
-        </Box>
-      </Box>
-      <ListItem sx={{ px: 0, pt: 0.9 }}>
+          <Emoji emoji={recruitment.status === Status.Published ? typeEmoji() : ':no_entry:'} size={28} native />
+        </Paper>
         <ListItemText
           sx={{ mr: 5 }}
           primary={
@@ -109,22 +75,18 @@ export const StockList: VFC<Props> = memo((props) => {
               onClick={() => {
                 navigate(`/recruitments/${recruitment.id}`);
               }}
-              sx={{ position: 'relative', bottom: 3, color: '#263238', cursor: 'pointer' }}
-              fontSize={18}
+              sx={{ position: 'relative', bottom: 3, color: '#263238', cursor: 'pointer', fontFamily: 'Roboto' }}
+              fontSize={17}
               fontWeight="bold"
             >
               {recruitment.title}
             </Typography>
           }
           secondary={
-            <Box component="span" sx={{ display: 'flex', alignItems: 'center', color: '#9e9e9e', cursor: 'pointer' }}>
-              <Avatar
-                component="span"
-                sx={{ width: 32, height: 32, mt: 0.2, mr: 1 }}
-                src="https://abs.twimg.com/sticky/default_profile_images/default_profile.png"
-              />
+            <Box component="span" sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer', mt: 0.1 }}>
+              <Avatar component="span" sx={{ width: 29, height: 29, mr: 0.8 }} src={recruitment.user?.avatar} />
               <Box component="span" sx={{ fontSize: 12, mr: 0.3 }}>
-                kosuda
+                {recruitment.user?.name}
               </Box>
               <BookmarkIcon fontSize="small" sx={{ fontSize: 14 }} />
               <Box component="span" sx={{ fontSize: 13 }}>
