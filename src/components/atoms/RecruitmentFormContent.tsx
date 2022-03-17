@@ -23,16 +23,17 @@ export const RecruitmentFormContent: VFC<Props> = memo((props) => {
           sx={{
             borderRadius: 2,
             bgcolor: '#fff',
-            height: 330,
+            minHeight: 330,
             mt: 3,
+            border: '1px solid #e0f2f1',
           }}
         >
           <InputBase
             {...field}
             multiline
-            rows={13}
             fullWidth
-            sx={{ fontSize: 14, py: 4, px: 4 }}
+            minRows={13}
+            sx={{ fontSize: 14, py: 4, px: 4, fontFamily: 'Roboto' }}
             placeholder="募集の詳細"
           />
         </Paper>
