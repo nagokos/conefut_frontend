@@ -30,14 +30,22 @@ export enum EmailVerificationStatus {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addRecruitmentTag: Scalars['Boolean'];
   createRecruitment: Recruitment;
   createStock: Scalars['Boolean'];
+  createTag: Tag;
   createUser: User;
   deleteRecruitment: Scalars['Boolean'];
   deleteStock: Scalars['Boolean'];
   loginUser: User;
   logoutUser: Scalars['Boolean'];
   updateRecruitment: Recruitment;
+};
+
+
+export type MutationAddRecruitmentTagArgs = {
+  recruitmentId: Scalars['String'];
+  tagId: Scalars['String'];
 };
 
 
@@ -48,6 +56,11 @@ export type MutationCreateRecruitmentArgs = {
 
 export type MutationCreateStockArgs = {
   recruitmentId: Scalars['String'];
+};
+
+
+export type MutationCreateTagArgs = {
+  input: CreateTagInput;
 };
 
 
@@ -90,9 +103,11 @@ export type Query = {
   getCurrentUserRecruitments: Array<Recruitment>;
   getPrefectures: Array<Prefecture>;
   getRecruitment: Recruitment;
+  getRecruitmentTags: Array<Maybe<Tag>>;
   getRecruitments: Array<Recruitment>;
   getStockedCount: Scalars['Int'];
   getStockedRecruitments: Array<Recruitment>;
+  getTags: Array<Tag>;
 };
 
 
@@ -103,6 +118,11 @@ export type QueryCheckStockedArgs = {
 
 export type QueryGetRecruitmentArgs = {
   id: Scalars['String'];
+};
+
+
+export type QueryGetRecruitmentTagsArgs = {
+  recruitmentId: Scalars['String'];
 };
 
 
@@ -123,6 +143,7 @@ export type Recruitment = {
   prefecture?: Maybe<Prefecture>;
   startAt?: Maybe<Scalars['DateTime']>;
   status: Status;
+  tags: Array<Maybe<Tag>>;
   title: Scalars['String'];
   type: Type;
   updatedAt: Scalars['DateTime'];
@@ -139,6 +160,12 @@ export enum Status {
   Draft = 'DRAFT',
   Published = 'PUBLISHED'
 }
+
+export type Tag = {
+  __typename?: 'Tag';
+  id: Scalars['String'];
+  name: Scalars['String'];
+};
 
 export enum Type {
   Individual = 'INDIVIDUAL',
@@ -158,6 +185,10 @@ export type User = {
   introduction?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   role: Role;
+};
+
+export type CreateTagInput = {
+  name: Scalars['String'];
 };
 
 export type CreateUserInput = {
@@ -182,8 +213,14 @@ export type RecruitmentInput = {
   prefectureId?: InputMaybe<Scalars['String']>;
   startAt?: InputMaybe<Scalars['DateTime']>;
   status: Status;
+  tags: Array<InputMaybe<RecruitmentTagInput>>;
   title: Scalars['String'];
   type: Type;
+};
+
+export type RecruitmentTagInput = {
+  id: Scalars['String'];
+  name: Scalars['String'];
 };
 
 export type GetCompetitionsQueryVariables = Exact<{ [key: string]: never; }>;
@@ -223,7 +260,7 @@ export type GetEditRecruitmentQueryVariables = Exact<{
 }>;
 
 
-export type GetEditRecruitmentQuery = { __typename?: 'Query', getRecruitment: { __typename?: 'Recruitment', id: string, title: string, type: Type, place?: string | null, startAt?: any | null, content?: string | null, capacity?: number | null, closingAt?: any | null, locationLat?: number | null, locationLng?: number | null, status: Status, competition?: { __typename?: 'Competition', id: string, name: string } | null, prefecture?: { __typename?: 'Prefecture', id: string, name: string } | null } };
+export type GetEditRecruitmentQuery = { __typename?: 'Query', getRecruitment: { __typename?: 'Recruitment', id: string, title: string, type: Type, place?: string | null, startAt?: any | null, content?: string | null, capacity?: number | null, closingAt?: any | null, locationLat?: number | null, locationLng?: number | null, status: Status, competition?: { __typename?: 'Competition', id: string, name: string } | null, prefecture?: { __typename?: 'Prefecture', id: string, name: string } | null, tags: Array<{ __typename?: 'Tag', id: string, name: string } | null> } };
 
 export type CreateRecruitmentMutationVariables = Exact<{
   title: Scalars['String'];
@@ -238,6 +275,7 @@ export type CreateRecruitmentMutationVariables = Exact<{
   status: Status;
   capacity?: InputMaybe<Scalars['Int']>;
   place?: InputMaybe<Scalars['String']>;
+  tags: Array<InputMaybe<RecruitmentTagInput>> | InputMaybe<RecruitmentTagInput>;
 }>;
 
 
@@ -257,6 +295,7 @@ export type UpdateRecruitmentMutationVariables = Exact<{
   status: Status;
   capacity?: InputMaybe<Scalars['Int']>;
   place?: InputMaybe<Scalars['String']>;
+  tags: Array<InputMaybe<RecruitmentTagInput>> | InputMaybe<RecruitmentTagInput>;
 }>;
 
 
@@ -296,6 +335,25 @@ export type DeleteStockMutationVariables = Exact<{
 
 
 export type DeleteStockMutation = { __typename?: 'Mutation', deleteStock: boolean };
+
+export type GetTagsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetTagsQuery = { __typename?: 'Query', getTags: Array<{ __typename?: 'Tag', id: string, name: string }> };
+
+export type GetRecruitmentTagsQueryVariables = Exact<{
+  recruitmentId: Scalars['String'];
+}>;
+
+
+export type GetRecruitmentTagsQuery = { __typename?: 'Query', getRecruitmentTags: Array<{ __typename?: 'Tag', id: string, name: string } | null> };
+
+export type CreateTagMutationVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type CreateTagMutation = { __typename?: 'Mutation', createTag: { __typename?: 'Tag', id: string, name: string } };
 
 export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -470,6 +528,10 @@ export const GetEditRecruitmentDocument = gql`
     locationLat
     locationLng
     status
+    tags {
+      id
+      name
+    }
   }
 }
     `;
@@ -478,9 +540,9 @@ export function useGetEditRecruitmentQuery(options: Omit<Urql.UseQueryArgs<GetEd
   return Urql.useQuery<GetEditRecruitmentQuery>({ query: GetEditRecruitmentDocument, ...options });
 };
 export const CreateRecruitmentDocument = gql`
-    mutation CreateRecruitment($title: String!, $competitionId: String, $closingAt: DateTime, $content: String, $type: Type!, $locationLat: Float, $locationLng: Float, $startAt: DateTime, $prefectureId: String, $status: Status!, $capacity: Int, $place: String) {
+    mutation CreateRecruitment($title: String!, $competitionId: String, $closingAt: DateTime, $content: String, $type: Type!, $locationLat: Float, $locationLng: Float, $startAt: DateTime, $prefectureId: String, $status: Status!, $capacity: Int, $place: String, $tags: [recruitmentTagInput]!) {
   createRecruitment(
-    input: {title: $title, competitionId: $competitionId, closingAt: $closingAt, content: $content, type: $type, locationLat: $locationLat, locationLng: $locationLng, status: $status, startAt: $startAt, capacity: $capacity, place: $place, prefectureId: $prefectureId}
+    input: {title: $title, competitionId: $competitionId, closingAt: $closingAt, content: $content, type: $type, locationLat: $locationLat, locationLng: $locationLng, status: $status, startAt: $startAt, capacity: $capacity, place: $place, prefectureId: $prefectureId, tags: $tags}
   ) {
     title
     content
@@ -493,10 +555,10 @@ export function useCreateRecruitmentMutation() {
   return Urql.useMutation<CreateRecruitmentMutation, CreateRecruitmentMutationVariables>(CreateRecruitmentDocument);
 };
 export const UpdateRecruitmentDocument = gql`
-    mutation UpdateRecruitment($id: String!, $title: String!, $competitionId: String, $closingAt: DateTime, $content: String, $type: Type!, $locationLat: Float, $locationLng: Float, $startAt: DateTime, $prefectureId: String, $status: Status!, $capacity: Int, $place: String) {
+    mutation UpdateRecruitment($id: String!, $title: String!, $competitionId: String, $closingAt: DateTime, $content: String, $type: Type!, $locationLat: Float, $locationLng: Float, $startAt: DateTime, $prefectureId: String, $status: Status!, $capacity: Int, $place: String, $tags: [recruitmentTagInput]!) {
   updateRecruitment(
     id: $id
-    input: {title: $title, competitionId: $competitionId, closingAt: $closingAt, content: $content, type: $type, locationLat: $locationLat, locationLng: $locationLng, status: $status, startAt: $startAt, capacity: $capacity, place: $place, prefectureId: $prefectureId}
+    input: {title: $title, competitionId: $competitionId, closingAt: $closingAt, content: $content, type: $type, locationLat: $locationLat, locationLng: $locationLng, status: $status, startAt: $startAt, capacity: $capacity, place: $place, prefectureId: $prefectureId, tags: $tags}
   ) {
     id
     title
@@ -552,6 +614,42 @@ export const DeleteStockDocument = gql`
 
 export function useDeleteStockMutation() {
   return Urql.useMutation<DeleteStockMutation, DeleteStockMutationVariables>(DeleteStockDocument);
+};
+export const GetTagsDocument = gql`
+    query GetTags {
+  getTags {
+    id
+    name
+  }
+}
+    `;
+
+export function useGetTagsQuery(options?: Omit<Urql.UseQueryArgs<GetTagsQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetTagsQuery>({ query: GetTagsDocument, ...options });
+};
+export const GetRecruitmentTagsDocument = gql`
+    query GetRecruitmentTags($recruitmentId: String!) {
+  getRecruitmentTags(recruitmentId: $recruitmentId) {
+    id
+    name
+  }
+}
+    `;
+
+export function useGetRecruitmentTagsQuery(options: Omit<Urql.UseQueryArgs<GetRecruitmentTagsQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetRecruitmentTagsQuery>({ query: GetRecruitmentTagsDocument, ...options });
+};
+export const CreateTagDocument = gql`
+    mutation CreateTag($name: String!) {
+  createTag(input: {name: $name}) {
+    id
+    name
+  }
+}
+    `;
+
+export function useCreateTagMutation() {
+  return Urql.useMutation<CreateTagMutation, CreateTagMutationVariables>(CreateTagDocument);
 };
 export const GetCurrentUserDocument = gql`
     query GetCurrentUser {
