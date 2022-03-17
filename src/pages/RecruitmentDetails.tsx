@@ -159,7 +159,7 @@ export const RecruitmentDetails: VFC = memo(() => {
                         <Emoji emoji=":alarm_clock:" native size={15} />
                       </Box>
                       <Box component="span" sx={{ fontSize: 14 }}>
-                        残り{distanceToNowFromClosingAt}
+                        {recruitment.status === Status.Published ? `残り${distanceToNowFromClosingAt}` : '締切'}
                       </Box>
                       <Box component="span" sx={{ color: '#424242', fontSize: 14 }}>
                         （{recruitment.closingAt}）
@@ -266,7 +266,7 @@ export const RecruitmentDetails: VFC = memo(() => {
             </Box>
           </Grid>
           <Grid item xs={3.5} sx={{ pl: 2 }}>
-            <RecruitmentDetailsApply type={recruitment.type} />
+            <RecruitmentDetailsApply recruitment={recruitment} />
             <Box
               sx={{
                 bgcolor: 'white',
@@ -279,13 +279,25 @@ export const RecruitmentDetails: VFC = memo(() => {
             >
               <ListItem alignItems="center" sx={{ px: 0, py: 0 }}>
                 <ListItemAvatar>
-                  <Avatar alt="user avatar" src={recruitment.user.avatar} sx={{ width: 53, height: 53 }} />
+                  <Avatar alt="user avatar" src={recruitment.user.avatar} sx={{ width: 60, height: 60 }} />
                 </ListItemAvatar>
                 <ListItemText
                   sx={{ ml: 1 }}
-                  primary={<Typography sx={{ fontSize: 18, fontWeight: 'bold' }}>{recruitment.user.name}</Typography>}
+                  primary={<Box sx={{ fontSize: 16, fontWeight: 'bold' }}>{recruitment.user.name}</Box>}
                   secondary={
-                    <Button sx={{ px: 0, py: 0.1 }} disableRipple variant="outlined" size="small">
+                    <Button
+                      sx={{
+                        px: 0,
+                        py: 0,
+                        position: 'relative',
+                        top: 4,
+                        fontFamily: ['Roboto'],
+                        fontWeight: 100,
+                      }}
+                      disableRipple
+                      variant="outlined"
+                      size="small"
+                    >
                       Follow
                     </Button>
                   }
