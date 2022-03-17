@@ -1,7 +1,6 @@
 import { memo, MouseEvent, useState, VFC } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
@@ -98,8 +97,13 @@ export const Header: VFC = memo(() => {
     <>
       {!isNeedHeader() && (
         <>
-          <AppBar sx={{ maxWidth: 1200, mx: 'auto' }} style={{ background: 'white' }} elevation={0} position="static">
-            <Toolbar sx={{ mx: isMobile ? '' : 2 }}>
+          <AppBar
+            sx={{ maxWidth: 1155, mx: 'auto', zIndex: 0 }}
+            style={{ background: 'white' }}
+            elevation={0}
+            position="static"
+          >
+            <Box sx={{ mx: isMobile ? '' : 2, display: 'flex', alignItems: 'center', height: 66 }}>
               <Typography
                 sx={{
                   flexGrow: isMobile ? 1 : 1,
@@ -114,11 +118,11 @@ export const Header: VFC = memo(() => {
                     <img
                       style={{ marginRight: 4 }}
                       src="/src/assets/img/main-logo.png"
-                      width="28"
-                      height="28"
+                      width="30"
+                      height="30"
                       alt="app logo"
                     />
-                    connefut
+                    <Box sx={{ fontSize: 25 }}>connefut</Box>
                   </Box>
                 </Box>
               </Typography>
@@ -235,7 +239,7 @@ export const Header: VFC = memo(() => {
                   </Button>
                 </>
               )}
-            </Toolbar>
+            </Box>
           </AppBar>
           <Box zIndex={100} component="nav" sx={{ position: 'sticky', top: 0, background: '#fff' }}>
             {isNeedTabCompetition() && (
