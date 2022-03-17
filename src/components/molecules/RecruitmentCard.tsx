@@ -139,11 +139,11 @@ export const RecruitmentCard: VFC<Props> = memo((props) => {
             ml: 2,
             mt: 1.5,
             bgcolor: '#009688',
-            border: '1px solid',
+            border: '1px solid #009688',
             color: 'white',
             borderRadius: 20,
             fontWeight: 'bold',
-            px: 1,
+            px: 0.8,
             py: 0.3,
           }}
         >
@@ -154,12 +154,12 @@ export const RecruitmentCard: VFC<Props> = memo((props) => {
           bgcolor={'#f0f5f4'}
           sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
         >
-          <Emoji emoji={typeEmoji()} size={55} native />
+          <Emoji emoji={typeEmoji()} size={52} native />
         </Box>
         <StyledCardContent>
-          <Typography minHeight={48} gutterBottom fontWeight="bold" variant="body1" component="div">
+          <Box minHeight={48} fontWeight="bold">
             {subStrTitle()}
-          </Typography>
+          </Box>
           <Box>
             <Box sx={{ fontSize: 10, display: 'flex', mt: 2, alignItems: 'center' }}>
               <Box sx={{ minWidth: 75 }}>
@@ -209,19 +209,21 @@ export const RecruitmentCard: VFC<Props> = memo((props) => {
               </ListItemAvatar>
               <ListItemText
                 primary={
-                  <Typography sx={{ ml: -1, position: 'relative', top: 3 }} component="span" fontSize={13}>
+                  <Box sx={{ ml: -1, position: 'relative', top: 2 }} component="span" fontSize={12}>
                     {recruitment.user.name}
-                  </Typography>
+                  </Box>
                 }
                 secondary={
                   <>
-                    <Typography sx={{ display: 'inline', ml: -1 }} component="span" color="#757575" fontSize={10}>
-                      {distanceToNowFromUpdatedAt}前
-                    </Typography>
-                    <Box ml={0.4} component="span" sx={{ position: 'relative', top: 3.5, color: '#9e9e9e' }}>
-                      <BookmarkIcon sx={{ fontSize: 14 }} />
-                      <Box component="span" sx={{ fontSize: 12, position: 'relative', bottom: 3, color: '#9e9e9e' }}>
-                        1
+                    <Box component="span" sx={{ position: 'relative', bottom: 2 }}>
+                      <Typography sx={{ display: 'inline', ml: -1 }} component="span" color="#757575" fontSize={10}>
+                        {distanceToNowFromUpdatedAt}前
+                      </Typography>
+                      <Box ml={0.4} component="span" sx={{ position: 'relative', top: 3.5, color: '#9e9e9e' }}>
+                        <BookmarkIcon sx={{ fontSize: 14 }} />
+                        <Box component="span" sx={{ fontSize: 12, position: 'relative', bottom: 3, color: '#9e9e9e' }}>
+                          1
+                        </Box>
                       </Box>
                     </Box>
                   </>
