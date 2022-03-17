@@ -1,0 +1,20 @@
+query GetTags {
+  getTags {
+    id
+    name
+  }
+}
+
+query GetRecruitmentTags($recruitmentId: String!) {
+  getRecruitmentTags(recruitmentId: $recruitmentId) {
+    id
+    name
+  }
+}
+
+mutation CreateTag($name: String!) {
+  createTag(input: { name: $name }) {
+    id
+    name
+  }
+}

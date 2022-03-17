@@ -12,7 +12,7 @@ type Props = {
 };
 export const RecruitmentFormArea: VFC<Props> = memo((props) => {
   const { control, getValues, watchStatus, watchType } = props;
-  const { loading, data } = useGetPrefecturesQuery();
+  const [data] = useGetPrefecturesQuery();
 
   return (
     <Controller
@@ -37,7 +37,7 @@ export const RecruitmentFormArea: VFC<Props> = memo((props) => {
             defaultValue=""
             input={<StyledRecruitmentSelectInput />}
           >
-            {data?.getPrefectures.map((prefecture) => (
+            {data.data?.getPrefectures.map((prefecture) => (
               <StyledSelectMenuItem disableRipple key={prefecture.id} value={prefecture.id}>
                 {prefecture.name}
               </StyledSelectMenuItem>

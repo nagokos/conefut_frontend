@@ -201,7 +201,7 @@ export const RecruitmentForm: VFC<Props> = memo((props) => {
               </Grid>
             ) : null}
             <Grid item xs={12}>
-              <RecruitmentFormTags />
+              <RecruitmentFormTags getValues={getValues} setFormValue={setValue} />
             </Grid>
             <Grid item xs={12}>
               <RecruitmentFormDraft onClick={onClick} />

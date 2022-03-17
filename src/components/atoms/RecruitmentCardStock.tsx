@@ -2,9 +2,13 @@ import { IconButton } from '@mui/material';
 import { memo, MouseEvent, VFC } from 'react';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
-import { useCreateStockMutation, useDeleteStockMutation, useCheckStockedQuery } from '../../generated/graphql';
+import {
+  useCreateStockMutation,
+  useDeleteStockMutation,
+  useCheckStockedQuery,
+  useGetCurrentUserQuery,
+} from '../../generated/graphql';
 import { StyledTooltip } from '..';
-import { isLoggedIn } from '../../reactive/user';
 import { useNavigate } from 'react-router-dom';
 
 type Props = {
@@ -16,40 +20,36 @@ export const RecruitmentCardStock: VFC<Props> = memo((props) => {
 
   const navigate = useNavigate();
 
-  const [createStock] = useCreateStockMutation();
-  const [deleteStock] = useDeleteStockMutation();
+  const [userData] = useGetCurrentUserQuery();
+  const [createResult, createStock] = useCreateStockMutation();
+  const [deleteResult, deleteStock] = useDeleteStockMutation();
 
-  const { data, loading, refetch } = useCheckStockedQuery({
+  const [data, executeQuery] = useCheckStockedQuery({
     variables: {
       recruitmentId: id,
     },
   });
 
-  const isStocked = data?.checkStocked;
+  const isLoggedIn = !!userData.data?.getCurrentUser;
+  const isStocked = data.data?.checkStocked;
 
-  const addStock = (event: MouseEvent) => {
+  const addStock = async (event: MouseEvent) => {
     event.stopPropagation();
-    if (!isLoggedIn()) return navigate('/login');
-    deleteStock({
-      variables: {
-        recruitmentId: id,
-      },
-      onCompleted() {
-        refetch();
-      },
+    if (!isLoggedIn) return navigate('/login');
+    const variables = { recruitmentId: id };
+    await createStock(variables);
+    executeQuery({
+      requestPolicy: 'network-only',
     });
   };
 
-  const removeStock = (event: MouseEvent) => {
+  const removeStock = async (event: MouseEvent) => {
     event.stopPropagation();
-    if (!isLoggedIn()) return navigate('/login');
-    createStock({
-      variables: {
-        recruitmentId: id,
-      },
-      onCompleted() {
-        refetch();
-      },
+    if (!isLoggedIn) return navigate('/login');
+    const variables = { recruitmentId: id };
+    await deleteStock(variables);
+    executeQuery({
+      requestPolicy: 'network-only',
     });
   };
   return (
@@ -65,7 +65,7 @@ export const RecruitmentCardStock: VFC<Props> = memo((props) => {
               },
             }}
             disableRipple
-            onClick={(event) => addStock(event)}
+            onClick={(event) => removeStock(event)}
           >
             <BookmarkIcon fontSize="small" sx={{ color: '#ff784e' }} />
           </IconButton>
@@ -81,7 +81,7 @@ export const RecruitmentCardStock: VFC<Props> = memo((props) => {
               },
             }}
             disableRipple
-            onClick={(event) => removeStock(event)}
+            onClick={(event) => addStock(event)}
           >
             <BookmarkBorderIcon fontSize="small" sx={{ color: '#90a4ae' }} />
           </IconButton>

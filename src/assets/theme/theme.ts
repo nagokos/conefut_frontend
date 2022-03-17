@@ -69,6 +69,10 @@ export const theme = createTheme({
     error: {
       main: '#f42121',
     },
+    action: {
+      hover: '#f0f5f4',
+      focus: '#fff',
+    },
   },
   typography: {
     fontFamily: [

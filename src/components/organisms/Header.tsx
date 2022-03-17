@@ -22,7 +22,6 @@ import { useSize } from '../../hooks/index';
 import { TabCompetition } from '../index';
 import { Divider, IconButton } from '@mui/material';
 import { useLocation, Link as RouterLink, useNavigate } from 'react-router-dom';
-import { isLoggedIn } from '../../reactive/user';
 import { useGetCurrentUserQuery, useLogoutUserMutation } from '../../generated/graphql';
 import { styled } from '@mui/material/styles';
 
@@ -33,16 +32,18 @@ const StyledMenuItem = styled(MenuItem)(() => ({
 }));
 
 export const Header: VFC = memo(() => {
-  const { data, loading } = useGetCurrentUserQuery();
+  const [data] = useGetCurrentUserQuery();
+  const [result, logout] = useLogoutUserMutation();
+
   const [search, setSearch] = useState<boolean>(false);
   const [notification, setNotification] = useState<boolean>(false);
+
   const { isMobile } = useSize();
+
   const location = useLocation();
   const navigate = useNavigate();
 
-  const user = data?.getCurrentUser;
-
-  const [logout] = useLogoutUserMutation();
+  const user = data.data?.getCurrentUser;
 
   const searchMove = () => {
     setSearch(true);
@@ -104,20 +105,6 @@ export const Header: VFC = memo(() => {
                   flexGrow: isMobile ? 1 : 1,
                   mr: 3,
                 }}
-                fontFamily={[
-                  'Nunito',
-                  'Roboto',
-                  'sans-serif',
-                  'IBM Plex Sans',
-                  '-apple-system',
-                  'BlinkMacSystemFont',
-                  'Segoe UI',
-                  'Helvetica Neue',
-                  'Arial',
-                  'Apple Color Emoji',
-                  'Segoe UI Emoji',
-                  'Segoe UI Symbol',
-                ].join(',')}
                 color="black"
                 variant="h5"
                 fontWeight="bold"
@@ -143,7 +130,7 @@ export const Header: VFC = memo(() => {
               >
                 <SearchIcon />
               </IconButton>
-              {isLoggedIn() && (
+              {!!user && (
                 <>
                   <IconButton
                     onMouseMove={notificationMove}
@@ -179,7 +166,7 @@ export const Header: VFC = memo(() => {
                   >
                     <StyledMenuItem disableRipple sx={{ py: 2 }}>
                       <Avatar sx={{ mr: 1.4, width: 35, height: 35 }} src={user?.avatar} />
-                      {user?.name}
+                      <Box sx={{ fontFamily: 'Roboto', fontSize: 15 }}>{user?.name}</Box>
                     </StyledMenuItem>
                     <Divider sx={{ borderColor: '#ebf2f2' }} />
                     <StyledMenuItem onClick={() => transitionPage('/recruitments/new')} disableRipple sx={{ py: 1.2 }}>

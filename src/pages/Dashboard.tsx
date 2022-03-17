@@ -58,7 +58,7 @@ export const Dashboard: VFC = memo(() => {
                     navigate('/dashboard');
                   }}
                   sx={{
-                    fontSize: 20,
+                    fontSize: 22,
                     px: 3,
                     fontWeight: selected === 'recruitments' ? 'bold' : 100,
                     backgroundColor: selected === 'recruitments' ? '#f5f5f5' : '',
@@ -78,13 +78,13 @@ export const Dashboard: VFC = memo(() => {
                     navigate('/dashboard/applied');
                   }}
                   sx={{
-                    fontSize: 20,
+                    fontSize: 22,
                     px: 3,
                     fontWeight: selected === 'applied' ? 'bold' : 100,
                     background: selected === 'applied' ? '#f5f5f5' : '',
                   }}
                 >
-                  Applied
+                  <Box>Applied</Box>
                 </StyledDashboardButton>
               </Grid>
               <Grid item xs={12}>
@@ -98,7 +98,7 @@ export const Dashboard: VFC = memo(() => {
                     navigate('/dashboard/stocks');
                   }}
                   sx={{
-                    fontSize: 20,
+                    fontSize: 22,
                     px: 3,
                     fontWeight: selected === 'stocks' ? 'bold' : 100,
                     background: selected === 'stocks' ? '#f5f5f5' : '',

@@ -12,18 +12,20 @@ import {
   Menu,
   MenuItem,
   MenuList,
+  Paper,
   styled,
-  Typography,
 } from '@mui/material';
 import { RecruitmentDeleteDialog, StyledSelectMenuItem, StyledTooltip } from '../index';
 import { useNavigate } from 'react-router-dom';
-import { Status, useGetEditRecruitmentLazyQuery } from '../../generated/graphql';
+import { Status, Type } from '../../generated/graphql';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { Emoji } from 'emoji-mart';
 
 type Recruitment = {
   id: string;
   title: string;
   status: Status;
+  type: Type;
   competition?: Competition | null | undefined;
 };
 
@@ -32,7 +34,6 @@ type Competition = {
 };
 
 type Props = {
-  color: string;
   recruitment: Recruitment;
   deleteCurrentUserRecruitment: (id: string) => void;
 };
@@ -57,15 +58,9 @@ const StyledListButton = styled(IconButton)(() => ({
 }));
 
 export const RecruitmentList: VFC<Props> = memo((props) => {
-  const { recruitment, color, deleteCurrentUserRecruitment } = props;
+  const { recruitment, deleteCurrentUserRecruitment } = props;
 
   const navigate = useNavigate();
-
-  const [getEditRecruitment] = useGetEditRecruitmentLazyQuery({
-    variables: {
-      id: recruitment.id,
-    },
-  });
 
   const [open, setOpen] = useState<boolean>(false);
   const handleClickOpen = () => {
@@ -78,7 +73,6 @@ export const RecruitmentList: VFC<Props> = memo((props) => {
   };
 
   const pushEditRecruitment = async () => {
-    await getEditRecruitment();
     navigate(`/recruitments/${recruitment.id}/edit`);
   };
 
@@ -101,7 +95,7 @@ export const RecruitmentList: VFC<Props> = memo((props) => {
     }
   };
 
-  const statusBgcolor = () => {
+  const statusColor = () => {
     if (recruitment.status === Status.Published) {
       return '#009688';
     } else if (recruitment.status === Status.Closed) {
@@ -111,35 +105,65 @@ export const RecruitmentList: VFC<Props> = memo((props) => {
     }
   };
 
+  const typeEmoji = (): string => {
+    if (recruitment.status === Status.Draft) {
+      return ':writing_hand:';
+    } else if (recruitment.type === Type.Opponent) {
+      return ':handshake:';
+    } else if (recruitment.type === Type.Individual) {
+      return ':muscle:';
+    } else if (recruitment.type === Type.Member) {
+      return ':people_holding_hands:';
+    } else if (recruitment.type === Type.Joining) {
+      return ':pray:';
+    } else if (recruitment.type === Type.Others) {
+      return ':thought_balloon:';
+    } else {
+      return '';
+    }
+  };
+
   return (
     <>
       <ListItem sx={{ mt: 1.5, mb: 1.5, px: 0 }}>
-        {/* <Paper
+        <Paper
+          onClick={() => {
+            navigate(`/recruitments/${recruitment.id}`);
+          }}
           elevation={0}
           sx={{
-            bgcolor: color,
+            bgcolor: '#f0f5f4',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            minHeight: 55,
-            minWidth: 55,
+            minHeight: 65,
+            minWidth: 65,
             borderRadius: 3.5,
+            mr: 2.5,
+            cursor: 'pointer',
           }}
         >
-          <ArticleOutlined sx={{ color: '#cfd8dc', fontSize: 33 }} />
-        </Paper> */}
+          <Emoji
+            emoji={
+              recruitment.status === Status.Published || recruitment.status === Status.Draft
+                ? typeEmoji()
+                : ':no_entry:'
+            }
+            size={28}
+            native
+          />
+        </Paper>
         <ListItemText
           onClick={() => pushEditRecruitment()}
           sx={{ mr: 5, cursor: 'pointer' }}
           primary={
-            <Typography
-              component="div"
-              sx={{ position: 'relative', bottom: 3, color: '#263238' }}
-              fontSize={18}
+            <Box
+              sx={{ position: 'relative', bottom: 3, color: '#263238', fontFamily: 'Roboto' }}
+              fontSize={17}
               fontWeight="bold"
             >
               {recruitment.title}
-            </Typography>
+            </Box>
           }
           secondary={
             <>
@@ -147,14 +171,13 @@ export const RecruitmentList: VFC<Props> = memo((props) => {
                 component="span"
                 fontSize={11}
                 sx={{
-                  border: '1px solid',
+                  border: `1px solid ${statusColor()}`,
                   maxWidth: 33,
-                  bgcolor: `${statusBgcolor()}`,
-                  color: 'white',
+                  color: statusColor(),
                   px: 0.7,
                   mr: 0.3,
                   borderRadius: 1,
-                  py: 0.4,
+                  py: 0.3,
                 }}
               >
                 {statusString()}

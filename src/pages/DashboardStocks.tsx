@@ -3,62 +3,62 @@ import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import CircularProgress from '@mui/material/CircularProgress';
-import { useSetRecoilState } from 'recoil';
 
-import { StockList } from '../components/index';
-import { useDeleteRecruitmentMutation, useGetCurrentUserRecruitmentsQuery } from '../generated/graphql';
-import { flashMessage, flashState, flashType } from '../store/flash';
+import { StockList, StyledTooltip } from '../components/index';
+import { useGetStockedRecruitmentsQuery } from '../generated/graphql';
+import { IconButton, Typography } from '@mui/material';
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 
 export const DashboardStocks: VFC = memo(() => {
-  const { loading, data, refetch } = useGetCurrentUserRecruitmentsQuery();
-  const [deleteRecruitment] = useDeleteRecruitmentMutation();
-
-  const colors = ['#3f51b5', '#e91e63', '#4caf50', '#607d8b', '#f44336', '#9c27b0'];
-
-  const setState = useSetRecoilState(flashState);
-  const setMessage = useSetRecoilState(flashMessage);
-  const setType = useSetRecoilState(flashType);
-
-  const deleteCurrentUserRecruitment = async (id: string) => {
-    const res = await deleteRecruitment({
-      variables: {
-        id: id,
-      },
-      onCompleted() {
-        refetch();
-      },
-    });
-    if (res.data?.deleteRecruitment) {
-      setState(true);
-      setMessage('削除しました');
-      setType('success');
-    }
-  };
-
-  let count = 0;
+  const [data] = useGetStockedRecruitmentsQuery({
+    requestPolicy: 'network-only',
+  });
 
   return (
     <>
-      <Box>
-        <Box fontSize={35} fontWeight="bold">
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Typography fontSize={35} fontWeight="bold" sx={{ mr: 0.5 }}>
           Stocks
-        </Box>
+        </Typography>
+        <StyledTooltip
+          title={
+            <Box sx={{ textAlign: 'center' }}>
+              ストックしている
+              <br />
+              募集の一覧
+            </Box>
+          }
+          placement="bottom"
+          sx={{ position: 'relative', bottom: 10 }}
+        >
+          <IconButton
+            size="small"
+            disableRipple
+            sx={{
+              height: 17,
+              width: 17,
+              position: 'relative',
+              top: 2,
+              bgcolor: '#455a64',
+              color: 'white',
+              ':hover': { bgcolor: '#455a64', color: 'white' },
+            }}
+          >
+            <QuestionMarkIcon fontSize="small" style={{ fontSize: 11 }} />
+          </IconButton>
+        </StyledTooltip>
       </Box>
       <List sx={{ mt: 0.2 }}>
-        {loading ? (
+        {data.fetching ? (
           <Box mt={2} sx={{ textAlign: 'center' }}>
             <CircularProgress size={40} color="primary" />
           </Box>
         ) : (
           <>
-            {data?.getCurrentUserRecruitments.map((recruitment) => {
-              if (count === 6) {
-                count = 0;
-              }
-              count += 1;
+            {data.data?.getStockedRecruitments.map((recruitment) => {
               return (
                 <Box key={recruitment.id} sx={{ mt: 2 }}>
-                  <StockList color={colors[count - 1]} recruitment={recruitment} />
+                  <StockList recruitment={recruitment} />
                   <Divider sx={{ border: '0.6px solid #ebf2f2' }} />
                 </Box>
               );

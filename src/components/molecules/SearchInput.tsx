@@ -18,7 +18,7 @@ export const SearchInput: VFC = memo(() => {
   const [value, setValue] = useState<Date | null>(null);
   const [picker, setPicker] = useState<boolean>(false);
 
-  const { loading, error, data } = useGetPrefecturesQuery();
+  const [data] = useGetPrefecturesQuery();
 
   const handleChange = (event: SelectChangeEvent) => {
     setSelect(String(event.target.value));
@@ -62,7 +62,7 @@ export const SearchInput: VFC = memo(() => {
         value={selectPrefecture}
         onChange={changeSelectPrefecture}
         renderValue={(selected) => {
-          const target = data?.getPrefectures?.find((prefecture) => prefecture.id === selected);
+          const target = data.data?.getPrefectures?.find((prefecture) => prefecture.id === selected);
           if (target) {
             return target.name;
           } else {
@@ -80,7 +80,7 @@ export const SearchInput: VFC = memo(() => {
         <StyledSelectMenuItem value="0" disabled>
           地域
         </StyledSelectMenuItem>
-        {data?.getPrefectures?.map((prefecture: Prefecture) => (
+        {data.data?.getPrefectures?.map((prefecture: Prefecture) => (
           <StyledSelectMenuItem disableRipple key={prefecture.id} value={prefecture.id}>
             {prefecture.name}
             {prefecture.id === selectPrefecture && (

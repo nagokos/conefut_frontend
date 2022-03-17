@@ -3,18 +3,18 @@ import ReactDOM from 'react-dom';
 import './assets/style/index.css';
 import { App } from './App';
 import { BrowserRouter } from 'react-router-dom';
-import { client } from './apollo/apollo';
-import { ApolloProvider } from '@apollo/client';
 import { RecoilRoot } from 'recoil';
+import { Provider } from 'urql';
+import { client } from './urql/index';
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <ApolloProvider client={client}>
+      <Provider value={client}>
         <RecoilRoot>
           <App />
         </RecoilRoot>
-      </ApolloProvider>
+      </Provider>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')

@@ -97,6 +97,10 @@ query GetEditRecruitment($id: String!) {
     locationLat
     locationLng
     status
+    tags {
+      id
+      name
+    }
   }
 }
 
@@ -113,6 +117,7 @@ mutation CreateRecruitment(
   $status: Status!
   $capacity: Int
   $place: String
+  $tags: [recruitmentTagInput]!
 ) {
   createRecruitment(
     input: {
@@ -128,6 +133,7 @@ mutation CreateRecruitment(
       capacity: $capacity
       place: $place
       prefectureId: $prefectureId
+      tags: $tags
     }
   ) {
     title
@@ -150,6 +156,7 @@ mutation UpdateRecruitment(
   $status: Status!
   $capacity: Int
   $place: String
+  $tags: [recruitmentTagInput]!
 ) {
   updateRecruitment(
     id: $id
@@ -166,6 +173,7 @@ mutation UpdateRecruitment(
       capacity: $capacity
       place: $place
       prefectureId: $prefectureId
+      tags: $tags
     }
   ) {
     id
