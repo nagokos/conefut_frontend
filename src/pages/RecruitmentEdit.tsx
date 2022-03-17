@@ -9,7 +9,6 @@ import {
   RecruitmentInput,
   useGetEditRecruitmentQuery,
   useUpdateRecruitmentMutation,
-  useGetCurrentUserRecruitmentsLazyQuery,
   Status,
 } from '../generated/graphql';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -26,17 +25,15 @@ export const RecruitmentEdit: VFC = memo(() => {
   const setMessage = useSetRecoilState(flashMessage);
   const setType = useSetRecoilState(flashType);
 
-  const [updateRecruitment, { error }] = useUpdateRecruitmentMutation();
+  const [result, updateRecruitment] = useUpdateRecruitmentMutation();
 
-  const [getRecruitments] = useGetCurrentUserRecruitmentsLazyQuery();
-
-  const { loading, data } = useGetEditRecruitmentQuery({
+  const [data] = useGetEditRecruitmentQuery({
     variables: {
       id: String(recruitmentId),
     },
   });
 
-  const recruitment = data?.getRecruitment;
+  const recruitment = data.data?.getRecruitment;
 
   const onClick = async (status: Status) => {
     setValue('status', status);
@@ -48,24 +45,25 @@ export const RecruitmentEdit: VFC = memo(() => {
     if (result) {
       console.log(getValues('locationLat'));
 
-      const res = await updateRecruitment({
-        variables: {
-          id: String(recruitmentId),
-          title: getValues('title'),
-          competitionId: getValues('competitionId'),
-          closingAt: getValues('closingAt'),
-          type: getValues('type'),
-          content: getValues('content'),
-          place: getValues('place'),
-          locationLat: getValues('locationLat'),
-          locationLng: getValues('locationLng'),
-          status: getValues('status'),
-          capacity: getValues('capacity') === 0 ? null : getValues('capacity'),
-          startAt: getValues('startAt'),
-          prefectureId: getValues('prefectureId') === '' ? null : getValues('prefectureId'),
-        },
-      });
-      await getRecruitments();
+      const variables = {
+        id: String(recruitmentId),
+        title: getValues('title'),
+        competitionId: getValues('competitionId'),
+        closingAt: getValues('closingAt'),
+        type: getValues('type'),
+        content: getValues('content'),
+        place: getValues('place'),
+        locationLat: getValues('locationLat'),
+        locationLng: getValues('locationLng'),
+        status: getValues('status'),
+        capacity: getValues('capacity') === 0 ? null : getValues('capacity'),
+        startAt: getValues('startAt'),
+        prefectureId: getValues('prefectureId') === '' ? null : getValues('prefectureId'),
+        tags: getValues('tags'),
+      };
+
+      const res = await updateRecruitment(variables);
+
       let message = '';
       if (status === Status.Published) {
         message = '募集を公開しました';
@@ -94,8 +92,9 @@ export const RecruitmentEdit: VFC = memo(() => {
       status: recruitment?.status,
       capacity: recruitment?.capacity,
       place: recruitment?.place,
+      tags: recruitment?.tags,
     };
-  }, [data?.getRecruitment]);
+  }, [data.data?.getRecruitment]);
 
   const { control, reset, formState, getValues, trigger, clearErrors, setValue, watch, resetField, setError } =
     useForm<RecruitmentInput>({
@@ -110,7 +109,7 @@ export const RecruitmentEdit: VFC = memo(() => {
 
   return (
     <>
-      {!loading && (
+      {!data.fetching && (
         <Box sx={{ pt: 2, px: 3, minHeight: '100vh' }} bgcolor="#ebf2f2">
           <Box>
             <IconButton onClick={() => navigate('/dashboard')} disableTouchRipple size="medium">
