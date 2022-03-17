@@ -19,7 +19,7 @@ export const RecruitmentFormTitle: VFC<Props> = memo((props) => {
           {...field}
           multiline
           fullWidth
-          sx={{ fontWeight: 'bold', fontSize: 28, px: 3 }}
+          sx={{ fontWeight: 'bold', fontSize: 28, px: 3, fontFamily: 'Roboto' }}
           placeholder="タイトル"
         />
       )}
