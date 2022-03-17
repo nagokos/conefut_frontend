@@ -16,7 +16,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useSize } from '../../hooks';
 import { SignupFormName, SignupFormPassword, SignupFormEmail } from '../index';
 import { flashMessage, flashState, flashType } from '../../store/flash';
-import { isLoggedIn } from '../../reactive/user';
 import { signupSchema } from '../../yup/userSchema';
 
 type Props = {
@@ -28,8 +27,9 @@ export const SignupDialog: VFC<Props> = memo((props) => {
   const { open, handleClose } = props;
   const { isMobile } = useSize();
 
-  const [signupUser, { loading, error }] = useCreateUserMutation();
-  const { refetch } = useGetCurrentUserQuery();
+  const [result, createUser] = useCreateUserMutation();
+
+  const [, executeQuery] = useGetCurrentUserQuery();
 
   const navigate = useNavigate();
 
@@ -52,38 +52,31 @@ export const SignupDialog: VFC<Props> = memo((props) => {
   }, [handleClose]);
 
   const onSubmit: SubmitHandler<CreateUserInput> = async (userData: CreateUserInput) => {
-    await signupUser({
-      variables: {
-        name: userData.name,
-        email: userData.email,
-        password: userData.password,
-      },
-      onCompleted() {
-        refetch();
-      },
-    });
-    if (!loading) {
+    const variables = { name: userData.name, email: userData.email, password: userData.password };
+    const res = await createUser(variables);
+
+    if (res.error) {
+      res.error.graphQLErrors?.forEach((error: GraphQLError) => {
+        if (error.extensions) {
+          setError(error.extensions['attribute'] as 'name' | 'email' | 'password', {
+            message: error.message,
+          });
+          setState(true);
+          setMessage(error.message);
+          setType('error');
+        }
+      });
+    } else {
+      executeQuery({
+        requestPolicy: 'network-only',
+      });
       setState(true);
       setMessage('新規登録しました');
       setType('success');
-      isLoggedIn(true);
       handleClose();
       navigate('/');
     }
   };
-
-  useEffect(() => {
-    error?.graphQLErrors?.forEach((error: GraphQLError) => {
-      if (error.extensions) {
-        setError(error.extensions['attribute'] as 'name' | 'email' | 'password', {
-          message: error.message,
-        });
-        setState(true);
-        setMessage('フォームに不備があります');
-        setType('error');
-      }
-    });
-  }, [error]);
 
   return (
     <Dialog
