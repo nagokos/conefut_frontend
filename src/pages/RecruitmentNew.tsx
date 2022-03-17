@@ -7,13 +7,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useSetRecoilState } from 'recoil';
 
-import {
-  RecruitmentInput,
-  Type,
-  useCreateRecruitmentMutation,
-  useGetCurrentUserRecruitmentsLazyQuery,
-  Status,
-} from '../generated/graphql';
+import { RecruitmentInput, Type, useCreateRecruitmentMutation, Status } from '../generated/graphql';
 import { RecruitmentForm } from '../components';
 import { recruitmentSchema } from '../yup/recruitmentSchema';
 import { flashMessage, flashState, flashType } from '../store/flash';
@@ -21,9 +15,7 @@ import { flashMessage, flashState, flashType } from '../store/flash';
 export const RecruitmentNew: VFC = memo(() => {
   const navigate = useNavigate();
 
-  const [createRecruitment, { data, error }] = useCreateRecruitmentMutation();
-
-  const [getRecruitments] = useGetCurrentUserRecruitmentsLazyQuery();
+  const [result, createRecruitment] = useCreateRecruitmentMutation();
 
   const setState = useSetRecoilState(flashState);
   const setMessage = useSetRecoilState(flashMessage);
@@ -44,6 +36,7 @@ export const RecruitmentNew: VFC = memo(() => {
         status: Status.Draft,
         capacity: 0,
         place: '',
+        tags: [],
       },
       resolver: yupResolver(recruitmentSchema),
       mode: 'onChange',
@@ -57,27 +50,24 @@ export const RecruitmentNew: VFC = memo(() => {
     const result: boolean = await trigger();
 
     if (result) {
-      console.log(getValues('capacity'));
+      const variables = {
+        title: getValues('title'),
+        competitionId: getValues('competitionId'),
+        closingAt: getValues('closingAt'),
+        type: getValues('type'),
+        content: getValues('content'),
+        place: getValues('place'),
+        locationLat: getValues('locationLat'),
+        locationLng: getValues('locationLng'),
+        status: getValues('status'),
+        capacity: getValues('capacity') === 0 ? null : getValues('capacity'),
+        startAt: getValues('startAt'),
+        prefectureId: getValues('prefectureId') === '' ? null : getValues('prefectureId'),
+        tags: getValues('tags'),
+      };
 
-      const res = await createRecruitment({
-        variables: {
-          title: getValues('title'),
-          competitionId: getValues('competitionId'),
-          closingAt: getValues('closingAt'),
-          type: getValues('type'),
-          content: getValues('content'),
-          place: getValues('place'),
-          locationLat: getValues('locationLat'),
-          locationLng: getValues('locationLng'),
-          status: getValues('status'),
-          capacity: getValues('capacity') === 0 ? null : getValues('capacity'),
-          startAt: getValues('startAt'),
-          prefectureId: getValues('prefectureId') === '' ? null : getValues('prefectureId'),
-        },
-      });
-      console.log(res);
+      await createRecruitment(variables);
 
-      await getRecruitments();
       let message = '';
       if (status === Status.Published) {
         message = '募集を公開しました';
