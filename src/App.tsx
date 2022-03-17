@@ -6,11 +6,16 @@ import { Header, SnackbarNotification } from './components/index';
 import { useGetCurrentUserQuery } from './generated/graphql';
 import { useRoutes } from 'react-router-dom';
 import { Box } from '@mui/material';
+import { useLocationChange } from './hooks';
 
 export const App: VFC = memo(() => {
   const [data] = useGetCurrentUserQuery();
 
   const routing = useRoutes(routes(!!data.data?.getCurrentUser));
+
+  useLocationChange(() => {
+    window.scrollTo(0, 0);
+  });
 
   return (
     <>
