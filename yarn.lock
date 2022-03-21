@@ -920,22 +920,6 @@
     auto-bind "~4.0.0"
     tslib "~2.3.0"
 
-"@graphql-codegen/visitor-plugin-common@2.7.3":
-  version "2.7.3"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/visitor-plugin-common/-/visitor-plugin-common-2.7.3.tgz#f374e8974ae4ab7b1059a7f8748db6393f20c138"
-  integrity sha512-rODPGkrHEf9aHD8SgVWS0xie8VmJoYXLWgQR8PFKrwCUFjf7nvDuATAL2lTFiHATlVBWg1meXVPdUlkKeJj/0Q==
-  dependencies:
-    "@graphql-codegen/plugin-helpers" "^2.4.0"
-    "@graphql-tools/optimize" "^1.0.1"
-    "@graphql-tools/relay-operation-optimizer" "^6.3.7"
-    "@graphql-tools/utils" "^8.3.0"
-    auto-bind "~4.0.0"
-    change-case-all "1.0.14"
-    dependency-graph "^0.11.0"
-    graphql-tag "^2.11.0"
-    parse-filepath "^1.0.2"
-    tslib "~2.3.0"
-
 "@graphql-codegen/visitor-plugin-common@2.7.4":
   version "2.7.4"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/visitor-plugin-common/-/visitor-plugin-common-2.7.4.tgz#fbc8aec9df0035b8f29fa64a6356cbb02062da5d"
@@ -4411,10 +4395,10 @@ react-dom@^17.0.2:
     object-assign "^4.1.1"
     scheduler "^0.20.2"
 
-react-hook-form@^7.28.0:
-  version "7.28.0"
-  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.28.0.tgz#40f385da1f31a3c26bb7491d7d77c111b6ad6909"
-  integrity sha512-mmLpT86BkMGPr0r6ca8zxV0WH4Y1FW5MKs7Rq1+uHLVeeg5pSWbF5Z/qLCnM5vPVblHNM6lRBRRotnfEAf0ALA==
+react-hook-form@^7.28.1:
+  version "7.28.1"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.28.1.tgz#95fc37be6c6b9d57212eb7eca055fb36d079b3b7"
+  integrity sha512-mgwxvXuvt3FMY/mdnWbPc++Zf1U5xYzkhOaL05mtFMLvXc9MvUhMUlKtUVuO12sOrgT3nPXBgVFawtiJ4ONrgg==
 
 react-icons@^4.3.1:
   version "4.3.1"
