@@ -115,7 +115,7 @@ export const RecruitmentFormTags: VFC<Props> = memo((props) => {
   const tags = data.data?.getTags;
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [pendingValue, setPendingValue] = useState<RecruitmentTagInput[]>([]); // チェックしているやつ
+  const [pendingValue, setPendingValue] = useState<RecruitmentTagInput[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
   const [filter, setFilter] = useState<RecruitmentTagInput[]>([]);
 
@@ -305,7 +305,7 @@ export const RecruitmentFormTags: VFC<Props> = memo((props) => {
                             py: 0.5,
                             borderRadius: 1,
                             display: 'flex',
-                            mr: 1,
+                            mr: 0.6,
                             alignItems: 'center',
                           }}
                         >
