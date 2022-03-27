@@ -31,6 +31,7 @@ export enum EmailVerificationStatus {
 export type Mutation = {
   __typename?: 'Mutation';
   addRecruitmentTag: Scalars['Boolean'];
+  applyForRecruitment: Scalars['Boolean'];
   createRecruitment: Recruitment;
   createStock: Scalars['Boolean'];
   createTag: Tag;
@@ -46,6 +47,12 @@ export type Mutation = {
 export type MutationAddRecruitmentTagArgs = {
   recruitmentId: Scalars['String'];
   tagId: Scalars['String'];
+};
+
+
+export type MutationApplyForRecruitmentArgs = {
+  input?: InputMaybe<ApplicantInput>;
+  recruitmentId: Scalars['String'];
 };
 
 
@@ -187,6 +194,10 @@ export type User = {
   role: Role;
 };
 
+export type ApplicantInput = {
+  content: Scalars['String'];
+};
+
 export type CreateTagInput = {
   name: Scalars['String'];
 };
@@ -236,7 +247,7 @@ export type GetPrefecturesQuery = { __typename?: 'Query', getPrefectures: Array<
 export type GetRecruitmentsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetRecruitmentsQuery = { __typename?: 'Query', getRecruitments: Array<{ __typename?: 'Recruitment', id: string, title: string, content?: string | null, type: Type, place?: string | null, startAt?: any | null, closingAt?: any | null, updatedAt: any, capacity?: number | null, prefecture?: { __typename?: 'Prefecture', name: string } | null, user: { __typename?: 'User', name: string, avatar: string } }> };
+export type GetRecruitmentsQuery = { __typename?: 'Query', getRecruitments: Array<{ __typename?: 'Recruitment', id: string, title: string, content?: string | null, type: Type, place?: string | null, startAt?: any | null, status: Status, closingAt?: any | null, updatedAt: any, capacity?: number | null, prefecture?: { __typename?: 'Prefecture', name: string } | null, user: { __typename?: 'User', name: string, avatar: string } }> };
 
 export type GetCurrentUserRecruitmentsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -416,6 +427,7 @@ export const GetRecruitmentsDocument = gql`
     type
     place
     startAt
+    status
     closingAt
     updatedAt
     capacity
