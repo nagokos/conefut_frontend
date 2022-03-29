@@ -10,7 +10,6 @@ export const StyledDialogInput = styled(InputBase)(({ theme }) => ({
     position: 'relative',
     backgroundColor: '#f0f5f4',
     border: '1px solid #e0f2f1',
-    fontSize: 16,
     padding: '10px 12px',
     fontFamily: 'Roboto',
     transition: theme.transitions.create(['border-color', 'background-color', 'box-shadow']),
