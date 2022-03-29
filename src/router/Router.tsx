@@ -9,6 +9,8 @@ import {
   RecruitmentDetails,
   DashboardRecruitments,
   DashboardStocks,
+  Messages,
+  DashboardApplies,
 } from '../pages';
 
 export const routes = (isLoggedIn: boolean) => [
@@ -29,6 +31,10 @@ export const routes = (isLoggedIn: boolean) => [
     element: isLoggedIn ? <RecruitmentNew /> : <Navigate to="/login" />,
   },
   {
+    path: 'messages',
+    element: isLoggedIn ? <Messages /> : <Navigate to="/login" />,
+  },
+  {
     path: 'recruitments/:recruitmentId/edit',
     element: isLoggedIn ? <RecruitmentEdit /> : <Navigate to="/login" />,
   },
@@ -42,6 +48,7 @@ export const routes = (isLoggedIn: boolean) => [
     children: [
       { path: '/dashboard', element: <DashboardRecruitments /> },
       { path: 'stocks', element: <DashboardStocks /> },
+      { path: 'applies', element: <DashboardApplies /> },
     ],
   },
 ];

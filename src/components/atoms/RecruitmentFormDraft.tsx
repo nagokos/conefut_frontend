@@ -20,7 +20,7 @@ export const RecruitmentFormDraft: VFC<Props> = memo((props) => {
           onClick(Status.Draft);
         }}
         size="small"
-        sx={{ bgcolor: 'white', boxShadow: '0 10px 10px -1px #d1dede', px: 2.8, py: 2.8 }}
+        sx={{ bgcolor: 'white', boxShadow: '0 10px 10px -1px #d1dede', px: 2.8, py: 2.8, zIndex: 0 }}
       >
         <RiDraftLine size="20" style={{ position: 'absolute', color: '#546e7a' }} />
       </Fab>

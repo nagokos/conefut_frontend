@@ -1,7 +1,6 @@
 import { memo, useEffect, useState, VFC } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
@@ -12,8 +11,9 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Popper from '@mui/material/Popper';
 
 import { RecruitmentInput, Type } from '../../generated/graphql';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { StyledLocationSearchInput } from '../index';
+import { useSize } from '../../hooks';
 
 type Props = {
   setValue: UseFormSetValue<RecruitmentInput>;
@@ -56,6 +56,8 @@ export const RecruitmentLocationDialog: VFC<Props> = memo((props) => {
     }
   };
 
+  const { isMobile } = useSize();
+
   const onSBLoad = (ref: google.maps.places.SearchBox) => {
     setSearchBox(ref);
   };
@@ -88,8 +90,15 @@ export const RecruitmentLocationDialog: VFC<Props> = memo((props) => {
     <Dialog
       PaperProps={{
         sx: {
-          minWidth: 500,
+          minWidth: isMobile ? 'auto' : 500,
           py: 0.5,
+          boxShadow: '0 5px 20px #00166721;',
+        },
+      }}
+      fullScreen={isMobile}
+      BackdropProps={{
+        sx: {
+          bgcolor: 'rgba(38, 50, 56, 0.25);',
         },
       }}
       open={open}
@@ -116,7 +125,7 @@ export const RecruitmentLocationDialog: VFC<Props> = memo((props) => {
         </Typography>
         <LoadScript libraries={libraries} googleMapsApiKey={googleMapApiKey}>
           <GoogleMap
-            mapContainerStyle={{ width: '500px', height: '400px' }}
+            mapContainerStyle={{ width: isMobile ? 'auto' : '500px', height: '400px' }}
             center={{ lat: location.lat, lng: location.lng }}
             zoom={16}
             onClick={mapOnClick}
@@ -144,12 +153,12 @@ export const RecruitmentLocationDialog: VFC<Props> = memo((props) => {
             </>
           </GoogleMap>
         </LoadScript>
+        <Box sx={{ mt: 2, textAlign: 'center' }}>
+          <Button size="large" disableElevation variant="contained" onClick={setLatLng} autoFocus>
+            保存する
+          </Button>
+        </Box>
       </DialogContent>
-      <DialogActions sx={{ justifyContent: 'center', mb: 1, pt: 0 }}>
-        <Button size="large" disableElevation variant="contained" onClick={setLatLng} autoFocus>
-          保存する
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 });

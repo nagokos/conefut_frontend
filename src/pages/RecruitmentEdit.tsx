@@ -10,16 +10,35 @@ import {
   useGetEditRecruitmentQuery,
   useUpdateRecruitmentMutation,
   Status,
+  useGetCurrentUserQuery,
+  EmailVerificationStatus,
 } from '../generated/graphql';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { recruitmentSchema } from '../yup/recruitmentSchema';
 import { RecruitmentForm } from '../components/index';
 import { useSetRecoilState } from 'recoil';
 import { flashMessage, flashState, flashType } from '../store/flash';
+import { useSize } from '../hooks/index';
+
+import { RiDraftLine } from 'react-icons/ri';
+import { AiOutlineTag } from 'react-icons/ai';
+
+import { MdOutlineAddLocationAlt } from 'react-icons/md';
+import { BiBookReader } from 'react-icons/bi';
+
+const actions = [
+  { id: 4, icon: <RiDraftLine size="20" />, name: '下書き保存' },
+  { id: 3, icon: <AiOutlineTag size="20" />, name: 'タグを追加' },
+  { id: 2, icon: <MdOutlineAddLocationAlt size="20" />, name: '会場を埋め込む' },
+  { id: 1, icon: <BiBookReader size="20" />, name: '募集を公開' },
+];
 
 export const RecruitmentEdit: VFC = memo(() => {
   const navigate = useNavigate();
   const { recruitmentId } = useParams();
+
+  const { isMobile } = useSize();
+  const [userData] = useGetCurrentUserQuery();
 
   const setState = useSetRecoilState(flashState);
   const setMessage = useSetRecoilState(flashMessage);
@@ -36,6 +55,16 @@ export const RecruitmentEdit: VFC = memo(() => {
   const recruitment = data.data?.getRecruitment;
 
   const onClick = async (status: Status) => {
+    if (
+      status === Status.Published &&
+      userData.data?.getCurrentUser?.emailVerificationStatus === EmailVerificationStatus.Pending
+    ) {
+      setState(true);
+      setMessage('メールアドレスを認証してください');
+      setType('warning');
+      return;
+    }
+
     setValue('status', status);
 
     clearErrors();
@@ -110,25 +139,25 @@ export const RecruitmentEdit: VFC = memo(() => {
   return (
     <>
       {!data.fetching && (
-        <Box sx={{ pt: 2, px: 3, minHeight: '100vh' }} bgcolor="#ebf2f2">
-          <Box>
-            <IconButton onClick={() => navigate('/dashboard')} disableTouchRipple size="medium">
+        <>
+          <Box sx={{ pt: 2, px: isMobile ? 0 : 3, minHeight: '100vh', position: 'relative' }} bgcolor="#ebf2f2">
+            <IconButton sx={{ ml: 1 }} onClick={() => navigate('/dashboard')} disableTouchRipple size="medium">
               <ArrowBackIcon sx={{ fontSize: 24 }} />
             </IconButton>
+            <RecruitmentForm
+              control={control}
+              formState={formState}
+              getValues={getValues}
+              trigger={trigger}
+              clearErrors={clearErrors}
+              setValue={setValue}
+              watch={watch}
+              resetField={resetField}
+              setError={setError}
+              onClick={onClick}
+            />
           </Box>
-          <RecruitmentForm
-            control={control}
-            formState={formState}
-            getValues={getValues}
-            trigger={trigger}
-            clearErrors={clearErrors}
-            setValue={setValue}
-            watch={watch}
-            resetField={resetField}
-            setError={setError}
-            onClick={onClick}
-          />
-        </Box>
+        </>
       )}
     </>
   );

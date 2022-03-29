@@ -3,6 +3,7 @@ import { InputBase, Paper } from '@mui/material';
 
 import { RecruitmentInput, Status, Type } from '../../generated/graphql';
 import { Control, Controller } from 'react-hook-form';
+import { useSize } from '../../hooks';
 
 type Props = {
   control: Control<RecruitmentInput, object>;
@@ -12,6 +13,8 @@ type Props = {
 
 export const RecruitmentFormContent: VFC<Props> = memo((props) => {
   const { control, watchStatus, watchType } = props;
+
+  const { isMobile } = useSize();
 
   return (
     <Controller
@@ -23,7 +26,7 @@ export const RecruitmentFormContent: VFC<Props> = memo((props) => {
           sx={{
             borderRadius: 2,
             bgcolor: '#fff',
-            minHeight: 330,
+            minHeight: isMobile ? 400 : 330,
             mt: 3,
             border: '1px solid #e0f2f1',
           }}
@@ -32,8 +35,8 @@ export const RecruitmentFormContent: VFC<Props> = memo((props) => {
             {...field}
             multiline
             fullWidth
-            minRows={13}
-            sx={{ fontSize: 14, py: 4, px: 4, fontFamily: 'Roboto' }}
+            minRows={isMobile ? 18 : 14}
+            sx={{ fontSize: 14, py: isMobile ? 3 : 4, px: isMobile ? 2 : 4, fontFamily: 'Roboto' }}
             placeholder="募集の詳細"
           />
         </Paper>

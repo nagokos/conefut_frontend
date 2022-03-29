@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Status, Type } from '../../generated/graphql';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import { Emoji } from 'emoji-mart';
+import { useSize } from '../../hooks';
 
 type Recruitment = {
   id: string;
@@ -29,6 +30,8 @@ export const StockList: VFC<Props> = memo((props) => {
 
   const navigate = useNavigate();
 
+  const { isMobile } = useSize();
+
   const typeEmoji = (): string => {
     if (recruitment.type === Type.Opponent) {
       return ':handshake:';
@@ -45,9 +48,18 @@ export const StockList: VFC<Props> = memo((props) => {
     }
   };
 
+  const subStrTitle = () => {
+    if (recruitment.title.length > 40) {
+      const subStr = recruitment.title.substring(0, 39);
+      return `${subStr}...`;
+    } else {
+      return recruitment.title;
+    }
+  };
+
   return (
     <>
-      <ListItem sx={{ px: 0, mb: 1.5, pt: 0.9 }}>
+      <ListItem sx={{ mt: isMobile ? 0.5 : 1.5, px: 0, mb: 1.5 }}>
         <Paper
           onClick={() => {
             navigate(`/recruitments/${recruitment.id}`);
@@ -68,7 +80,7 @@ export const StockList: VFC<Props> = memo((props) => {
           <Emoji emoji={recruitment.status === Status.Published ? typeEmoji() : ':no_entry:'} size={28} native />
         </Paper>
         <ListItemText
-          sx={{ mr: 5 }}
+          sx={{ mr: isMobile ? 0 : 5 }}
           primary={
             <Typography
               component="div"
@@ -76,20 +88,24 @@ export const StockList: VFC<Props> = memo((props) => {
                 navigate(`/recruitments/${recruitment.id}`);
               }}
               sx={{ position: 'relative', bottom: 3, color: '#263238', cursor: 'pointer', fontFamily: 'Roboto' }}
-              fontSize={17}
+              fontSize={isMobile ? 13 : 17}
               fontWeight="bold"
             >
-              {recruitment.title}
+              {isMobile ? subStrTitle() : recruitment.title}
             </Typography>
           }
           secondary={
             <Box component="span" sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer', mt: 0.1 }}>
-              <Avatar component="span" sx={{ width: 29, height: 29, mr: 0.8 }} src={recruitment.user?.avatar} />
-              <Box component="span" sx={{ fontSize: 12, mr: 0.3 }}>
+              <Avatar
+                component="span"
+                sx={{ width: isMobile ? 25 : 29, height: isMobile ? 25 : 29, mr: 0.8 }}
+                src={recruitment.user?.avatar}
+              />
+              <Box component="span" sx={{ fontSize: isMobile ? 11 : 12, mr: 0.3 }}>
                 {recruitment.user?.name}
               </Box>
-              <BookmarkIcon fontSize="small" sx={{ fontSize: 14 }} />
-              <Box component="span" sx={{ fontSize: 13 }}>
+              <BookmarkIcon fontSize="small" sx={{ fontSize: isMobile ? 13 : 14 }} />
+              <Box component="span" sx={{ fontSize: isMobile ? 12 : 13 }}>
                 1
               </Box>
             </Box>

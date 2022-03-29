@@ -84,10 +84,16 @@ export const SignupDialog: VFC<Props> = memo((props) => {
         sx: {
           maxWidth: 400,
           borderRadius: isMobile ? 0 : 2,
+          boxShadow: '0 5px 20px #00166721;',
         },
       }}
       fullScreen={isMobile}
       open={open}
+      BackdropProps={{
+        sx: {
+          bgcolor: 'rgba(38, 50, 56, 0.25);',
+        },
+      }}
       onClose={handleClose}
     >
       <DialogTitle sx={{ fontWeight: 'bold', fontSize: 18, mt: 2.4, mr: 'auto', ml: 'auto' }}>

@@ -86,12 +86,6 @@
             "deprecationReason": null
           },
           {
-            "name": "UNNECESSARY",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "VERIFIED",
             "description": null,
             "isDeprecated": false,

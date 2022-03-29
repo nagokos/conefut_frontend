@@ -11,8 +11,11 @@ import {
   Type,
   Status,
   useGetCurrentUserQuery,
+  EmailVerificationStatus,
 } from '../../generated/graphql';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+import { flashMessage, flashState, flashType } from '../../store/flash';
 
 type Recruitment = {
   status: Status;
@@ -21,10 +24,15 @@ type Recruitment = {
 
 type Props = {
   recruitment: Recruitment;
+  handleClickOpen: () => void;
 };
 
 export const RecruitmentDetailsApply: VFC<Props> = memo((props) => {
-  const { recruitment } = props;
+  const { recruitment, handleClickOpen } = props;
+
+  const setState = useSetRecoilState(flashState);
+  const setMessage = useSetRecoilState(flashMessage);
+  const setType = useSetRecoilState(flashType);
 
   const { recruitmentId } = useParams();
   const navigate = useNavigate();
@@ -92,6 +100,16 @@ export const RecruitmentDetailsApply: VFC<Props> = memo((props) => {
           fullWidth
           disableRipple
           variant="contained"
+          onClick={() => {
+            if (!isLoggedIn) return navigate('/login');
+            if (userData.data?.getCurrentUser?.emailVerificationStatus === EmailVerificationStatus.Pending) {
+              setState(true);
+              setMessage('メールアドレスを認証してください');
+              setType('warning');
+              return;
+            }
+            handleClickOpen();
+          }}
           disabled={recruitment.status === Status.Closed}
           sx={{
             py: 1.4,
