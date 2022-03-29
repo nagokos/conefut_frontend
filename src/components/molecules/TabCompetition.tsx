@@ -44,7 +44,6 @@ export const TabCompetition: VFC = memo(() => {
     { name: 'サッカー', value: 0 },
     { name: 'フットサル', value: 1 },
     { name: 'ソサイチ', value: 2 },
-    { name: '大会開催', value: 3 },
   ];
   const [value, setValue] = useState<number>(0);
   const [tab, setTab] = useState<number | null>(null);
