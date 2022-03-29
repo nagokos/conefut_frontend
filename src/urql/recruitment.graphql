@@ -6,6 +6,7 @@ query GetRecruitments {
     type
     place
     startAt
+    status
     closingAt
     updatedAt
     capacity
