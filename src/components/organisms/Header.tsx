@@ -12,10 +12,12 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import Logout from '@mui/icons-material/Logout';
-import MessageOutlinedIcon from '@mui/icons-material/MessageOutlined';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
 
 import { useSize } from '../../hooks/index';
 import { TabCompetition } from '../index';
@@ -36,6 +38,7 @@ export const Header: VFC = memo(() => {
 
   const [search, setSearch] = useState<boolean>(false);
   const [notification, setNotification] = useState<boolean>(false);
+  const [message, setMessage] = useState<boolean>(false);
 
   const { isMobile } = useSize();
 
@@ -58,6 +61,14 @@ export const Header: VFC = memo(() => {
 
   const notificationLeave = () => {
     setNotification(false);
+  };
+
+  const messageMove = () => {
+    setMessage(true);
+  };
+
+  const messageLeave = () => {
+    setMessage(false);
   };
 
   const isNeedHeader = (): boolean => {
@@ -98,7 +109,7 @@ export const Header: VFC = memo(() => {
       {!isNeedHeader() && (
         <>
           <AppBar
-            sx={{ maxWidth: 1155, mx: 'auto', zIndex: 0 }}
+            sx={{ maxWidth: 1155, mx: 'auto', zIndex: 0, px: isMobile ? 2 : '' }}
             style={{ background: 'white' }}
             elevation={0}
             position="static"
@@ -118,11 +129,11 @@ export const Header: VFC = memo(() => {
                     <img
                       style={{ marginRight: 4 }}
                       src="/src/assets/img/main-logo.png"
-                      width="30"
-                      height="30"
+                      width={isMobile ? 27 : 30}
+                      height={isMobile ? 27 : 30}
                       alt="app logo"
                     />
-                    <Box sx={{ fontSize: 25 }}>connefut</Box>
+                    <Box sx={{ fontSize: isMobile ? 23 : 25 }}>connefut</Box>
                   </Box>
                 </Box>
               </Typography>
@@ -136,6 +147,17 @@ export const Header: VFC = memo(() => {
               </IconButton>
               {!!user && (
                 <>
+                  <IconButton
+                    onMouseMove={messageMove}
+                    onMouseLeave={messageLeave}
+                    style={{ color: message ? 'black' : '' }}
+                    disableRipple
+                    onClick={() => {
+                      navigate('messages');
+                    }}
+                  >
+                    <MailOutlineIcon />
+                  </IconButton>
                   <IconButton
                     onMouseMove={notificationMove}
                     onMouseLeave={notificationLeave}
@@ -170,14 +192,23 @@ export const Header: VFC = memo(() => {
                   >
                     <StyledMenuItem disableRipple sx={{ py: 2 }}>
                       <Avatar sx={{ mr: 1.4, width: 35, height: 35 }} src={user?.avatar} />
-                      <Box sx={{ fontFamily: 'Roboto', fontSize: 15 }}>{user?.name}</Box>
+                      <Box sx={{ fontFamily: 'Roboto, ヒラギノ角ゴシック', fontSize: 15 }}>{user?.name}</Box>
                     </StyledMenuItem>
                     <Divider sx={{ borderColor: '#ebf2f2' }} />
                     <StyledMenuItem onClick={() => transitionPage('/recruitments/new')} disableRipple sx={{ py: 1.2 }}>
                       <ListItemIcon>
                         <CreateOutlinedIcon sx={{ fontSize: 21 }} />
                       </ListItemIcon>
-                      <Box sx={{ color: '#616161', position: 'relative', fontSize: 12.7 }}>募集の作成</Box>
+                      <Box
+                        sx={{
+                          color: '#616161',
+                          position: 'relative',
+                          fontSize: 12.7,
+                          fontFamily: 'ヒラギノ角ゴシック',
+                        }}
+                      >
+                        募集の作成
+                      </Box>
                     </StyledMenuItem>
                     <StyledMenuItem onClick={() => transitionPage('/dashboard')} disableRipple sx={{ py: 1.2 }}>
                       <ListItemIcon>
@@ -185,31 +216,82 @@ export const Header: VFC = memo(() => {
                       </ListItemIcon>
                       <Box sx={{ color: '#616161', position: 'relative', fontSize: 12.7 }}>募集の管理</Box>
                     </StyledMenuItem>
-                    <StyledMenuItem disableRipple sx={{ py: 1.2 }}>
+                    <StyledMenuItem onClick={() => transitionPage('/dashboard/applies')} disableRipple sx={{ py: 1.2 }}>
                       <ListItemIcon>
-                        <MessageOutlinedIcon sx={{ fontSize: 21 }} />
+                        <EventNoteOutlinedIcon sx={{ fontSize: 21 }} />
                       </ListItemIcon>
-                      <Box sx={{ color: '#616161', position: 'relative', fontSize: 12.7 }}>メッセージの管理</Box>
+                      <Box
+                        sx={{
+                          color: '#616161',
+                          position: 'relative',
+                          fontSize: 12.7,
+                          fontFamily: 'ヒラギノ角ゴシック',
+                        }}
+                      >
+                        応募の管理
+                      </Box>
+                    </StyledMenuItem>
+                    <StyledMenuItem onClick={() => transitionPage('/dashboard/stocks')} disableRipple sx={{ py: 1.2 }}>
+                      <ListItemIcon>
+                        <BookmarkBorderIcon sx={{ fontSize: 21 }} />
+                      </ListItemIcon>
+                      <Box
+                        sx={{
+                          color: '#616161',
+                          position: 'relative',
+                          fontSize: 12.7,
+                          fontFamily: 'ヒラギノ角ゴシック',
+                        }}
+                      >
+                        ストックの管理
+                      </Box>
                     </StyledMenuItem>
                     <Divider sx={{ borderColor: '#ebf2f2' }} />
                     <StyledMenuItem disableRipple sx={{ py: 1.2, fontSize: 13 }}>
                       <ListItemIcon>
                         <SettingsOutlinedIcon sx={{ fontSize: 21 }} />
                       </ListItemIcon>
-                      <Box sx={{ color: '#616161', position: 'relative', fontSize: 12.7 }}>アカウント設定</Box>
+                      <Box
+                        sx={{
+                          color: '#616161',
+                          position: 'relative',
+                          fontSize: 12.7,
+                          fontFamily: 'ヒラギノ角ゴシック',
+                        }}
+                      >
+                        アカウント設定
+                      </Box>
                     </StyledMenuItem>
                     <StyledMenuItem disableRipple sx={{ py: 1.2, fontSize: 13 }}>
                       <ListItemIcon>
                         <HelpOutlineOutlinedIcon sx={{ fontSize: 21 }} />
                       </ListItemIcon>
-                      <Box sx={{ color: '#616161', position: 'relative', fontSize: 12.7 }}>お問い合わせ</Box>
+                      <Box
+                        sx={{
+                          color: '#616161',
+                          position: 'relative',
+                          fontSize: 12.7,
+                          fontFamily: 'ヒラギノ角ゴシック',
+                        }}
+                      >
+                        お問い合わせ
+                      </Box>
                     </StyledMenuItem>
                     <Divider sx={{ borderColor: '#ebf2f2' }} />
                     <StyledMenuItem onClick={logoutUser} disableRipple sx={{ py: 1.2 }}>
                       <ListItemIcon>
                         <Logout sx={{ fontSize: 21 }} />
                       </ListItemIcon>
-                      <Box sx={{ color: '#616161', position: 'relative', fontSize: 12.7 }}>ログアウト</Box>
+                      <Box
+                        sx={{
+                          color: '#616161',
+                          position: 'relative',
+                          fontSize: 12.7,
+                          fontFamily: 'ヒラギノ角ゴシック',
+                        }}
+                      >
+                        ログアウト
+                      </Box>
                     </StyledMenuItem>
                   </Menu>
                 </>
