@@ -287,9 +287,7 @@ export const RecruitmentFormTags: VFC<Props> = memo((props) => {
                     autoFocus
                     placeholder="タグを入力"
                     sx={{ pb: pendingValue.length === 0 ? 1 : '' }}
-                  >
-                    aaa
-                  </StyledInput>
+                  />
                   {pendingValue.length !== 0 && (
                     <Box sx={{ display: 'flex', mt: 0.4, mb: 1.5, px: 1.5, flexWrap: 'wrap' }}>
                       {pendingValue.map((pending) => (
