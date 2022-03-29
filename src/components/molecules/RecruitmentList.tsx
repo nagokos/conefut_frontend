@@ -4,6 +4,7 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import {
+  Badge,
   Box,
   Divider,
   IconButton,
@@ -12,14 +13,19 @@ import {
   Menu,
   MenuItem,
   MenuList,
-  Paper,
   styled,
 } from '@mui/material';
-import { RecruitmentDeleteDialog, StyledSelectMenuItem, StyledTooltip } from '../index';
+import {
+  RecruitmentDeleteDialog,
+  StyledSelectMenuItem,
+  StyledTooltip,
+  RecruitmentListApplicantsDialog,
+} from '../index';
 import { useNavigate } from 'react-router-dom';
 import { Status, Type } from '../../generated/graphql';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { Emoji } from 'emoji-mart';
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
+import { useSize } from '../../hooks';
 
 type Recruitment = {
   id: string;
@@ -61,6 +67,18 @@ export const RecruitmentList: VFC<Props> = memo((props) => {
   const { recruitment, deleteCurrentUserRecruitment } = props;
 
   const navigate = useNavigate();
+
+  const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
+
+  const { isMobile } = useSize();
+
+  const handleClickOpenDialog = () => {
+    setIsOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setIsOpenDialog(false);
+  };
 
   const [open, setOpen] = useState<boolean>(false);
   const handleClickOpen = () => {
@@ -105,71 +123,35 @@ export const RecruitmentList: VFC<Props> = memo((props) => {
     }
   };
 
-  const typeEmoji = (): string => {
-    if (recruitment.status === Status.Draft) {
-      return ':writing_hand:';
-    } else if (recruitment.type === Type.Opponent) {
-      return ':handshake:';
-    } else if (recruitment.type === Type.Individual) {
-      return ':muscle:';
-    } else if (recruitment.type === Type.Member) {
-      return ':people_holding_hands:';
-    } else if (recruitment.type === Type.Joining) {
-      return ':pray:';
-    } else if (recruitment.type === Type.Others) {
-      return ':thought_balloon:';
+  const subStrTitle = () => {
+    if (recruitment.title.length > 40) {
+      const subStr = recruitment.title.substring(0, 39);
+      return `${subStr}...`;
     } else {
-      return '';
+      return recruitment.title;
     }
   };
 
   return (
     <>
-      <ListItem sx={{ mt: 1.5, mb: 1.5, px: 0 }}>
-        <Paper
-          onClick={() => {
-            navigate(`/recruitments/${recruitment.id}`);
-          }}
-          elevation={0}
-          sx={{
-            bgcolor: '#f0f5f4',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: 65,
-            minWidth: 65,
-            borderRadius: 3.5,
-            mr: 2.5,
-            cursor: 'pointer',
-          }}
-        >
-          <Emoji
-            emoji={
-              recruitment.status === Status.Published || recruitment.status === Status.Draft
-                ? typeEmoji()
-                : ':no_entry:'
-            }
-            size={28}
-            native
-          />
-        </Paper>
+      <ListItem sx={{ mt: isMobile ? 0.5 : 1.5, mb: 1.5, px: 0 }}>
         <ListItemText
           onClick={() => pushEditRecruitment()}
-          sx={{ mr: 5, cursor: 'pointer' }}
+          sx={{ mr: isMobile ? 1 : 5, cursor: 'pointer' }}
           primary={
             <Box
               sx={{ position: 'relative', bottom: 3, color: '#263238', fontFamily: 'Roboto' }}
-              fontSize={17}
+              fontSize={isMobile ? 13 : 17}
               fontWeight="bold"
             >
-              {recruitment.title}
+              {isMobile ? subStrTitle() : recruitment.title}
             </Box>
           }
           secondary={
             <>
               <Box
                 component="span"
-                fontSize={11}
+                fontSize={isMobile ? 10 : 11}
                 sx={{
                   border: `1px solid ${statusColor()}`,
                   maxWidth: 33,
@@ -185,13 +167,38 @@ export const RecruitmentList: VFC<Props> = memo((props) => {
             </>
           }
         />
-        <StyledTooltip title="編集する" placement="bottom">
-          <StyledListButton onClick={() => pushEditRecruitment()} sx={{ mr: 1 }} disableRipple size="medium">
-            <EditOutlinedIcon fontSize="small" />
-          </StyledListButton>
-        </StyledTooltip>
+        {recruitment.status === Status.Published && (
+          <StyledTooltip title="応募者" placement="bottom">
+            <StyledListButton
+              onClick={handleClickOpenDialog}
+              sx={{ mr: 1 }}
+              disableRipple
+              size={isMobile ? 'small' : 'medium'}
+            >
+              <Badge
+                sx={{ '& .MuiBadge-badge': { fontSize: 9, height: 7, minWidth: 7, top: -0.5 } }}
+                variant="dot"
+                color="warning"
+              >
+                <PeopleOutlineIcon fontSize="small" />
+              </Badge>
+            </StyledListButton>
+          </StyledTooltip>
+        )}
+        {!isMobile && (
+          <StyledTooltip title="編集する" placement="bottom">
+            <StyledListButton
+              onClick={() => pushEditRecruitment()}
+              sx={{ mr: 1 }}
+              disableRipple
+              size={isMobile ? 'small' : 'medium'}
+            >
+              <EditOutlinedIcon fontSize="small" />
+            </StyledListButton>
+          </StyledTooltip>
+        )}
         <StyledTooltip onClick={handleClickOpen} title="もっとみる" placement="bottom">
-          <StyledListButton onClick={handleClickMenu} disableRipple size="medium">
+          <StyledListButton onClick={handleClickMenu} disableRipple size={isMobile ? 'small' : 'medium'}>
             <MoreHorizIcon fontSize="small" />
           </StyledListButton>
         </StyledTooltip>
@@ -223,6 +230,15 @@ export const RecruitmentList: VFC<Props> = memo((props) => {
           onClose={handleCloseMenu}
         >
           <MenuList sx={{ py: 0 }}>
+            {isMobile && (
+              <>
+                <StyledSelectMenuItem onClick={() => pushEditRecruitment()} disableRipple>
+                  <EditOutlinedIcon fontSize="small" sx={{ mr: 1 }} />
+                  編集する
+                </StyledSelectMenuItem>
+                <StyledMyZeroDivider />
+              </>
+            )}
             <StyledSelectMenuItem disableRipple>
               <CheckCircleOutlineIcon fontSize="small" sx={{ mr: 1 }} />
               締め切る
@@ -245,6 +261,7 @@ export const RecruitmentList: VFC<Props> = memo((props) => {
         handleClose={handleClose}
         id={recruitment.id}
       />
+      <RecruitmentListApplicantsDialog isOpenDialog={isOpenDialog} handleCloseDialog={handleCloseDialog} />
     </>
   );
 });
