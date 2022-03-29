@@ -2,8 +2,8 @@ import { ThemeProvider } from '@emotion/react';
 import { memo, VFC } from 'react';
 import { routes } from './router/Router';
 import { theme } from './assets/theme/theme';
-import { Header, SnackbarNotification } from './components/index';
-import { useGetCurrentUserQuery } from './generated/graphql';
+import { Header, SnackbarNotification, EmailVerificationAlert } from './components/index';
+import { EmailVerificationStatus, useGetCurrentUserQuery } from './generated/graphql';
 import { useRoutes } from 'react-router-dom';
 import { Box } from '@mui/material';
 import { useLocationChange } from './hooks';
@@ -17,6 +17,17 @@ export const App: VFC = memo(() => {
     window.scrollTo(0, 0);
   });
 
+  const isNeedAlert = (): boolean => {
+    console.log(data.data?.getCurrentUser?.emailVerificationStatus);
+    if (data.data?.getCurrentUser?.emailVerificationStatus !== EmailVerificationStatus.Pending) return false;
+    return (
+      location.pathname === '/' ||
+      (location.pathname.includes('recruitments') &&
+        !location.pathname.includes('new') &&
+        !location.pathname.includes('edit'))
+    );
+  };
+
   return (
     <>
       {data.fetching ? (
@@ -28,8 +39,11 @@ export const App: VFC = memo(() => {
       ) : (
         <ThemeProvider theme={theme}>
           <Header />
+          {isNeedAlert() && <EmailVerificationAlert />}
           <SnackbarNotification />
           {routing}
+          {/* <Divider sx={{ borderColor: '#ebf2f2' }} /> */}
+          {/* <Footer /> */}
         </ThemeProvider>
       )}
     </>
