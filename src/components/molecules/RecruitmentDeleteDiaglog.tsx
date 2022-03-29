@@ -28,6 +28,12 @@ export const RecruitmentDeleteDialog: VFC<Props> = memo((props) => {
         sx: {
           maxWidth: 320,
           borderRadius: 4,
+          boxShadow: '0 5px 20px #00166721;',
+        },
+      }}
+      BackdropProps={{
+        sx: {
+          bgcolor: 'rgba(38, 50, 56, 0.25);',
         },
       }}
       open={open}

@@ -85,6 +85,12 @@ export const LoginDialog: VFC<Props> = memo((props) => {
         sx: {
           maxWidth: 400,
           borderRadius: isMobile ? 0 : 2,
+          boxShadow: '0 5px 20px #00166721;',
+        },
+      }}
+      BackdropProps={{
+        sx: {
+          bgcolor: 'rgba(38, 50, 56, 0.25);',
         },
       }}
       fullScreen={isMobile}
