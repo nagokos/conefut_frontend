@@ -166,7 +166,7 @@ export const RecruitmentCard: VFC<Props> = memo((props) => {
                 <Box component="span" mr={0.2}>
                   ■
                 </Box>
-                募集エリア:
+                募集エリア
               </Box>
               <Box>
                 <Box px={1} py={0.6} borderRadius={1} component="span" bgcolor="#f0f5f4">
@@ -175,7 +175,6 @@ export const RecruitmentCard: VFC<Props> = memo((props) => {
                   </Box>
                   <Box component="span" sx={{ fontSize: 10 }}>
                     {recruitment.prefecture?.name}
-                    {!!recruitment.place && <>（{recruitment.place}）</>}
                   </Box>
                 </Box>
               </Box>
@@ -185,7 +184,7 @@ export const RecruitmentCard: VFC<Props> = memo((props) => {
                 <Box component="span" mr={0.2}>
                   ■
                 </Box>
-                募集期限:
+                募集期限
               </Box>
               <Box>
                 <Box px={1} py={0.6} borderRadius={1} component="span" bgcolor="#f0f5f4">
