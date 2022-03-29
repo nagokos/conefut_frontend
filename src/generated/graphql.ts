@@ -24,7 +24,6 @@ export type Competition = {
 
 export enum EmailVerificationStatus {
   Pending = 'PENDING',
-  Unnecessary = 'UNNECESSARY',
   Verified = 'VERIFIED'
 }
 
