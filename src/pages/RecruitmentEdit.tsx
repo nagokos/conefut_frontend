@@ -90,18 +90,25 @@ export const RecruitmentEdit: VFC = memo(() => {
       };
 
       const res = await updateRecruitment(variables);
-
-      let message = '';
-      if (status === Status.Published) {
-        message = '募集を公開しました';
-        navigate('/dashboard');
-      } else if (status === Status.Draft) {
-        message = '下書きに保存しました';
-        navigate('/dashboard');
+      if (res.error?.graphQLErrors) {
+        res.error.graphQLErrors.forEach((error) => {
+          setState(true);
+          setMessage(error.message);
+          setType('error');
+        });
+      } else {
+        let message = '';
+        if (status === Status.Published) {
+          message = '募集を公開しました';
+          navigate('/dashboard');
+        } else if (status === Status.Draft) {
+          message = '下書きに保存しました';
+          navigate('/dashboard');
+        }
+        setState(true);
+        setMessage(message);
+        setType('success');
       }
-      setState(true);
-      setMessage(message);
-      setType('success');
     }
   };
 
