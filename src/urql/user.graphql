@@ -11,27 +11,11 @@ query GetCurrentUser {
 }
 
 mutation CreateUser($name: String!, $email: String!, $password: String!) {
-  createUser(input: { name: $name, email: $email, password: $password }) {
-    id
-    name
-    email
-    role
-    avatar
-    introduction
-    emailVerificationStatus
-  }
+  createUser(input: { name: $name, email: $email, password: $password })
 }
 
 mutation LoginUser($email: String!, $password: String!) {
-  loginUser(input: { email: $email, password: $password }) {
-    id
-    name
-    email
-    role
-    avatar
-    introduction
-    emailVerificationStatus
-  }
+  loginUser(input: { email: $email, password: $password })
 }
 
 mutation LogoutUser {
