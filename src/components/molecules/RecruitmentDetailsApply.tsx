@@ -18,8 +18,13 @@ import { useSetRecoilState } from 'recoil';
 import { flashMessage, flashState, flashType } from '../../store/flash';
 
 type Recruitment = {
+  user: User;
   status: Status;
   type: Type;
+};
+
+type User = {
+  id: string;
 };
 
 type Props = {
@@ -89,42 +94,46 @@ export const RecruitmentDetailsApply: VFC<Props> = memo((props) => {
         boxShadow: '0 2px 4px #4385bb12;',
       }}
     >
-      {recruitment.type === Type.Opponent || recruitment.type === Type.Individual ? (
-        <Box sx={{ fontSize: 14, fontWeight: 'bold', color: '#616161' }}>1人が応募中</Box>
-      ) : (
-        <Box sx={{ fontSize: 14, fontWeight: 'bold', color: '#616161' }}>1人がメッセージを送信</Box>
+      {userData.data?.getCurrentUser?.id !== recruitment.user.id && (
+        <>
+          {recruitment.type === Type.Opponent || recruitment.type === Type.Individual ? (
+            <Box sx={{ fontSize: 14, fontWeight: 'bold', color: '#616161' }}>1人が応募中</Box>
+          ) : (
+            <Box sx={{ fontSize: 14, fontWeight: 'bold', color: '#616161' }}>1人がメッセージを送信</Box>
+          )}
+          <Box sx={{ mt: 1.5 }}>
+            <Button
+              disableElevation
+              fullWidth
+              disableRipple
+              variant="contained"
+              onClick={() => {
+                if (!isLoggedIn) return navigate('/login');
+                if (userData.data?.getCurrentUser?.emailVerificationStatus === EmailVerificationStatus.Pending) {
+                  setState(true);
+                  setMessage('メールアドレスを認証してください');
+                  setType('warning');
+                  return;
+                }
+                handleClickOpen();
+              }}
+              disabled={recruitment.status === Status.Closed}
+              sx={{
+                py: 1.4,
+                fontSize: 13,
+                boxShadow: '0 0 0 1px rgb(0 0 0 / 2%), 0 5px 8px 0 rgb(0 0 0 / 10%)',
+                ':hover': {
+                  boxShadow: '0 0 0 1px rgb(0 0 0 / 2%), 0 5px 8px 0 rgb(0 0 0 / 10%)',
+                  bgcolor: '#00897b',
+                },
+              }}
+            >
+              {sendMessage()}
+            </Button>
+          </Box>
+          <Divider sx={{ borderColor: '#ebf2f2', mt: 3, mb: 2 }} />
+        </>
       )}
-      <Box sx={{ mt: 1.5 }}>
-        <Button
-          disableElevation
-          fullWidth
-          disableRipple
-          variant="contained"
-          onClick={() => {
-            if (!isLoggedIn) return navigate('/login');
-            if (userData.data?.getCurrentUser?.emailVerificationStatus === EmailVerificationStatus.Pending) {
-              setState(true);
-              setMessage('メールアドレスを認証してください');
-              setType('warning');
-              return;
-            }
-            handleClickOpen();
-          }}
-          disabled={recruitment.status === Status.Closed}
-          sx={{
-            py: 1.4,
-            fontSize: 13,
-            boxShadow: '0 0 0 1px rgb(0 0 0 / 2%), 0 5px 8px 0 rgb(0 0 0 / 10%)',
-            ':hover': {
-              boxShadow: '0 0 0 1px rgb(0 0 0 / 2%), 0 5px 8px 0 rgb(0 0 0 / 10%)',
-              bgcolor: '#00897b',
-            },
-          }}
-        >
-          {sendMessage()}
-        </Button>
-      </Box>
-      <Divider sx={{ borderColor: '#ebf2f2', mt: 3, mb: 2 }} />
       <Box sx={{ fontSize: 14, fontWeight: 'bold', color: '#616161' }}>1人がストック中</Box>
       <Box sx={{ mt: 1.5 }}>
         {isStocked ? (
