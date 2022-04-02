@@ -84,7 +84,7 @@ export const RecruitmentNew: VFC = memo(() => {
     const result: boolean = await trigger();
 
     if (result) {
-      const variables = {
+      const variables: RecruitmentInput = {
         title: getValues('title'),
         competitionId: getValues('competitionId'),
         closingAt: getValues('closingAt'),
@@ -100,19 +100,26 @@ export const RecruitmentNew: VFC = memo(() => {
         tags: getValues('tags'),
       };
 
-      await createRecruitment(variables);
-
-      let message = '';
-      if (status === Status.Published) {
-        message = '募集を公開しました';
-        navigate('/dashboard');
-      } else if (status === Status.Draft) {
-        message = '下書きに保存しました';
-        navigate('/dashboard');
+      const res = await createRecruitment(variables);
+      if (res.error?.graphQLErrors) {
+        res.error.graphQLErrors.forEach((error) => {
+          setState(true);
+          setMessage(error.message);
+          setType('success');
+        });
+      } else {
+        let message = '';
+        if (status === Status.Published) {
+          message = '募集を公開しました';
+          navigate('/dashboard');
+        } else if (status === Status.Draft) {
+          message = '下書きに保存しました';
+          navigate('/dashboard');
+        }
+        setState(true);
+        setMessage(message);
+        setType('success');
       }
-      setState(true);
-      setMessage(message);
-      setType('success');
     }
   };
 
