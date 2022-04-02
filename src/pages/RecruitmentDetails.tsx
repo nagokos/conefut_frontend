@@ -376,7 +376,14 @@ export const RecruitmentDetails: VFC = memo(() => {
                       <Box sx={{ ml: 0.4 }}>エリア・会場</Box>
                     </Box>
                     <Box pr={recruitment.place === '' ? 1.2 : 0.6} pl={1.2} py={0.6} borderRadius={1} bgcolor="#f0f5f4">
-                      <Box sx={{ fontSize: isMobile ? 13 : 14, display: 'flex', alignItems: 'center' }}>
+                      <Box
+                        sx={{
+                          fontSize: isMobile ? 13 : 14,
+                          display: 'flex',
+                          alignItems: 'center',
+                          overflowWrap: 'break-word',
+                        }}
+                      >
                         <Box sx={{ fontSize: isMobile ? 13 : 14 }}>{recruitment.prefecture?.name}</Box>
                         {!!recruitment.place && <Box sx={{ color: '#424242' }}>（{recruitment.place}）</Box>}
                       </Box>
@@ -432,6 +439,7 @@ export const RecruitmentDetails: VFC = memo(() => {
                         fontSize: isMobile ? 13 : 14,
                         py: 1.7,
                         px: 2,
+                        overflowWrap: 'break-word',
                         whiteSpace: 'pre-wrap',
                       }}
                     >
@@ -457,7 +465,12 @@ export const RecruitmentDetails: VFC = memo(() => {
                 <Typography sx={{ fontWeight: 'bold', fontSize: 18 }}>Tags</Typography>
                 <Grid container>
                   {tagData.data?.getRecruitmentTags.map((tag) => (
-                    <Grid key={tag?.id} item xs={6} sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+                    <Grid
+                      key={tag?.id}
+                      item
+                      xs={6}
+                      sx={{ display: 'flex', alignItems: 'center', mt: 1, overflowWrap: 'break-word' }}
+                    >
                       <Box
                         sx={{
                           border: '1px solid #eceff1',
@@ -514,7 +527,7 @@ export const RecruitmentDetails: VFC = memo(() => {
                   </Grid>
                 </Grid>
               </Box>
-              <Box sx={{ position: 'sticky', top: 30 }}>
+              <Box sx={{ position: 'sticky', top: 30, overflowWrap: 'break-word' }}>
                 <RecruitmentDetailsApply handleClickOpen={handleClickOpen} recruitment={recruitment} />
                 <Box
                   sx={{
@@ -554,7 +567,7 @@ export const RecruitmentDetails: VFC = memo(() => {
                   </ListItem>
                   <Box sx={{ fontSize: 14.3, mt: 1.5 }}>
                     フリーランスでwebエンジニアやらせてもらってます。 メインスタックはLaravel / Vue / Nextなど AWS
-                    SAAとりました
+                    SAAとりました============================================================================
                   </Box>
                 </Box>
               </Box>
@@ -562,7 +575,7 @@ export const RecruitmentDetails: VFC = memo(() => {
           )}
         </Grid>
       </Box>
-      {isMobile && (
+      {isMobile && userData.data?.getCurrentUser?.id !== recruitment.user.id && (
         <Box sx={{ width: 'auto' }}>
           <Button
             variant="contained"
