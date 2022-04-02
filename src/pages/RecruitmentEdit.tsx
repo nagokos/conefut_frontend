@@ -72,8 +72,6 @@ export const RecruitmentEdit: VFC = memo(() => {
     const result: boolean = await trigger();
 
     if (result) {
-      console.log(getValues('locationLat'));
-
       const variables = {
         id: String(recruitmentId),
         title: getValues('title'),
