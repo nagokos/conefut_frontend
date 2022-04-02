@@ -16,7 +16,7 @@ export const RecruitmentFormLocation: VFC<Props> = memo((props) => {
         disableRipple
         size="small"
         onClick={handleClickOpen}
-        sx={{ bgcolor: 'white', boxShadow: '0 10px 10px -1px #d1dede', px: 2.8, py: 2.8 }}
+        sx={{ bgcolor: 'white', boxShadow: '0 10px 10px -1px #d1dede', px: 2.8, py: 2.8, zIndex: 0 }}
       >
         <MdOutlineAddLocationAlt size="23" style={{ position: 'absolute', color: '#546e7a' }} />
       </Fab>
