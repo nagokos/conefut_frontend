@@ -6,10 +6,19 @@ import CloseIcon from '@mui/icons-material/Close';
 import { StyledDialogInput } from '../custom/StyledDialogInput';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
-import { ApplicantInput } from '../../generated/graphql';
+import {
+  ApplicantInput,
+  ManagementStatus,
+  Type,
+  useApplyForRecruitmentMutation,
+  useGetRecruitmentQuery,
+} from '../../generated/graphql';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { applicantSchema } from '../../yup/applicantSchema';
 import { useSize } from '../../hooks';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+import { flashMessage, flashState, flashType } from '../../store/flash';
 
 type Props = {
   open: boolean;
@@ -19,7 +28,24 @@ type Props = {
 export const RecruitmentApplicantDialog: VFC<Props> = memo((props) => {
   const { open, handleClose } = props;
 
+  const { recruitmentId } = useParams();
+  const navigate = useNavigate();
+
+  const setState = useSetRecoilState(flashState);
+  const setMessage = useSetRecoilState(flashMessage);
+  const setType = useSetRecoilState(flashType);
+
+  const [data] = useGetRecruitmentQuery({
+    variables: {
+      id: String(recruitmentId),
+    },
+  });
+
+  const recruitment = data.data?.getRecruitment;
+
   const { isMobile } = useSize();
+
+  const [result, applyForRecruitment] = useApplyForRecruitmentMutation();
 
   const {
     control,
@@ -34,13 +60,30 @@ export const RecruitmentApplicantDialog: VFC<Props> = memo((props) => {
     mode: 'onChange',
   });
 
-  const onSubmit: SubmitHandler<ApplicantInput> = (data: ApplicantInput) => {
-    console.log(data.content);
-    if (data.content == '') {
-      console.log('hey');
+  const onSubmit: SubmitHandler<ApplicantInput> = async (data: ApplicantInput) => {
+    const variables = {
+      recruitmentId: String(recruitmentId),
+      content: data.content,
+      managementStatus:
+        recruitment?.type === Type.Individual || recruitment?.type === Type.Opponent
+          ? ManagementStatus.Backlog
+          : ManagementStatus.Unnecessary,
+    };
+    const res = await applyForRecruitment(variables);
+    if (res.error?.graphQLErrors) {
+      res.error.graphQLErrors.forEach((error) => {
+        setState(true);
+        setMessage(error.message);
+        setType('error');
+      });
+    } else {
+      setState(true);
+      setMessage('メッセージを送信しました');
+      setType('success');
+      navigate('/messages');
     }
-    console.log('hello');
   };
+
   return (
     <Dialog
       maxWidth={false}

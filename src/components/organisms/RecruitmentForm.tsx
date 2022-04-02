@@ -20,6 +20,7 @@ import {
   RecruitmentFormDraft,
   RecruitmentFormTags,
   RecruitmentLocationDialog,
+  AddTagDialog,
 } from '../index';
 import { RecruitmentInput, Status, Type } from '../../generated/graphql';
 import { flashMessage, flashState, flashType } from '../../store/flash';
@@ -55,7 +56,6 @@ import { AiOutlineTag } from 'react-icons/ai';
 import { MdOutlineAddLocationAlt } from 'react-icons/md';
 import { BiBookReader } from 'react-icons/bi';
 import { SpeedDialAction } from '@mui/material';
-import { AddTagDialog } from '../molecules/AddTagDialog';
 
 const actions = [
   { id: 4, icon: <RiDraftLine size="20" />, name: '下書き保存' },
@@ -160,46 +160,57 @@ export const RecruitmentForm: VFC<Props> = memo((props) => {
 
   return (
     <>
-      <Grid sx={{ maxWidth: 900, margin: '0 auto', px: 1, mt: isMobile ? 2 : 7 }}>
-        <Grid item xs={10}>
-          <Box sx={{ px: isMobile ? 1.5 : 3 }}>
-            <RecruitmentFormTitle control={control} />
-          </Box>
-          <Box px={isMobile ? 1 : 2.4} mt={0.8}>
-            <RecruitmentFormCompetition watchType={watchType} watchStatus={watchStatus} control={control} />
-            <RecruitmentFormType watchType={watchType} watchStatus={watchStatus} control={control} />
-          </Box>
+      <Box sx={{ maxWidth: 850, margin: '0 auto' }}>
+        <Grid sx={{ px: 1, mt: isMobile ? 2 : 7 }}>
+          <Grid item xs={12}>
+            <Box sx={{ px: isMobile ? 1.5 : 2 }}>
+              <RecruitmentFormTitle control={control} />
+            </Box>
+            <Box px={isMobile ? 1 : 1.5} mt={0.8}>
+              <RecruitmentFormCompetition watchType={watchType} watchStatus={watchStatus} control={control} />
+              <RecruitmentFormType watchType={watchType} watchStatus={watchStatus} control={control} />
+            </Box>
+          </Grid>
         </Grid>
-        <Grid display="none" item xs={2} />
-      </Grid>
-      <Grid container sx={{ maxWidth: 900, margin: '0 auto', px: 0, pb: 10 }}>
-        <Grid item md={10} sm={12} xs={12}>
-          <Box sx={{ mt: -1 }}>
-            <Container sx={{ px: 2 }}>
-              <RecruitmentFormContent watchType={watchType} watchStatus={watchStatus} control={control} />
-              {watchType !== Type.Unnecessary && (
-                <Grid container>
-                  <Grid item xs={12} md={6} sx={{ mt: 4 }}>
-                    <Box maxWidth={isMobile ? 'auto' : 320}>
-                      <RecruitmentFormArea
-                        watchType={watchType}
-                        watchStatus={watchStatus}
-                        getValues={getValues}
-                        control={control}
-                      />
-                    </Box>
-                  </Grid>
-                  {watchType === Type.Opponent || watchType === Type.Individual ? (
-                    <Grid item xs={12} md={6} sx={{ mt: 4 }}>
-                      <Box maxWidth={isMobile ? 'auto' : 320} ml="auto">
-                        <RecruitmentFormPlace watchType={watchType} watchStatus={watchStatus} control={control} />
-                      </Box>
-                    </Grid>
-                  ) : null}
-                  {watchType === Type.Opponent || watchType === Type.Individual ? (
+        <Grid container sx={{ maxWidth: 900, margin: '0 auto', px: 0, pb: 10 }}>
+          <Grid item md={10} sm={12} xs={12}>
+            <Box sx={{ mt: -1 }}>
+              <Container sx={{ px: 2 }}>
+                <RecruitmentFormContent watchType={watchType} watchStatus={watchStatus} control={control} />
+                {watchType !== Type.Unnecessary && (
+                  <Grid container>
                     <Grid item xs={12} md={6} sx={{ mt: 4 }}>
                       <Box maxWidth={isMobile ? 'auto' : 320}>
-                        <RecruitmentFormStart
+                        <RecruitmentFormArea
+                          watchType={watchType}
+                          watchStatus={watchStatus}
+                          getValues={getValues}
+                          control={control}
+                        />
+                      </Box>
+                    </Grid>
+                    {watchType === Type.Opponent || watchType === Type.Individual ? (
+                      <Grid item xs={12} md={6} sx={{ mt: 4 }}>
+                        <Box maxWidth={isMobile ? 'auto' : 320} ml="auto">
+                          <RecruitmentFormPlace watchType={watchType} watchStatus={watchStatus} control={control} />
+                        </Box>
+                      </Grid>
+                    ) : null}
+                    {watchType === Type.Opponent || watchType === Type.Individual ? (
+                      <Grid item xs={12} md={6} sx={{ mt: 4 }}>
+                        <Box maxWidth={isMobile ? 'auto' : 320}>
+                          <RecruitmentFormStart
+                            getValues={getValues}
+                            watchType={watchType}
+                            watchStatus={watchStatus}
+                            control={control}
+                          />
+                        </Box>
+                      </Grid>
+                    ) : null}
+                    <Grid mt={4} item xs={12} md={6}>
+                      <Box maxWidth={isMobile ? 'auto' : 320} sx={{ ml: 'auto' }}>
+                        <RecruitmentFormDeadline
                           getValues={getValues}
                           watchType={watchType}
                           watchStatus={watchStatus}
@@ -207,50 +218,40 @@ export const RecruitmentForm: VFC<Props> = memo((props) => {
                         />
                       </Box>
                     </Grid>
-                  ) : null}
-                  <Grid mt={4} item xs={12} md={6}>
-                    <Box maxWidth={isMobile ? 'auto' : 320} sx={{ ml: 'auto' }}>
-                      <RecruitmentFormDeadline
-                        getValues={getValues}
-                        watchType={watchType}
-                        watchStatus={watchStatus}
-                        control={control}
-                      />
-                    </Box>
+                    {watchType === Type.Joining || watchType === Type.Others || watchType === Type.Member ? null : (
+                      <Grid mt={4} item xs={12} md={6}>
+                        <Box maxWidth={isMobile ? 'auto' : 320}>
+                          <RecruitmentFormCapacity watchType={watchType} watchStatus={watchStatus} control={control} />
+                        </Box>
+                      </Grid>
+                    )}
                   </Grid>
-                  {watchType === Type.Joining || watchType === Type.Others || watchType === Type.Member ? null : (
-                    <Grid mt={4} item xs={12} md={6}>
-                      <Box maxWidth={isMobile ? 'auto' : 320}>
-                        <RecruitmentFormCapacity watchType={watchType} watchStatus={watchStatus} control={control} />
-                      </Box>
-                    </Grid>
-                  )}
-                </Grid>
-              )}
-            </Container>
-          </Box>
-        </Grid>
-        {!isMobile && (
-          <Grid mt={2} xs={2} item>
-            <Grid container spacing={1.4}>
-              <Grid item xs={12}>
-                <RecruitmentFormPublish onClick={onClick} />
-              </Grid>
-              {watchType === Type.Opponent || watchType === Type.Individual ? (
+                )}
+              </Container>
+            </Box>
+          </Grid>
+          {!isMobile && (
+            <Grid mt={2} xs={2} item>
+              <Grid container spacing={1.4}>
                 <Grid item xs={12}>
-                  <RecruitmentFormLocation handleClickOpen={handleClickOpen} />
+                  <RecruitmentFormPublish onClick={onClick} />
                 </Grid>
-              ) : null}
-              <Grid item xs={12}>
-                <RecruitmentFormTags getValues={getValues} setFormValue={setValue} />
-              </Grid>
-              <Grid item xs={12}>
-                <RecruitmentFormDraft onClick={onClick} />
+                {watchType === Type.Opponent || watchType === Type.Individual ? (
+                  <Grid item xs={12}>
+                    <RecruitmentFormLocation handleClickOpen={handleClickOpen} />
+                  </Grid>
+                ) : null}
+                <Grid item xs={12}>
+                  <RecruitmentFormTags getValues={getValues} setFormValue={setValue} />
+                </Grid>
+                <Grid item xs={12}>
+                  <RecruitmentFormDraft onClick={onClick} />
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        )}
-      </Grid>
+          )}
+        </Grid>
+      </Box>
       {isMobile && (
         <Box sx={{ position: 'fixed', bottom: 16, right: 16 }}>
           <Backdrop sx={{ bgcolor: 'rgba(38, 50, 56, 0.25);' }} open={openDial} />

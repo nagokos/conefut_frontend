@@ -1,0 +1,11 @@
+query GetAppliedCounts($recruitmentId: String!) {
+  getAppliedCounts(recruitmentId: $recruitmentId)
+}
+
+query CheckApplied($recruitmentId: String!) {
+  checkApplied(recruitmentId: $recruitmentId)
+}
+
+mutation ApplyForRecruitment($recruitmentId: String!, $content: String!, $managementStatus: ManagementStatus!) {
+  applyForRecruitment(recruitmentId: $recruitmentId, input: { content: $content, managementStatus: $managementStatus })
+}

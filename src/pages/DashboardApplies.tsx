@@ -2,17 +2,14 @@ import { memo, useState, VFC } from 'react';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import CircularProgress from '@mui/material/CircularProgress';
-
 import { StyledTooltip, ApplyList } from '../components/index';
-import { useGetStockedRecruitmentsQuery } from '../generated/graphql';
 import { IconButton, Typography, Divider, ClickAwayListener } from '@mui/material';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import { useSize } from '../hooks';
+import { useGetAppliedRecruitmentsQuery } from '../generated/graphql';
 
 export const DashboardApplies: VFC = memo(() => {
-  const [data] = useGetStockedRecruitmentsQuery({
-    requestPolicy: 'network-only',
-  });
+  const [data] = useGetAppliedRecruitmentsQuery();
 
   const { isMobile } = useSize();
 
@@ -109,7 +106,7 @@ export const DashboardApplies: VFC = memo(() => {
           </Box>
         ) : (
           <>
-            {data.data?.getStockedRecruitments.map((recruitment) => {
+            {data.data?.getAppliedRecruitments.map((recruitment) => {
               return (
                 <Box key={recruitment.id} sx={{ mt: isMobile ? 0 : 2 }}>
                   <ApplyList recruitment={recruitment} />

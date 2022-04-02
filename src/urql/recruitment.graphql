@@ -47,6 +47,23 @@ query GetStockedRecruitments {
   }
 }
 
+query GetAppliedRecruitments {
+  getAppliedRecruitments {
+    id
+    title
+    type
+    applicant {
+      managementStatus
+      createdAt
+    }
+    user {
+      id
+      name
+      avatar
+    }
+  }
+}
+
 query GetRecruitment($id: String!) {
   getRecruitment(id: $id) {
     id
