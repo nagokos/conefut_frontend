@@ -16,6 +16,12 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type Applicant = {
+  __typename?: 'Applicant';
+  createdAt: Scalars['DateTime'];
+  managementStatus: ManagementStatus;
+};
+
 export type Competition = {
   __typename?: 'Competition';
   id: Scalars['String'];
@@ -27,6 +33,13 @@ export enum EmailVerificationStatus {
   Verified = 'VERIFIED'
 }
 
+export enum ManagementStatus {
+  Accepted = 'ACCEPTED',
+  Backlog = 'BACKLOG',
+  Rejected = 'REJECTED',
+  Unnecessary = 'UNNECESSARY'
+}
+
 export type Mutation = {
   __typename?: 'Mutation';
   addRecruitmentTag: Scalars['Boolean'];
@@ -34,10 +47,10 @@ export type Mutation = {
   createRecruitment: Recruitment;
   createStock: Scalars['Boolean'];
   createTag: Tag;
-  createUser: User;
+  createUser: Scalars['Boolean'];
   deleteRecruitment: Scalars['Boolean'];
   deleteStock: Scalars['Boolean'];
-  loginUser: User;
+  loginUser: Scalars['Boolean'];
   logoutUser: Scalars['Boolean'];
   updateRecruitment: Recruitment;
 };
@@ -103,7 +116,10 @@ export type Prefecture = {
 
 export type Query = {
   __typename?: 'Query';
+  checkApplied: Scalars['Boolean'];
   checkStocked: Scalars['Boolean'];
+  getAppliedCounts: Scalars['Int'];
+  getAppliedRecruitments: Array<Recruitment>;
   getCompetitions: Array<Competition>;
   getCurrentUser?: Maybe<User>;
   getCurrentUserRecruitments: Array<Recruitment>;
@@ -117,7 +133,17 @@ export type Query = {
 };
 
 
+export type QueryCheckAppliedArgs = {
+  recruitmentId: Scalars['String'];
+};
+
+
 export type QueryCheckStockedArgs = {
+  recruitmentId: Scalars['String'];
+};
+
+
+export type QueryGetAppliedCountsArgs = {
   recruitmentId: Scalars['String'];
 };
 
@@ -138,6 +164,7 @@ export type QueryGetStockedCountArgs = {
 
 export type Recruitment = {
   __typename?: 'Recruitment';
+  applicant?: Maybe<Applicant>;
   capacity?: Maybe<Scalars['Int']>;
   closingAt?: Maybe<Scalars['DateTime']>;
   competition?: Maybe<Competition>;
@@ -195,6 +222,7 @@ export type User = {
 
 export type ApplicantInput = {
   content: Scalars['String'];
+  managementStatus: ManagementStatus;
 };
 
 export type CreateTagInput = {
@@ -233,6 +261,29 @@ export type RecruitmentTagInput = {
   name: Scalars['String'];
 };
 
+export type GetAppliedCountsQueryVariables = Exact<{
+  recruitmentId: Scalars['String'];
+}>;
+
+
+export type GetAppliedCountsQuery = { __typename?: 'Query', getAppliedCounts: number };
+
+export type CheckAppliedQueryVariables = Exact<{
+  recruitmentId: Scalars['String'];
+}>;
+
+
+export type CheckAppliedQuery = { __typename?: 'Query', checkApplied: boolean };
+
+export type ApplyForRecruitmentMutationVariables = Exact<{
+  recruitmentId: Scalars['String'];
+  content: Scalars['String'];
+  managementStatus: ManagementStatus;
+}>;
+
+
+export type ApplyForRecruitmentMutation = { __typename?: 'Mutation', applyForRecruitment: boolean };
+
 export type GetCompetitionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -257,6 +308,11 @@ export type GetStockedRecruitmentsQueryVariables = Exact<{ [key: string]: never;
 
 
 export type GetStockedRecruitmentsQuery = { __typename?: 'Query', getStockedRecruitments: Array<{ __typename?: 'Recruitment', id: string, title: string, type: Type, status: Status, user: { __typename?: 'User', id: string, name: string, avatar: string } }> };
+
+export type GetAppliedRecruitmentsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAppliedRecruitmentsQuery = { __typename?: 'Query', getAppliedRecruitments: Array<{ __typename?: 'Recruitment', id: string, title: string, type: Type, applicant?: { __typename?: 'Applicant', managementStatus: ManagementStatus, createdAt: any } | null, user: { __typename?: 'User', id: string, name: string, avatar: string } }> };
 
 export type GetRecruitmentQueryVariables = Exact<{
   id: Scalars['String'];
@@ -377,7 +433,7 @@ export type CreateUserMutationVariables = Exact<{
 }>;
 
 
-export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, name: string, email: string, role: Role, avatar: string, introduction?: string | null, emailVerificationStatus: EmailVerificationStatus } };
+export type CreateUserMutation = { __typename?: 'Mutation', createUser: boolean };
 
 export type LoginUserMutationVariables = Exact<{
   email: Scalars['String'];
@@ -385,7 +441,7 @@ export type LoginUserMutationVariables = Exact<{
 }>;
 
 
-export type LoginUserMutation = { __typename?: 'Mutation', loginUser: { __typename?: 'User', id: string, name: string, email: string, role: Role, avatar: string, introduction?: string | null, emailVerificationStatus: EmailVerificationStatus } };
+export type LoginUserMutation = { __typename?: 'Mutation', loginUser: boolean };
 
 export type LogoutUserMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -393,6 +449,36 @@ export type LogoutUserMutationVariables = Exact<{ [key: string]: never; }>;
 export type LogoutUserMutation = { __typename?: 'Mutation', logoutUser: boolean };
 
 
+export const GetAppliedCountsDocument = gql`
+    query GetAppliedCounts($recruitmentId: String!) {
+  getAppliedCounts(recruitmentId: $recruitmentId)
+}
+    `;
+
+export function useGetAppliedCountsQuery(options: Omit<Urql.UseQueryArgs<GetAppliedCountsQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetAppliedCountsQuery>({ query: GetAppliedCountsDocument, ...options });
+};
+export const CheckAppliedDocument = gql`
+    query CheckApplied($recruitmentId: String!) {
+  checkApplied(recruitmentId: $recruitmentId)
+}
+    `;
+
+export function useCheckAppliedQuery(options: Omit<Urql.UseQueryArgs<CheckAppliedQueryVariables>, 'query'>) {
+  return Urql.useQuery<CheckAppliedQuery>({ query: CheckAppliedDocument, ...options });
+};
+export const ApplyForRecruitmentDocument = gql`
+    mutation ApplyForRecruitment($recruitmentId: String!, $content: String!, $managementStatus: ManagementStatus!) {
+  applyForRecruitment(
+    recruitmentId: $recruitmentId
+    input: {content: $content, managementStatus: $managementStatus}
+  )
+}
+    `;
+
+export function useApplyForRecruitmentMutation() {
+  return Urql.useMutation<ApplyForRecruitmentMutation, ApplyForRecruitmentMutationVariables>(ApplyForRecruitmentDocument);
+};
 export const GetCompetitionsDocument = gql`
     query GetCompetitions {
   getCompetitions {
@@ -481,6 +567,28 @@ export const GetStockedRecruitmentsDocument = gql`
 
 export function useGetStockedRecruitmentsQuery(options?: Omit<Urql.UseQueryArgs<GetStockedRecruitmentsQueryVariables>, 'query'>) {
   return Urql.useQuery<GetStockedRecruitmentsQuery>({ query: GetStockedRecruitmentsDocument, ...options });
+};
+export const GetAppliedRecruitmentsDocument = gql`
+    query GetAppliedRecruitments {
+  getAppliedRecruitments {
+    id
+    title
+    type
+    applicant {
+      managementStatus
+      createdAt
+    }
+    user {
+      id
+      name
+      avatar
+    }
+  }
+}
+    `;
+
+export function useGetAppliedRecruitmentsQuery(options?: Omit<Urql.UseQueryArgs<GetAppliedRecruitmentsQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetAppliedRecruitmentsQuery>({ query: GetAppliedRecruitmentsDocument, ...options });
 };
 export const GetRecruitmentDocument = gql`
     query GetRecruitment($id: String!) {
@@ -681,15 +789,7 @@ export function useGetCurrentUserQuery(options?: Omit<Urql.UseQueryArgs<GetCurre
 };
 export const CreateUserDocument = gql`
     mutation CreateUser($name: String!, $email: String!, $password: String!) {
-  createUser(input: {name: $name, email: $email, password: $password}) {
-    id
-    name
-    email
-    role
-    avatar
-    introduction
-    emailVerificationStatus
-  }
+  createUser(input: {name: $name, email: $email, password: $password})
 }
     `;
 
@@ -698,15 +798,7 @@ export function useCreateUserMutation() {
 };
 export const LoginUserDocument = gql`
     mutation LoginUser($email: String!, $password: String!) {
-  loginUser(input: {email: $email, password: $password}) {
-    id
-    name
-    email
-    role
-    avatar
-    introduction
-    emailVerificationStatus
-  }
+  loginUser(input: {email: $email, password: $password})
 }
     `;
 
