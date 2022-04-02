@@ -152,10 +152,7 @@ export const Messages: VFC = memo(() => {
               <Box sx={{ overflow: 'auto', py: 3, px: 2 }}>
                 <Box sx={{ display: 'flex', alignItems: 'end', mb: 1 }}>
                   <Box>
-                    <Avatar
-                      sx={{ width: 25, height: 25, display: 'table-column' }}
-                      src="https://abs.twimg.com/sticky/default_profile_images/default_profile.png"
-                    />
+                    <Box sx={{ width: 25, height: 25 }} />
                   </Box>
                   <Box
                     component="span"
