@@ -43,7 +43,6 @@ type User = {
 
 type Props = {
   recruitment: Recruitment;
-  color: string;
 };
 
 const StyledCardContent = styled(CardContent)(() => ({
@@ -53,7 +52,7 @@ const StyledCardContent = styled(CardContent)(() => ({
 }));
 
 export const RecruitmentCard: VFC<Props> = memo((props) => {
-  const { recruitment, color } = props;
+  const { recruitment } = props;
   const [target, setTarget] = useState<string | null>(null);
 
   const navigate = useNavigate();
