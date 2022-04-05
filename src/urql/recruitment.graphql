@@ -74,7 +74,6 @@ query GetRecruitment($id: String!) {
     startAt
     content
     capacity
-    updatedAt
     closingAt
     competition {
       id
