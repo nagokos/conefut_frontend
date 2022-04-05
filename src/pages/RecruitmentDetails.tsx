@@ -348,7 +348,6 @@ export const RecruitmentDetails: VFC = memo(() => {
                         <RiCheckboxBlankFill />
                         <Box sx={{ ml: 0.4 }}>エリア</Box>
                       </Box>
-
                       <Box px={1.2} py={0.6} borderRadius={1} bgcolor="#f0f5f4">
                         <Box sx={{ fontSize: isMobile ? 13 : 14 }}>
                           <Box sx={{ fontSize: isMobile ? 13 : 14 }}>{recruitment.prefecture?.name}</Box>
@@ -390,7 +389,6 @@ export const RecruitmentDetails: VFC = memo(() => {
                     </Box>
                   </Box>
                 )}
-
                 {!!recruitment.locationLat && !!recruitment.locationLng && (
                   <Box sx={{ fontSize: isMobile ? 13 : 14, display: 'flex', alignItems: 'center' }}>
                     {!isMobile && <Box sx={{ minWidth: isMobile ? 100 : 124 }} />}
