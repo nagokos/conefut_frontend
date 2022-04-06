@@ -59,7 +59,6 @@ export const RecruitmentCardStock: VFC<Props> = memo((props) => {
           <IconButton
             sx={{
               bgcolor: '#fcf1ed',
-              transition: '400ms',
               ':hover': {
                 bgcolor: '#fcf1ed',
               },
@@ -75,7 +74,6 @@ export const RecruitmentCardStock: VFC<Props> = memo((props) => {
           <IconButton
             sx={{
               bgcolor: '#f0f5f4',
-              transition: '400ms',
               ':hover': {
                 bgcolor: '#e9f2f2',
               },
