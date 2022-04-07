@@ -12,6 +12,7 @@ import {
   Status,
   useGetCurrentUserQuery,
   EmailVerificationStatus,
+  useCheckAppliedQuery,
 } from '../../generated/graphql';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
@@ -51,8 +52,15 @@ export const RecruitmentDetailsApply: VFC<Props> = memo((props) => {
     },
   });
 
+  const [appliedData, executeQueryApplied] = useCheckAppliedQuery({
+    variables: {
+      recruitmentId: String(recruitmentId),
+    },
+  });
+
   const isLoggedIn = !!userData.data?.getCurrentUser;
   const isStocked = data.data?.checkStocked;
+  const isApplied = !!appliedData.data?.checkApplied;
 
   const addStock = async () => {
     if (!isLoggedIn) return navigate('/login');
@@ -73,6 +81,7 @@ export const RecruitmentDetailsApply: VFC<Props> = memo((props) => {
   };
 
   const sendMessage = (): string => {
+    if (isApplied) return '応募済みです';
     if (recruitment.status === Status.Published) {
       if (recruitment.type === Type.Opponent || recruitment.type === Type.Individual) {
         return '応募する';
@@ -117,7 +126,7 @@ export const RecruitmentDetailsApply: VFC<Props> = memo((props) => {
                 }
                 handleClickOpen();
               }}
-              disabled={recruitment.status === Status.Closed}
+              disabled={recruitment.status === Status.Closed || isApplied}
               sx={{
                 py: 1.4,
                 fontSize: 13,
