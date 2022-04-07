@@ -124,7 +124,7 @@ export const RecruitmentEdit: VFC = memo(() => {
       locationLat: recruitment?.locationLat,
       locationLng: recruitment?.locationLng,
       status: recruitment?.status,
-      capacity: recruitment?.capacity,
+      capacity: recruitment?.capacity ? recruitment.capacity : 1,
       place: recruitment?.place,
       tags: recruitment?.tags,
     };
