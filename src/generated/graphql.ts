@@ -108,6 +108,21 @@ export type MutationUpdateRecruitmentArgs = {
   input: RecruitmentInput;
 };
 
+export type PageInfo = {
+  __typename?: 'PageInfo';
+  endCursor: Scalars['String'];
+  hasNextPage: Scalars['Boolean'];
+  hasPreviousPage: Scalars['Boolean'];
+  startCursor: Scalars['String'];
+};
+
+export type PaginationInput = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  end?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+};
+
 export type Prefecture = {
   __typename?: 'Prefecture';
   id: Scalars['String'];
@@ -158,6 +173,11 @@ export type QueryGetRecruitmentTagsArgs = {
 };
 
 
+export type QueryGetRecruitmentsArgs = {
+  input?: InputMaybe<PaginationInput>;
+};
+
+
 export type QueryGetStockedCountArgs = {
   recruitmentId: Scalars['String'];
 };
@@ -181,6 +201,18 @@ export type Recruitment = {
   type: Type;
   updatedAt: Scalars['DateTime'];
   user: User;
+};
+
+export type RecruitmentConnection = {
+  __typename?: 'RecruitmentConnection';
+  edges: Array<RecruitmentEdge>;
+  pageInfo: PageInfo;
+};
+
+export type RecruitmentEdge = {
+  __typename?: 'RecruitmentEdge';
+  cursor: Scalars['String'];
+  node: Recruitment;
 };
 
 export enum Role {
@@ -294,7 +326,12 @@ export type GetPrefecturesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetPrefecturesQuery = { __typename?: 'Query', getPrefectures: Array<{ __typename?: 'Prefecture', id: string, name: string }> };
 
-export type GetRecruitmentsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetRecruitmentsQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  end?: InputMaybe<Scalars['Int']>;
+  before?: InputMaybe<Scalars['String']>;
+}>;
 
 
 export type GetRecruitmentsQuery = { __typename?: 'Query', getRecruitments: Array<{ __typename?: 'Recruitment', id: string, title: string, content?: string | null, type: Type, place?: string | null, startAt?: any | null, status: Status, closingAt?: any | null, updatedAt: any, capacity?: number | null, prefecture?: { __typename?: 'Prefecture', name: string } | null, user: { __typename?: 'User', name: string, avatar: string } }> };
@@ -504,8 +541,10 @@ export function useGetPrefecturesQuery(options?: Omit<Urql.UseQueryArgs<GetPrefe
   return Urql.useQuery<GetPrefecturesQuery>({ query: GetPrefecturesDocument, ...options });
 };
 export const GetRecruitmentsDocument = gql`
-    query GetRecruitments {
-  getRecruitments {
+    query GetRecruitments($first: Int, $after: String, $end: Int, $before: String) {
+  getRecruitments(
+    input: {first: $first, after: $after, end: $end, before: $before}
+  ) {
     id
     title
     content
